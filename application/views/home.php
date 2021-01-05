@@ -36,7 +36,7 @@
 	<script type="text/javascript" src="<?php echo base_url(); ?>assets/limitless/assets/js/pages/dashboard.js"></script>
 	<!-- /theme JS files -->
 	<style>
-		.box-shadow.p-3 {
+		.box-shadow {
 			-webkit-box-shadow: 0 4px 6px -1px rgba(0, 0, 0, .1), 0 2px 4px -1px rgba(0, 0, 0, .06);
 			box-shadow: 0 4px 6px -1px rgba(0, 0, 0, .1), 0 2px 4px -1px rgba(0, 0, 0, .06);
 			background: #fff;
@@ -92,48 +92,36 @@
 					<!-- Dashboard content -->
 					<div class="row">
 						<div class="col-md-12">
-							<div class="col-md-2">
-								<div class="box-shadow p-3">
+							<div class="col-md-3">
+								<div class="box-shadow">
 									<p>
-									<h1>120</h1>
+										<span class="data__">Data Pegawai</span>
+									<h1><?= $this->db->get('tb_pegawai')->num_rows() ?></h1>
 									</p>
 								</div>
 							</div>
-							<div class="col-md-2">
-								<div class="box-shadow p-3">
+							<div class="col-md-3">
+								<div class="box-shadow">
 									<p>
 									<h1>34</h1>
 									</p>
 								</div>
 							</div>
-							<div class="col-md-2">
-								<div class="box-shadow p-3">
+							<div class="col-md-3">
+								<div class="box-shadow">
 									<p>
 									<h1>22</h1>
 									</p>
 								</div>
 							</div>
-							<div class="col-md-2">
-								<div class="box-shadow p-3">
+							<div class="col-md-3">
+								<div class="box-shadow">
 									<p>
 									<h1>232</h1>
 									</p>
 								</div>
 							</div>
-							<div class="col-md-2">
-								<div class="box-shadow p-3">
-									<p>
-									<h1>22</h1>
-									</p>
-								</div>
-							</div>
-							<div class="col-md-2">
-								<div class="box-shadow p-3">
-									<p>
-									<h1>232</h1>
-									</p>
-								</div>
-							</div>
+
 						</div>
 					</div>
 					<!-- /dashboard content -->
