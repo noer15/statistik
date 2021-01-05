@@ -206,7 +206,7 @@
 										<label for="">Kabupaten</label>
 										<select name="" id="kabValue" class="select-search" data-placeholder="Pilih Kabupaten">
 											<option value="0">
-												< ALL>
+												< ALL >
 											</option>
 											<?php foreach ($kabupaten as $key => $value) { ?>
 												<option value="<?php echo $value->id ?>">
@@ -219,13 +219,8 @@
 										<label for="">Kecamatan</label>
 										<select name="" id="kecValue" class="select-search" data-placeholder="Pilih Kabupaten">
 											<option value="0">
-												< ALL>
+												< ALL >
 											</option>
-											<?php foreach ($kecamatan as $key => $value) { ?>
-												<option value="<?php echo $value->id ?>">
-													<?php echo $value->nama ?>
-												</option>
-											<?php }  ?>
 										</select>
 									</div>
 									<div class="form-group col-lg-3 keltani">
@@ -307,6 +302,21 @@
 											let tipe= $('#ktaniBtnValue').val();
 											pieChart('laporanKelas',kab,kec,cdk,tipe);
 										});
+
+										$('#kabValue').on('change', function(){
+											$.get("<?=base_url()?>Desa/getKecamatan/"+$(this).val(),
+												function (response) {
+													$('#kecValue').empty();
+													$('#kecValue').append($("<option></option>").attr("value",'0').text('< ALL >'));
+													var dataArray = JSON.parse(response);          	                	
+													for (var i in dataArray) {
+														$('#kecValue').append($("<option></option>")
+															.attr("value",dataArray[i].id)
+															.text(dataArray[i].nama));
+													}
+												},
+											);
+										})
 
 										$('#kabValue,#kecValue,#cdkValue').on('change', function(){
 											let kab = $('#kabValue').val(); 
