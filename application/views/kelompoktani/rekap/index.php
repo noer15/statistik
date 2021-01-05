@@ -23,9 +23,6 @@
 	<!-- /core JS files -->
 
 	<script type="text/javascript" src="<?php echo base_url();?>assets/limitless/assets/js/core/app.js"></script>
-    
-	
-
 </head>
 
 <body>

@@ -421,12 +421,12 @@ class Kelompoktani extends CI_Controller {
     	$kab = $this->db->query("Select a.* from m_kabupaten a ")->result();
     	$cdk=$this->db->query("select t0.* from m_unit_kerja t0 where t0.id>=9 and t0.id<=17 and t0.tahun='2018'")->result_object();
 
-    	$data['datacdk'] = $cdk;
-		$data['kabupaten'] 	 = $kab;
-	 	$data['page']	 ='reportkelompoktani';
-		$data['subpage'] ='list';
-		$data['judul']	 ='Laporan Kelompok Tani ';
-		$data['header']	 ='Kelompok Tani ';
+    	$data['datacdk'] 	= $cdk;
+		$data['kabupaten'] 	= $kab;
+	 	$data['page']	 	= 'reportkelompoktani';
+		$data['subpage'] 	= 'list';
+		$data['judul']	 	= 'Laporan Kelompok Tani ';
+		$data['header']	 	= 'Kelompok Tani ';
 		$this->load->view('kelompoktani/rekap/index',$data);
 	 }
 
