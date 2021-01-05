@@ -11,7 +11,7 @@ class Home extends CI_Controller {
 		$this->load->view('home',$data);
 	}
 
-	public function laporanKelas($kab,$kec,$cdk)
+	public function laporanKelas($kab,$kec,$cdk,$tipe)
 	{
 		$strWhere = "";
 
@@ -24,36 +24,42 @@ class Home extends CI_Controller {
 				$strWhere = " c.kabupaten_id=t2.kabupaten_id and b.kecamatan_id=t0.kecamatan_id and b.id=t0.id ";
 			}
 		}
-		$sql = "Select t0.* ,
-				(
-				Select count(a.id) from kelompok_tani a
-				INNER JOIN m_desa b on b.id=a.desa_id
-				INNER JOIN m_kecamatan c on c.id=b.kecamatan_id
-				WHERE a.kelas=1 and ".$strWhere."
-				) as jml_pemula,
 
-				(
-				Select count(a.id) from kelompok_tani a
-				INNER JOIN m_desa b on b.id=a.desa_id
-				INNER JOIN m_kecamatan c on c.id=b.kecamatan_id
-				WHERE a.kelas=2 and ".$strWhere."
-				) as jml_madya,
-
-				(
-				Select count(a.id) from kelompok_tani a
-				INNER JOIN m_desa b on b.id=a.desa_id
-				INNER JOIN m_kecamatan c on c.id=b.kecamatan_id
-				WHERE a.kelas=3 and ".$strWhere."
-				) as jml_utama,
-
+		if($tipe == 'total'){
+			$sql = "Select t0.* ,
 				(
 				Select count(a.id) from kelompok_tani a
 				INNER JOIN m_desa b on b.id=a.desa_id
 				INNER JOIN m_kecamatan c on c.id=b.kecamatan_id
 				WHERE ".$strWhere."
-				) as jml
-
-					";
+				) as jml ";
+		}else
+		if($tipe == 'pemula'){
+			$sql = "Select t0.* ,
+				(
+				Select count(a.id) from kelompok_tani a
+				INNER JOIN m_desa b on b.id=a.desa_id
+				INNER JOIN m_kecamatan c on c.id=b.kecamatan_id
+				WHERE a.kelas=1 and ".$strWhere."
+				) as jml ";
+		}else
+		if($tipe == 'madya'){
+			$sql = "Select t0.* ,
+				(
+				Select count(a.id) from kelompok_tani a
+				INNER JOIN m_desa b on b.id=a.desa_id
+				INNER JOIN m_kecamatan c on c.id=b.kecamatan_id
+				WHERE a.kelas=2 and ".$strWhere."
+				) as jml";
+		}else{
+			$sql = "Select t0.* ,
+				(
+				Select count(a.id) from kelompok_tani a
+				INNER JOIN m_desa b on b.id=a.desa_id
+				INNER JOIN m_kecamatan c on c.id=b.kecamatan_id
+				WHERE a.kelas=3 and ".$strWhere."
+				) as jml";
+		}
 
 		if ($kab==0){
 			$sql = $sql." from m_kabupaten t0 
@@ -85,14 +91,19 @@ class Home extends CI_Controller {
 			}
 			$query = $this->db->query($sql);
 		}
-		$data['data'] = $query->result_object();
-		$data['kab'] = $kab;
-		$data['kec'] = $kec;
-		$data['cdk'] = $cdk;
+
+		$a = '['; $n=1;
+		foreach($query->result_object() as $stat){
+			if($n>1)
+			$a .= ',';
+			$a .= '{"country":"'.$stat->nama.'","visits":'.$stat->jml.'}';
+			$n++;
+		}
+		$a .= ']';
 
 		$this->output
 			 ->set_content_type('application/json')
-			 ->set_output(json_encode($data['data']));
+			 ->set_output(json_decode(json_encode($a)));
 	}
 
 }
