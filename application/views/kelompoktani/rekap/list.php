@@ -10,8 +10,6 @@
 <!-- /core JS files -->
 
 <script type="text/javascript" src="<?php echo base_url();?>assets/limitless/assets/js/plugins/tables/datatables/datatables.min.js"></script>
-
-
 <!-- /theme JS files -->
 
 <div class="content">
@@ -29,8 +27,6 @@
 		</div>
 
 		<div class="panel-body">						
-			
-			
             <div class="form-group">
 				<label class="col-lg-2">Laporan Berdasarkan</label>
 				<div class="col-lg-5">
