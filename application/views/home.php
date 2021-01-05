@@ -385,12 +385,14 @@
 
 											});
 										}
-										</script>
 
+										function pieChart(jenis,kab,kec,cdk,tipe){
+											
+										}
+										</script>
 									</div>
 								</div>
 							</div>
-
 						</div>
 					</div>
 					<!-- /dashboard content -->
