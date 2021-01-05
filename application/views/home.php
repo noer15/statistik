@@ -261,8 +261,9 @@
 								<hr>
 								<div class="row">
 									<div class="col-lg-12 text-center">
-										<button type="button" class="btn btn-primary"><span class="icon-stats-bars"></span> Grafik Bar</button>
-										<button type="button" class="btn btn-default"><span class="icon-pie-chart"></span> Grafik Pie</button>
+										<button type="button" class="btn btn-primary" id="ktanibar"><span class="icon-stats-bars"></span> Grafik Bar</button>
+										<button type="button" class="btn btn-default" id="ktanipie"><span class="icon-pie-chart"></span> Grafik Pie</button>
+										<input type="hidden" id="ktaniTipeGrafik" value="bar">
 									</div>
 								</div>
 								<div class="row mt-10">
@@ -285,12 +286,38 @@
 										<script>
 										barChart('laporanKelas',0,0,0,'total');
 
-										$('#kabValue,#kecValue,#cdkValue').on('change', function(){
+										$('#ktanibar').click(function(){
+											$(this).removeClass('btn-default').addClass('btn-primary');
+											$('#ktanipie').removeClass('btn-primary').addClass('btn-default');
+											$('#ktaniTipeGrafik').val('bar');
 											let kab = $('#kabValue').val(); 
 											let kec = $('#kecValue').val(); 
 											let cdk = $('#cdkValue').val();
 											let tipe= $('#ktaniBtnValue').val();
 											barChart('laporanKelas',kab,kec,cdk,tipe);
+										});
+
+										$('#ktanipie').click(function(){
+											$(this).removeClass('btn-default').addClass('btn-primary');
+											$('#ktanibar').removeClass('btn-primary').addClass('btn-default');
+											$('#ktaniTipeGrafik').val('pie');
+											let kab = $('#kabValue').val(); 
+											let kec = $('#kecValue').val(); 
+											let cdk = $('#cdkValue').val();
+											let tipe= $('#ktaniBtnValue').val();
+											pieChart('laporanKelas',kab,kec,cdk,tipe);
+										});
+
+										$('#kabValue,#kecValue,#cdkValue').on('change', function(){
+											let kab = $('#kabValue').val(); 
+											let kec = $('#kecValue').val(); 
+											let cdk = $('#cdkValue').val();
+											let tipe= $('#ktaniBtnValue').val();
+											if($('#ktaniTipeGrafik').val() == 'bar'){
+												barChart('laporanKelas',kab,kec,cdk,tipe);
+											}else{
+												pieChart('laporanKelas',kab,kec,cdk,tipe);
+											}
 										});
 
 										$('#ktanitotal').on('click', function(){
@@ -300,7 +327,11 @@
 											$(this).removeClass('btn-default').addClass('btn-primary');
 											$('#ktanipemula,#ktanimadya,#ktaniutama').removeClass('btn-primary').addClass('btn-default');
 											$('#ktaniBtnValue').val('total');
-											barChart('laporanKelas',kab,kec,cdk,'total');
+											if($('#ktaniTipeGrafik').val() == 'bar'){
+												barChart('laporanKelas',kab,kec,cdk,'total');
+											}else{
+												pieChart('laporanKelas',kab,kec,cdk,'total');
+											}
 										});
 
 										$('#ktanipemula').on('click', function(){
@@ -310,7 +341,11 @@
 											$(this).removeClass('btn-default').addClass('btn-primary');
 											$('#ktanitotal,#ktanimadya,#ktaniutama').removeClass('btn-primary').addClass('btn-default');
 											$('#ktaniBtnValue').val('pemula');
-											barChart('laporanKelas',kab,kec,cdk,'pemula');
+											if($('#ktaniTipeGrafik').val() == 'bar'){
+												barChart('laporanKelas',kab,kec,cdk,'pemula');
+											}else{
+												pieChart('laporanKelas',kab,kec,cdk,'pemula');
+											}
 										});
 
 										$('#ktanimadya').on('click', function(){
@@ -320,7 +355,11 @@
 											$(this).removeClass('btn-default').addClass('btn-primary');
 											$('#ktanipemula,#ktanitotal,#ktaniutama').removeClass('btn-primary').addClass('btn-default');
 											$('#ktaniBtnValue').val('madya');
-											barChart('laporanKelas',kab,kec,cdk,'madya');
+											if($('#ktaniTipeGrafik').val() == 'bar'){
+												barChart('laporanKelas',kab,kec,cdk,'madya');
+											}else{
+												pieChart('laporanKelas',kab,kec,cdk,'madya');
+											}
 										});
 
 										$('#ktaniutama').on('click', function(){
@@ -330,7 +369,11 @@
 											$(this).removeClass('btn-default').addClass('btn-primary');
 											$('#ktanipemula,#ktanimadya,#ktanitotal').removeClass('btn-primary').addClass('btn-default');
 											$('#ktaniBtnValue').val('utama');
-											barChart('laporanKelas',kab,kec,cdk,'utama');
+											if($('#ktaniTipeGrafik').val() == 'bar'){
+												barChart('laporanKelas',kab,kec,cdk,'utama');
+											}else{
+												pieChart('laporanKelas',kab,kec,cdk,'utama');
+											}
 										});
 
 										function barChart(jenis,kab,kec,cdk,tipe){
@@ -387,7 +430,26 @@
 										}
 
 										function pieChart(jenis,kab,kec,cdk,tipe){
-											
+											am4core.ready(function() {
+											am4core.useTheme(am4themes_animated);
+											var chart = am4core.create("chartdiv", am4charts.PieChart);
+											chart.dataSource.url = "<?=base_url()?>/home/"+jenis+"/"+kab+"/"+kec+"/"+cdk+"/"+tipe;
+											chart.dataSource.updateCurrentData = true;
+
+											// Add and configure Series
+											var pieSeries = chart.series.push(new am4charts.PieSeries());
+											pieSeries.dataFields.value = "visits";
+											pieSeries.dataFields.category = "country";
+											pieSeries.slices.template.stroke = am4core.color("#fff");
+											pieSeries.slices.template.strokeWidth = 2;
+											pieSeries.slices.template.strokeOpacity = 1;
+
+											// This creates initial animation
+											pieSeries.hiddenState.properties.opacity = 1;
+											pieSeries.hiddenState.properties.endAngle = -90;
+											pieSeries.hiddenState.properties.startAngle = -90;
+
+											}); // end am4core.ready()
 										}
 										</script>
 									</div>
