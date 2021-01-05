@@ -202,6 +202,21 @@
 										}
 									})
 								</script>
+								<hr>
+								<div class="row">
+									<div class="col-lg-12 text-center">
+										<button type="button" class="btn btn-primary"><span class="icon-stats-bars"></span> Grafik Bar</button>
+										<button type="button" class="btn btn-default"><span class="icon-pie-chart"></span> Grafik Pie</button>
+									</div>
+								</div>
+								<div class="row mt-10">
+									<div class="col-lg-12 text-center">
+										<button type="button" class="btn btn-primary" id="ktanitotal">Total</button>
+										<button type="button" class="btn btn-default" id="ktanipemula">Pemula</button>
+										<button type="button" class="btn btn-default" id="ktanimadya">Madya</button>
+										<button type="button" class="btn btn-default" id="ktaniutama">Utama</button>
+									</div>
+								</div>
 								<div class="row">
 									<div class="col-lg-12">
 										<div id="chartdiv"></div>
@@ -209,105 +224,86 @@
 										<script src="https://cdn.amcharts.com/lib/4/core.js"></script>
 										<script src="https://cdn.amcharts.com/lib/4/charts.js"></script>
 										<script src="https://cdn.amcharts.com/lib/4/themes/animated.js"></script>
-
 										<!-- Chart code -->
 										<script>
-										am4core.ready(function() {
-
-										// Themes begin
-										am4core.useTheme(am4themes_animated);
-										// Themes end
-
-										var chart = am4core.create('chartdiv', am4charts.XYChart)
-										chart.colors.step = 3;
-
-										chart.legend = new am4charts.Legend()
-										chart.legend.position = 'top'
-										chart.legend.paddingBottom = 20
-										chart.legend.labels.template.maxWidth = 95
-
-										var xAxis = chart.xAxes.push(new am4charts.CategoryAxis())
-										xAxis.dataFields.category = 'category'
-										xAxis.renderer.cellStartLocation = 0.1
-										xAxis.renderer.cellEndLocation = 0.9
-										xAxis.renderer.grid.template.location = 0;
-
-										var yAxis = chart.yAxes.push(new am4charts.ValueAxis());
-										yAxis.min = 0;
-
-										function createSeries(value, name) {
-											var series = chart.series.push(new am4charts.ColumnSeries())
-											series.dataFields.valueY = value
-											series.dataFields.categoryX = 'category'
-											series.name = name
-
-											series.events.on("hidden", arrangeColumns);
-											series.events.on("shown", arrangeColumns);
-
-											var bullet = series.bullets.push(new am4charts.LabelBullet())
-											bullet.interactionsEnabled = false
-											bullet.dy = 30;
-											bullet.label.text = '{valueY}'
-											bullet.label.fill = am4core.color('#fff')
-
-											return series;
-										}
-
-										chart.data = [
-											<?php foreach($statistik as $s): ?>
-											{
-												category: '<?=$s->nama?>',
-												first: <?=$s->jml_pemula?>,
-												second: <?=$s->jml_madya?>,
-												third: <?=$s->jml_utama?>
-											},
-											<?php endforeach; ?>
-										]
-
-
-										createSeries('first', 'Pemula');
-										createSeries('second', 'Madya');
-										createSeries('third', 'Utama');
-
-										function arrangeColumns() {
-
-											var series = chart.series.getIndex(0);
-
-											var w = 1 - xAxis.renderer.cellStartLocation - (1 - xAxis.renderer.cellEndLocation);
-											if (series.dataItems.length > 1) {
-												var x0 = xAxis.getX(series.dataItems.getIndex(0), "categoryX");
-												var x1 = xAxis.getX(series.dataItems.getIndex(1), "categoryX");
-												var delta = ((x1 - x0) / chart.series.length) * w;
-												if (am4core.isNumber(delta)) {
-													var middle = chart.series.length / 2;
-
-													var newIndex = 0;
-													chart.series.each(function(series) {
-														if (!series.isHidden && !series.isHiding) {
-															series.dummyData = newIndex;
-															newIndex++;
-														}
-														else {
-															series.dummyData = chart.series.indexOf(series);
-														}
-													})
-													var visibleCount = newIndex;
-													var newMiddle = visibleCount / 2;
-
-													chart.series.each(function(series) {
-														var trueIndex = chart.series.indexOf(series);
-														var newIndex = series.dummyData;
-
-														var dx = (newIndex - trueIndex + middle - newMiddle) * delta
-
-														series.animate({ property: "dx", to: dx }, series.interpolationDuration, series.interpolationEasing);
-														series.bulletsContainer.animate({ property: "dx", to: dx }, series.interpolationDuration, series.interpolationEasing);
-													})
-												}
+										$.get("<?=base_url()?>/home/laporanKelas/0/0/0",
+											function (data) {
+												localStorage.setItem('dataStatistik', JSON.stringify(data));
+												barChart(data);
 											}
-										}
+										);
 
-										}); // end am4core.ready()
+										function barChart(barChartData){
+											am4core.ready(function() {
+											am4core.useTheme(am4themes_animated);
+											var chart = am4core.create("chartdiv", am4charts.XYChart);
+											chart.scrollbarX = new am4core.Scrollbar();
+
+											let dataStatistik = '[';
+											for($i=0; $i < barChartData.length; $i++){
+												dataStatistik += '{"country":"'+barChartData[$i].nama+'",';
+												dataStatistik += '"visits":'+barChartData[$i].jml+'},';
+											}
+											dataStatistik  += ']';
+
+											// Add data
+											chart.data = [{"country":"Kabupaten Bogor","visits":34},{"country":"Kabupaten Sukabumi","visits":184},{"country":"Kabupaten Cianjur","visits":381},{"country":"Kabupaten Bandung","visits":178},{"country":"Kabupaten Garut","visits":33},{"country":"Kabupaten Tasikmalaya","visits":507},{"country":"Kabupaten Ciamis","visits":518},{"country":"Kabupaten Kuningan","visits":249},{"country":"Kabupaten Cirebon","visits":173},{"country":"Kabupaten Majalengka","visits":232},{"country":"Kabupaten Sumedang","visits":133},{"country":"Kabupaten Indramayu","visits":5},{"country":"Kabupaten Subang","visits":175},{"country":"Kabupaten Purwakarta","visits":141},{"country":"Kabupaten Karawang","visits":73},{"country":"Kabupaten Bekasi","visits":0},{"country":"Kabupaten Bandung Barat","visits":192},{"country":"Kota Bogor","visits":0},{"country":"Kota Sukabumi","visits":0},{"country":"Kota Bandung","visits":0},{"country":"Kota Cirebon","visits":0},{"country":"Kota Bekasi","visits":0},{"country":"Kota Depok","visits":0},{"country":"Kota Cimahi","visits":0},{"country":"Kota Tasikmalaya","visits":36},{"country":"Kota Banjar","visits":34},{"country":"Kabupaten Pangandaran","visits":159},];
+											// chart.dataSource.url = "/data/myData.php";
+											// chart.dataSource.updateCurrentData = true;
+											// chart.dataSource.reloadFrequency = 5000;
+
+											// chart.dataSource.events.on("parseended", function(ev) {
+											// parsed data is assigned to data source's `data` property
+											// var data = ev.target.data;
+											// for (var i = 0; i < data.length; i++) {
+											// 	data[i]["year"] = "Year: " + data[i]["year"];
+											// }
+											// });
+
+											console.log(dataStatistik);
+
+											// Create axes
+											var categoryAxis = chart.xAxes.push(new am4charts.CategoryAxis());
+											categoryAxis.dataFields.category = "country";
+											categoryAxis.renderer.grid.template.location = 0;
+											categoryAxis.renderer.minGridDistance = 30;
+											categoryAxis.renderer.labels.template.horizontalCenter = "right";
+											categoryAxis.renderer.labels.template.verticalCenter = "middle";
+											categoryAxis.renderer.labels.template.rotation = 270;
+											categoryAxis.tooltip.disabled = true;
+											categoryAxis.renderer.minHeight = 110;
+
+											var valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
+											valueAxis.renderer.minWidth = 50;
+
+											// Create series
+											var series = chart.series.push(new am4charts.ColumnSeries());
+											series.sequencedInterpolation = true;
+											series.dataFields.valueY = "visits";
+											series.dataFields.categoryX = "country";
+											series.tooltipText = "[{categoryX}: bold]{valueY}[/]";
+											series.columns.template.strokeWidth = 0;
+
+											series.tooltip.pointerOrientation = "vertical";
+
+											series.columns.template.column.cornerRadiusTopLeft = 10;
+											series.columns.template.column.cornerRadiusTopRight = 10;
+											series.columns.template.column.fillOpacity = 0.8;
+
+											// on hover, make corner radiuses bigger
+											var hoverState = series.columns.template.column.states.create("hover");
+											hoverState.properties.cornerRadiusTopLeft = 0;
+											hoverState.properties.cornerRadiusTopRight = 0;
+											hoverState.properties.fillOpacity = 1;
+
+											series.columns.template.adapter.add("fill", function(fill, target) {
+											return chart.colors.getIndex(target.dataItem.index);
+											});
+
+											chart.cursor = new am4charts.XYCursor();
+
+											});
+										}
 										</script>
 
 									</div>

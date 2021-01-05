@@ -8,7 +8,6 @@ class Home extends CI_Controller {
 		$data['page']		= 'home';
 		$data['kabupaten']	= $this->db->get('m_kabupaten')->result();
 		$data['kecamatan']	= $this->db->get_where('m_kecamatan',['kodekab'=>01])->result();
-		$data['statistik']	= $this->laporanKelas(0,0,0);
 		$this->load->view('home',$data);
 	}
 
@@ -90,8 +89,10 @@ class Home extends CI_Controller {
 		$data['kab'] = $kab;
 		$data['kec'] = $kec;
 		$data['cdk'] = $cdk;
-		
-		return $data['data'];
+
+		$this->output
+			 ->set_content_type('application/json')
+			 ->set_output(json_encode($data['data']));
 	}
 
 }
