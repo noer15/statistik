@@ -195,7 +195,7 @@
 						<div class="col-lg-12">
 							<div class="box-shadow-stats p-3 mt-20">
 								<div class="row">
-									<div class="form-group col-lg-3">
+									<div class="form-group col-lg-2">
 										<label for="">Kelompok Data</label>
 										<select name="" id="kelompokdata" class="form-control">
 											<option value="tani">Kelompok Tani</option>
@@ -223,22 +223,18 @@
 											</option>
 										</select>
 									</div>
-									<div class="form-group col-lg-3 keltani">
-										<label for="">CDK</label>
-										<select name="" id="cdkValue" class="select-search" data-placeholder="Pilih CDK">
-											<option value="0">
-												< ALL>
-											</option>
-											<option value="cdk1">Cabang Dinas Kehutanan I</option>
-											<option value="cdk2">Cabang Dinas Kehutanan II</option>
-											<option value="cdk3">Cabang Dinas Kehutanan III</option>
-											<option value="cdk4">Cabang Dinas Kehutanan IV</option>
-											<option value="cdk5">Cabang Dinas Kehutanan V</option>
-											<option value="cdk6">Cabang Dinas Kehutanan VI</option>
-											<option value="cdk7">Cabang Dinas Kehutanan VII</option>
-											<option value="cdk8">Cabang Dinas Kehutanan VIII</option>
-											<option value="cdk9">Cabang Dinas Kehutanan IX</option>
-										</select>
+									<div class="form-inline">
+										<div class="form-group col-lg-4 keltani">
+											<label for="">Periode Tanggal</label>
+											<div class="row">
+												<div class="col-lg-6">
+													<input type="date" name="" id="tglawal" class="form-control" onchange="handlerDate(event)">
+												</div>
+												<div class="col-lg-6">
+													<input type="date" name="" id="tglakhir" class="form-control" style="width: 95%;" onchange="handlerDate(event)">
+												</div>
+											</div>
+										</div>
 									</div>
 								</div>
 								<script>
@@ -279,28 +275,30 @@
 										<script src="https://cdn.amcharts.com/lib/4/themes/animated.js"></script>
 										<!-- Chart code -->
 										<script>
-										barChart('laporanKelas',0,0,0,'total');
+										barChart('laporanKelas',0,0,0,'total',0,0);
 
 										$('#ktanibar').click(function(){
 											$(this).removeClass('btn-default').addClass('btn-primary');
 											$('#ktanipie').removeClass('btn-primary').addClass('btn-default');
 											$('#ktaniTipeGrafik').val('bar');
-											let kab = $('#kabValue').val(); 
-											let kec = $('#kecValue').val(); 
-											let cdk = $('#cdkValue').val();
-											let tipe= $('#ktaniBtnValue').val();
-											barChart('laporanKelas',kab,kec,cdk,tipe);
+											let kab 		= $('#kabValue').val(); 
+											let kec 		= $('#kecValue').val();
+											let tipe		= $('#ktaniBtnValue').val();
+											let startDate 	= $('#tglawal').val() === '' ? 0 : $('#tglawal').val();
+											let endDate 	= $('#tglakhir').val() === '' ? 0 : $('#tglakhir').val();
+											barChart('laporanKelas',kab,kec,0,tipe,startDate,endDate);
 										});
 
 										$('#ktanipie').click(function(){
 											$(this).removeClass('btn-default').addClass('btn-primary');
 											$('#ktanibar').removeClass('btn-primary').addClass('btn-default');
 											$('#ktaniTipeGrafik').val('pie');
-											let kab = $('#kabValue').val(); 
-											let kec = $('#kecValue').val(); 
-											let cdk = $('#cdkValue').val();
-											let tipe= $('#ktaniBtnValue').val();
-											pieChart('laporanKelas',kab,kec,cdk,tipe);
+											let kab 		= $('#kabValue').val(); 
+											let kec 		= $('#kecValue').val();
+											let tipe		= $('#ktaniBtnValue').val();
+											let startDate 	= $('#tglawal').val() === '' ? 0 : $('#tglawal').val();
+											let endDate 	= $('#tglakhir').val() === '' ? 0 : $('#tglakhir').val();
+											pieChart('laporanKelas',kab,kec,0,tipe,startDate,endDate);
 										});
 
 										$('#kabValue').on('change', function(){
@@ -318,82 +316,100 @@
 											);
 										})
 
-										$('#kabValue,#kecValue,#cdkValue').on('change', function(){
-											let kab = $('#kabValue').val(); 
-											let kec = $('#kecValue').val(); 
-											let cdk = $('#cdkValue').val();
-											let tipe= $('#ktaniBtnValue').val();
+										$('#kabValue,#kecValue').on('change', function(){
+											let kab 		= $('#kabValue').val(); 
+											let kec 		= $('#kecValue').val();
+											let tipe		= $('#ktaniBtnValue').val();
+											let startDate 	= $('#tglawal').val() === '' ? 0 : $('#tglawal').val();
+											let endDate 	= $('#tglakhir').val() === '' ? 0 : $('#tglakhir').val();
 											if($('#ktaniTipeGrafik').val() == 'bar'){
-												barChart('laporanKelas',kab,kec,cdk,tipe);
+												barChart('laporanKelas',kab,kec,0,tipe,startDate,endDate);
 											}else{
-												pieChart('laporanKelas',kab,kec,cdk,tipe);
+												pieChart('laporanKelas',kab,kec,0,tipe,startDate,endDate);
 											}
 										});
 
+										function handlerDate(e){
+											let kab 		= $('#kabValue').val(); 
+											let kec 		= $('#kecValue').val();
+											let tipe		= $('#ktaniBtnValue').val();
+											let startDate 	= $('#tglawal').val() === '' ? 0 : $('#tglawal').val();
+											let endDate 	= $('#tglakhir').val() === '' ? 0 : $('#tglakhir').val();
+											if($('#ktaniTipeGrafik').val() == 'bar'){
+												barChart('laporanKelas',kab,kec,0,tipe,startDate,endDate);
+											}else{
+												pieChart('laporanKelas',kab,kec,0,tipe,startDate,endDate);
+											}
+										}
+
 										$('#ktanitotal').on('click', function(){
-											let kab = $('#kabValue').val(); 
-											let kec = $('#kecValue').val(); 
-											let cdk = $('#cdkValue').val();
+											let kab 		= $('#kabValue').val(); 
+											let kec 		= $('#kecValue').val();
+											let startDate 	= $('#tglawal').val() === '' ? 0 : $('#tglawal').val();
+											let endDate 	= $('#tglakhir').val() === '' ? 0 : $('#tglakhir').val();
 											$(this).removeClass('btn-default').addClass('btn-primary');
 											$('#ktanipemula,#ktanimadya,#ktaniutama').removeClass('btn-primary').addClass('btn-default');
 											$('#ktaniBtnValue').val('total');
 											if($('#ktaniTipeGrafik').val() == 'bar'){
-												barChart('laporanKelas',kab,kec,cdk,'total');
+												barChart('laporanKelas',kab,kec,0,'total',startDate,endDate);
 											}else{
-												pieChart('laporanKelas',kab,kec,cdk,'total');
+												pieChart('laporanKelas',kab,kec,0,'total',startDate,endDate);
 											}
 										});
 
 										$('#ktanipemula').on('click', function(){
-											let kab = $('#kabValue').val(); 
-											let kec = $('#kecValue').val(); 
-											let cdk = $('#cdkValue').val();
+											let kab 		= $('#kabValue').val(); 
+											let kec 		= $('#kecValue').val();
+											let startDate 	= $('#tglawal').val() === '' ? 0 : $('#tglawal').val();
+											let endDate 	= $('#tglakhir').val() === '' ? 0 : $('#tglakhir').val();
 											$(this).removeClass('btn-default').addClass('btn-primary');
 											$('#ktanitotal,#ktanimadya,#ktaniutama').removeClass('btn-primary').addClass('btn-default');
 											$('#ktaniBtnValue').val('pemula');
 											if($('#ktaniTipeGrafik').val() == 'bar'){
-												barChart('laporanKelas',kab,kec,cdk,'pemula');
+												barChart('laporanKelas',kab,kec,0,'pemula',startDate,endDate);
 											}else{
-												pieChart('laporanKelas',kab,kec,cdk,'pemula');
+												pieChart('laporanKelas',kab,kec,0,'pemula',startDate,endDate);
 											}
 										});
 
 										$('#ktanimadya').on('click', function(){
-											let kab = $('#kabValue').val(); 
-											let kec = $('#kecValue').val(); 
-											let cdk = $('#cdkValue').val();
+											let kab 		= $('#kabValue').val(); 
+											let kec 		= $('#kecValue').val();
+											let startDate 	= $('#tglawal').val() === '' ? 0 : $('#tglawal').val();
+											let endDate 	= $('#tglakhir').val() === '' ? 0 : $('#tglakhir').val();
 											$(this).removeClass('btn-default').addClass('btn-primary');
 											$('#ktanipemula,#ktanitotal,#ktaniutama').removeClass('btn-primary').addClass('btn-default');
 											$('#ktaniBtnValue').val('madya');
 											if($('#ktaniTipeGrafik').val() == 'bar'){
-												barChart('laporanKelas',kab,kec,cdk,'madya');
+												barChart('laporanKelas',kab,kec,0,'madya',startDate,endDate);
 											}else{
-												pieChart('laporanKelas',kab,kec,cdk,'madya');
+												pieChart('laporanKelas',kab,kec,0,'madya',startDate,endDate);
 											}
 										});
 
 										$('#ktaniutama').on('click', function(){
-											let kab = $('#kabValue').val(); 
-											let kec = $('#kecValue').val(); 
-											let cdk = $('#cdkValue').val();
+											let kab 		= $('#kabValue').val(); 
+											let kec 		= $('#kecValue').val();
+											let startDate 	= $('#tglawal').val() === '' ? 0 : $('#tglawal').val();
+											let endDate 	= $('#tglakhir').val() === '' ? 0 : $('#tglakhir').val();
 											$(this).removeClass('btn-default').addClass('btn-primary');
 											$('#ktanipemula,#ktanimadya,#ktanitotal').removeClass('btn-primary').addClass('btn-default');
 											$('#ktaniBtnValue').val('utama');
 											if($('#ktaniTipeGrafik').val() == 'bar'){
-												barChart('laporanKelas',kab,kec,cdk,'utama');
+												barChart('laporanKelas',kab,kec,0,'utama',startDate,endDate);
 											}else{
-												pieChart('laporanKelas',kab,kec,cdk,'utama');
+												pieChart('laporanKelas',kab,kec,0,'utama',startDate,endDate);
 											}
 										});
 
-										function barChart(jenis,kab,kec,cdk,tipe){
+										function barChart(jenis,kab,kec,cdk,tipe,startDate,endDate){
 											am4core.ready(function() {
 											am4core.useTheme(am4themes_animated);
 											var chart = am4core.create("chartdiv", am4charts.XYChart);
 											chart.scrollbarX = new am4core.Scrollbar();
 
 											// Add data
-											chart.dataSource.url = "<?=base_url()?>/home/"+jenis+"/"+kab+"/"+kec+"/"+cdk+"/"+tipe;
+											chart.dataSource.url = "<?=base_url()?>/home/"+jenis+"/"+kab+"/"+kec+"/"+cdk+"/"+tipe+"/"+startDate+"/"+endDate;
 											chart.dataSource.updateCurrentData = true;
 
 											// Create axes
@@ -439,27 +455,40 @@
 											});
 										}
 
-										function pieChart(jenis,kab,kec,cdk,tipe){
+										function pieChart(jenis,kab,kec,cdk,tipe,startDate,endDate){
+											// pie chart 1
 											am4core.ready(function() {
-											am4core.useTheme(am4themes_animated);
-											var chart = am4core.create("chartdiv", am4charts.PieChart);
-											chart.dataSource.url = "<?=base_url()?>/home/"+jenis+"/"+kab+"/"+kec+"/"+cdk+"/"+tipe;
-											chart.dataSource.updateCurrentData = true;
+												am4core.useTheme(am4themes_animated);
+												var chart = am4core.create("chartdiv", am4charts.PieChart);
+												chart.dataSource.url = "<?=base_url()?>/home/"+jenis+"/"+kab+"/"+kec+"/"+cdk+"/"+tipe+"/"+startDate+"/"+endDate;
+												chart.dataSource.updateCurrentData = true;
 
-											// Add and configure Series
-											var pieSeries = chart.series.push(new am4charts.PieSeries());
-											pieSeries.dataFields.value = "visits";
-											pieSeries.dataFields.category = "country";
-											pieSeries.slices.template.stroke = am4core.color("#fff");
-											pieSeries.slices.template.strokeWidth = 2;
-											pieSeries.slices.template.strokeOpacity = 1;
+												// Add and configure Series
+												var pieSeries = chart.series.push(new am4charts.PieSeries());
+												pieSeries.dataFields.value = "visits";
+												pieSeries.dataFields.category = "country";
+												pieSeries.slices.template.stroke = am4core.color("#fff");
+												pieSeries.slices.template.strokeWidth = 2;
+												pieSeries.slices.template.strokeOpacity = 1;
 
-											// This creates initial animation
-											pieSeries.hiddenState.properties.opacity = 1;
-											pieSeries.hiddenState.properties.endAngle = -90;
-											pieSeries.hiddenState.properties.startAngle = -90;
+												// This creates initial animation
+												pieSeries.hiddenState.properties.opacity = 1;
+												pieSeries.hiddenState.properties.endAngle = -90;
+												pieSeries.hiddenState.properties.startAngle = -90;
+											});
 
-											}); // end am4core.ready()
+											// pie cart 2
+											// am4core.ready(function() {
+											// 	am4core.useTheme(am4themes_animated);
+											// 	var chart = am4core.create("chartdiv", am4charts.PieChart3D);
+											// 	chart.hiddenState.properties.opacity = 0;
+											// 	chart.dataSource.url = "<?=base_url()?>/home/"+jenis+"/"+kab+"/"+kec+"/"+cdk+"/"+tipe;
+											// 	chart.dataSource.updateCurrentData = true;
+											// 	chart.legend = new am4charts.Legend();
+											// 	var series = chart.series.push(new am4charts.PieSeries3D());
+											// 	series.dataFields.value = "visits";
+											// 	series.dataFields.category = "country";
+											// });
 										}
 										</script>
 									</div>
