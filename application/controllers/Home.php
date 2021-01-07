@@ -15,7 +15,7 @@ class Home extends CI_Controller {
 	{
 		$data['page']		= 'home';
 		$data['kabupaten']	= $this->db->get('m_kabupaten')->result();
-		$data['kecamatan']	= $this->db->get_where('m_kecamatan',['kodekab'=>01])->result();
+		$data['sertifikat']	= $this->db->get('m_jenis_sertifikat')->result();
 		$this->load->view('home',$data);
 	}
 
@@ -120,6 +120,65 @@ class Home extends CI_Controller {
 		$this->output
 			 ->set_content_type('application/json')
 			 ->set_output(json_decode(json_encode($a)));
+	}
+
+	public function laporanKepemilikanLahan($jenis,$blok,$filter)
+	{
+		if($jenis == 0 && $blok == 0){
+			$sql = "SELECT count(a.id) as jumlah,b.nama AS jenis, sum(a.luas_lahan) as luas_lahan
+			FROM pemilik_lahan a INNER JOIN m_jenis_sertifikat b ON b.id = a.jenis_sertifikat
+			GROUP BY b.nama";
+
+			$data = $this->db->query($sql)->result_object();
+			$a = '['; $n=1;
+			foreach($data as $stat){
+				if($n>1)
+				$a .= ',';
+				$total = $filter == 'total' ? $stat->jumlah : $stat->luas_lahan;
+				$a .= '{"jenis":"'.$stat->jenis.'","total":'.$total.'}';
+				$n++;
+			}
+			$a .= ']';
+
+		}else{
+			$blok = urldecode($blok);
+			$sql  = "SELECT a.nama_sertifikat, a.blok, b.nama AS jenis_sertifikat,
+					sum(a.luas_lahan) as luas_lahan, count(a.id) as total_data
+					FROM pemilik_lahan a INNER JOIN m_jenis_sertifikat b ON b.id = a.jenis_sertifikat
+					WHERE a.blok = '$blok'
+					GROUP BY a.nama_sertifikat,b.nama,a.blok";
+			$data = $this->db->query($sql)->result_object();
+			$a = '['; $n=1;
+			foreach($data as $stat){
+				if($n>1)
+				$a .= ',';
+				$total = $filter == 'total' ? $stat->total_data : $stat->luas_lahan;
+				$a .= '{"jenis":"'.$stat->nama_sertifikat.'","total":'. $total.'}';
+				$n++;
+			}
+			$a .= ']';
+		}
+		
+		$this->output
+		->set_content_type('application/json')
+		->set_output(json_decode(json_encode($a)));
+
+	}
+
+	public function getBlokLahan($jenis)
+	{
+		if($jenis == 0){
+			$data = $this->db->query('SELECT a.blok FROM pemilik_lahan a
+					GROUP BY a.blok')->result_object();
+		}else{
+			$data = $this->db->query('SELECT a.blok FROM pemilik_lahan a 	
+					WHERE a.jenis_sertifikat = '.$jenis.'
+					GROUP BY a.blok')->result_object();
+		}
+
+		$this->output
+		->set_content_type('application/json')
+		->set_output(json_encode($data));
 	}
 
 }
