@@ -79,12 +79,12 @@ class Home extends CI_Controller {
 
 		if ($kab==0){
 			$sql = $sql." from m_kabupaten t0 
-				LEFT JOIN m_unit_kerja_wilayah t1 on t1.kabupaten_id=t0.id ";
+				LEFT JOIN m_unit_kerja_wilayah t1 on t1.kabupaten_id=t0.id";
 
 			if($cdk>0){
 				$sql=$sql." where t1.unit_kerja_id=".$cdk;
 			}
-
+			$sql .= " ORDER BY jml DESC";
 			$query = $this->db->query($sql);
 		}else{			
 			if($kec==0){
@@ -105,6 +105,7 @@ class Home extends CI_Controller {
 					$sql=$sql." and t1.unit_kerja_id=".$cdk;
 				}
 			}
+			$sql .= " ORDER BY jml DESC";
 			$query = $this->db->query($sql);
 		}
 
@@ -122,12 +123,30 @@ class Home extends CI_Controller {
 			 ->set_output(json_decode(json_encode($a)));
 	}
 
-	public function laporanKepemilikanLahan($jenis,$blok,$filter)
+	public function laporanKepemilikanLahan($jenis,$blok,$filter,$startdate,$enddate)
 	{
+		if($startdate != 0 && $enddate != 0){
+			$sd = date('Y-m-d', strtotime($startdate)).' 00:00:00';
+			$ed = date('Y-m-d', strtotime($enddate)). ' 23:59:00';
+			if($jenis == 0 && $blok == 0){
+				$betweenDate = " WHERE tanggal BETWEEN '".$sd."' AND '".$ed."'";
+			}else{
+				$betweenDate = " AND tanggal BETWEEN '".$sd."' AND '".$ed."'";
+			}
+		}else{
+			$betweenDate = "";
+		}
+
 		if($jenis == 0 && $blok == 0){
+			if($filter == 'total'){
+				$orderBy = " ORDER BY jumlah DESC";
+			}else{
+				$orderBy = " ORDER BY luas_lahan DESC";
+			}
+
 			$sql = "SELECT count(a.id) as jumlah,b.nama AS jenis, sum(a.luas_lahan) as luas_lahan
-			FROM pemilik_lahan a INNER JOIN m_jenis_sertifikat b ON b.id = a.jenis_sertifikat
-			GROUP BY b.nama";
+			FROM pemilik_lahan a INNER JOIN m_jenis_sertifikat b ON b.id = a.jenis_sertifikat $betweenDate
+			GROUP BY b.nama $orderBy";
 
 			$data = $this->db->query($sql)->result_object();
 			$a = '['; $n=1;
@@ -141,12 +160,18 @@ class Home extends CI_Controller {
 			$a .= ']';
 
 		}else{
+			if($filter == 'total'){
+				$orderBy = " ORDER BY total_data DESC";
+			}else{
+				$orderBy = " ORDER BY luas_lahan DESC";
+			}
+
 			$blok = urldecode($blok);
 			$sql  = "SELECT a.nama_sertifikat, a.blok, b.nama AS jenis_sertifikat,
 					sum(a.luas_lahan) as luas_lahan, count(a.id) as total_data
 					FROM pemilik_lahan a INNER JOIN m_jenis_sertifikat b ON b.id = a.jenis_sertifikat
-					WHERE a.blok = '$blok'
-					GROUP BY a.nama_sertifikat,b.nama,a.blok";
+					WHERE a.blok = '$blok' $betweenDate 
+					GROUP BY a.nama_sertifikat,b.nama,a.blok $orderBy";
 			$data = $this->db->query($sql)->result_object();
 			$a = '['; $n=1;
 			foreach($data as $stat){
