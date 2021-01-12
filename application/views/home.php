@@ -486,7 +486,8 @@
 											series.columns.template.column.cornerRadiusTopLeft = 10;
 											series.columns.template.column.cornerRadiusTopRight = 10;
 											series.columns.template.column.fillOpacity = 0.8;
-
+											series.stacked = true;
+											
 											// on hover, make corner radiuses bigger
 											var hoverState = series.columns.template.column.states.create("hover");
 											hoverState.properties.cornerRadiusTopLeft = 0;
