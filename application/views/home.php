@@ -87,9 +87,9 @@
 		#chartdiv,
 		#chartdiv2,
 		#chartdivpie1,
-		#chartdivpie2,
-		#chartdivpie3,
-		#chartdivpie4 {
+		#chartdivpieanggota1,
+		#chartdivpieanggota2,
+		#chartdivpieanggota3 {
 			width: 100%;
 			height: 500px;
 		}
@@ -112,6 +112,21 @@
 		.box-shadow.p-3.kepemilikan {
 			background: #81b7d294;
 			border-bottom: 3px solid #37474F;
+		}
+
+		.card__anggota {
+			-webkit-box-shadow: 1px 1px 4px 1px rgba(201, 201, 201, 0.51);
+			-moz-box-shadow: 1px 1px 4px 1px rgba(201, 201, 201, 0.51);
+			box-shadow: 1px 1px 4px 1px rgba(201, 201, 201, 0.51);
+			margin: 10px;
+		}
+
+		.card__anggota_total {
+			-webkit-box-shadow: 1px 1px 4px 1px rgba(201, 201, 201, 0.51);
+			-moz-box-shadow: 1px 1px 4px 1px rgba(201, 201, 201, 0.51);
+			box-shadow: 1px 1px 4px 1px rgba(201, 201, 201, 0.51);
+			margin: 15px;
+			padding: 10px;
 		}
 	</style>
 </head>
@@ -337,8 +352,6 @@
 										</div>
 									</div>
 								</div>
-
-
 								<hr>
 								<div class="row">
 									<div class="col-lg-12">
@@ -367,8 +380,6 @@
 															<td id="totalMadya"></td>
 															<td id="totalUtama"></td>
 															<td id="totalSemua"></td>
-														</tr>
-													</tfoot>
 												</table>
 											</div>
 										</div>
@@ -401,60 +412,97 @@
 													</div>
 												</div>
 											</div>
+											<hr><br>
 										</div>
-
-										<hr>
-										<br>
 										<div id="grafikTani">
 											<div id="grafikText" class="text-center">
 												<h3 style="margin-bottom:0px">Jumlah Semua Data Kelompok Tani Per Tahun</h3>
 												<small>Data kelompok tani berdasarkan tahun berdiri</small>
 											</div>
 											<div id="chartdiv2"></div>
+											<hr><br>
 										</div>
-
-										<hr>
-										<br>
 										<div id="pieTani">
 											<div id="grafikText" class="text-center">
 												<h3 style="margin-bottom:0px">Jumlah Semua Data Kelompok Tani Berdasarkan File</h3>
 												<small>Data kelompok tani berdasarkan file</small>
 											</div>
 											<div id="chartdivpie1"></div>
+											<hr><br>
 										</div>
+										<div id="pieAnggota" style="display:none">
+											<div id="grafikText" class="text-center">
+												<h3 style="margin-bottom:0px">Jumlah Data Anggota Kelompok Tani</h3>
+												<small>Data Anggota Kelompok tani</small>
+												<h2 style="text-align: center;">10000</h2>
+											</div>
+											<div class="row">
+												<div class="col-lg-12">
+													<div class="card__anggota">
+														<div id="chartdivpieanggota1"></div>
+													</div>
+												</div>
+											</div>
+											<div class="row">
+												<div class="col-lg-6">
+													<div class="card__anggota">
+														<div id="chartdivpieanggota2"></div>
+														<div class="row">
+															<div class="col-md-12">
+																<div class="card__anggota_total">
+																	Lorem ipsum dolor sit amet consectetur, adipisicing elit. Enim debitis quisquam cumque fugiat autem, dolore vitae corrupti quo, quasi quas, fuga perspiciatis laborum aperiam asperiores eum. Eum quam quod eaque.
+																</div>
+															</div>
+														</div>
+													</div>
+												</div>
+												<div class="col-lg-6">
+													<div class="card__anggota">
+														<div id="chartdivpieanggota3"></div>
+														<div class="row">
+															<div class="col-md-12">
+																<div class="card__anggota_total">
+																	Lorem ipsum dolor sit amet consectetur, adipisicing elit. Enim debitis quisquam cumque fugiat autem, dolore vitae corrupti quo, quasi quas, fuga perspiciatis laborum aperiam asperiores eum. Eum quam quod eaque.
+																</div>
+															</div>
+														</div>
 
-										<script src="https://cdn.amcharts.com/lib/4/core.js"></script>
-										<script src="https://cdn.amcharts.com/lib/4/charts.js"></script>
-										<script src="https://cdn.amcharts.com/lib/4/themes/animated.js"></script>
-										<!-- Chart code -->
-										<script>
-											const baseUrl = '<?= base_url() ?>';
-										</script>
-										<script src="<?= base_url('assets/js/dashboard.js') ?>"></script>
+													</div>
+												</div>
+											</div>
+
+											<script src="https://cdn.amcharts.com/lib/4/core.js"></script>
+											<script src="https://cdn.amcharts.com/lib/4/charts.js"></script>
+											<script src="https://cdn.amcharts.com/lib/4/themes/animated.js"></script>
+											<!-- Chart code -->
+											<script>
+												const baseUrl = '<?= base_url() ?>';
+											</script>
+											<script src="<?= base_url('assets/js/dashboard.js') ?>"></script>
 
 
 
 
+										</div>
 									</div>
 								</div>
 							</div>
 						</div>
-					</div>
-					<!-- /dashboard content -->
+						<!-- /dashboard content -->
 
-					<!-- Footer -->
-					<div class="footer text-muted">
-						&copy; 2018 <a href="#">Statistik</a>
+						<!-- Footer -->
+						<div class="footer text-muted">
+							&copy; 2018 <a href="#">Statistik</a>
+						</div>
+						<!-- /footer -->
 					</div>
-					<!-- /footer -->
+					<!-- /content area -->
 				</div>
-				<!-- /content area -->
+				<!-- /main content -->
 			</div>
-			<!-- /main content -->
+			<!-- /page content -->
 		</div>
-		<!-- /page content -->
-	</div>
-	<!-- /page container -->
+		<!-- /page container -->
 </body>
 
 </html>
