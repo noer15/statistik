@@ -348,7 +348,7 @@ function barChartTahun() {
 		hoverState.properties.fillOpacity = 1;
 
 		series.columns.template.adapter.add("fill", function (fill, target) {
-			return chart.colors.getIndex(target.dataItem.index);
+			return chart.colors.getIndex(1);
 		});
 
 		// Cursor
@@ -491,26 +491,6 @@ function pieChartLahan(jenis, blok, filter, sdate, edate) {
 		pieSeries.hiddenState.properties.endAngle = -90;
 		pieSeries.hiddenState.properties.startAngle = -90;
 	});
-
-	// am4core.ready(function() {
-	// 	am4core.useTheme(am4themes_animated);
-	// 	var chart = am4core.create("chartdiv", am4charts.PieChart3D);
-	// 	chart.hiddenState.properties.opacity = 0; // this creates initial fade-in
-
-	// 	chart.dataSource.url = "<?= base_url() ?>/home/laporanKepemilikanLahan/"+jenis+"/"+blok+"/"+filter;
-	// 	chart.dataSource.updateCurrentData = true;
-
-	// 	chart.innerRadius = am4core.percent(40);
-	// 	chart.depth = 120;
-	// 	chart.legend = new am4charts.Legend();
-	// 	var series = chart.series.push(new am4charts.PieSeries3D());
-	// 	series.dataFields.value = "total";
-	// 	series.dataFields.depthValue = "total";
-	// 	series.dataFields.category = "jenis";
-	// 	series.slices.template.cornerRadius = 5;
-	// 	series.colors.step = 3;
-
-	// }); // end am4core.ready()
 }
 
 function pieChartTotal() {
@@ -532,6 +512,82 @@ function pieChartTotal() {
 		pieSeries.hiddenState.properties.opacity = 1;
 		pieSeries.hiddenState.properties.endAngle = -90;
 		pieSeries.hiddenState.properties.startAngle = -90;
+	});
+}
+
+function pieChartAnggota() {
+	am4core.ready(function () {
+		am4core.useTheme(am4themes_animated);
+		var chart = am4core.create("chartdivpieanggota1", am4charts.PieChart);
+		chart.dataSource.url = baseUrl + "/home/laporananggotakelompok/umur";
+		chart.dataSource.updateCurrentData = true;
+
+		// Add and configure Series
+		var pieSeries = chart.series.push(new am4charts.PieSeries());
+		pieSeries.dataFields.value = "total";
+		pieSeries.dataFields.category = "name";
+		pieSeries.slices.template.stroke = am4core.color("#fff");
+		pieSeries.slices.template.strokeWidth = 2;
+		pieSeries.slices.template.strokeOpacity = 1;
+
+		// This creates initial animation
+		pieSeries.hiddenState.properties.opacity = 1;
+		pieSeries.hiddenState.properties.endAngle = -90;
+		pieSeries.hiddenState.properties.startAngle = -90;
+	});
+
+	am4core.ready(function () {
+		am4core.useTheme(am4themes_animated);
+		var chart = am4core.create("chartdivpieanggota2", am4charts.PieChart);
+		chart.dataSource.url = baseUrl + "/home/laporananggotakelompok/jk";
+		chart.dataSource.updateCurrentData = true;
+
+		// Add and configure Series
+		var pieSeries = chart.series.push(new am4charts.PieSeries());
+		pieSeries.dataFields.value = "total";
+		pieSeries.dataFields.category = "name";
+		pieSeries.slices.template.stroke = am4core.color("#fff");
+		pieSeries.slices.template.strokeWidth = 2;
+		pieSeries.slices.template.strokeOpacity = 1;
+
+		// This creates initial animation
+		pieSeries.hiddenState.properties.opacity = 1;
+		pieSeries.hiddenState.properties.endAngle = -90;
+		pieSeries.hiddenState.properties.startAngle = -90;
+	});
+
+	am4core.ready(function () {
+		am4core.useTheme(am4themes_animated);
+		var chart = am4core.create("chartdivpieanggota3", am4charts.PieChart);
+		chart.dataSource.url = baseUrl + "/home/laporananggotakelompok/pendidikan";
+		chart.dataSource.updateCurrentData = true;
+
+		// Add and configure Series
+		var pieSeries = chart.series.push(new am4charts.PieSeries());
+		pieSeries.dataFields.value = "total";
+		pieSeries.dataFields.category = "name";
+		pieSeries.slices.template.stroke = am4core.color("#fff");
+		pieSeries.slices.template.strokeWidth = 2;
+		pieSeries.slices.template.strokeOpacity = 1;
+
+		// This creates initial animation
+		pieSeries.hiddenState.properties.opacity = 1;
+		pieSeries.hiddenState.properties.endAngle = -90;
+		pieSeries.hiddenState.properties.startAngle = -90;
+	});
+
+	$.get(baseUrl + "/home/laporananggotakelompok/umur", function (response) {
+		$("#textTotalAnggota").text(
+			response[0].total +
+				response[1].total +
+				response[2].total +
+				response[3].total +
+				" anggota"
+		);
+		$("#textTotalAnggota17").text(response[0].total + " anggota");
+		$("#textTotalAnggota35").text(response[1].total + " anggota");
+		$("#textTotalAnggota50").text(response[2].total + " anggota");
+		$("#textTotalAnggota51").text(response[3].total + " anggota");
 	});
 }
 
@@ -671,13 +727,17 @@ $("#tabel").click(function () {
 $("#kelompokdata").on("change", function () {
 	if ($(this).val() == "tani") {
 		$(".keltani,#grafikTani,#pieTani").show();
-		$(".kellahan").hide();
+		$(".kellahan,#pieAnggota").hide();
 		barChart("laporanKelas", 0, 0, 0, "total", 0, 0);
 	} else if ($(this).val() == "lahan") {
 		$(".kellahan").show();
-		$(".keltani,#grafikTani,#pieTani").hide();
+		$(".keltani,#grafikTani,#pieTani,#pieAnggota").hide();
 		barChartLahan(0, 0, "total", 0, 0);
 		getBlokLahan(0);
+	} else if ($(this).val() == "anggota") {
+		pieChartAnggota();
+		$("#pieAnggota").show();
+		$("#grafik,#grafikTani,#pieTani").hide();
 	}
 });
 
