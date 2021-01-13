@@ -36,6 +36,7 @@
 	<script type="text/javascript" src="<?php echo base_url(); ?>assets/limitless/assets/js/core/app.js"></script>
 	<script type="text/javascript" src="<?php echo base_url(); ?>assets/limitless/assets/js/pages/dashboard.js"></script>
 	<!-- /theme JS files -->
+
 	<style>
 		.box-shadow {
 			-webkit-box-shadow: 0 4px 6px -1px rgba(0, 0, 0, .1), 0 2px 4px -1px rgba(0, 0, 0, .06);
@@ -45,6 +46,19 @@
 			border-radius: 4px;
 			height: 100px;
 			border-bottom: 2px solid #333;
+		}
+
+		span .title__total {
+			border-bottom: 2px solid red;
+		}
+
+		tbody#tabel-tani tr:nth-child(odd) {
+			background-color: #eae9e9;
+		}
+
+		span.title__total {
+			padding-left: 10px;
+			font-weight: 600;
 		}
 
 		.box-shadow>h2 {
@@ -66,7 +80,16 @@
 			height: auto;
 		}
 
-		#chartdiv {
+		.panel-body.total__data {
+			background-color: #eeeeee;
+		}
+
+		#chartdiv,
+		#chartdiv2,
+		#chartdivpie1,
+		#chartdivpie2,
+		#chartdivpie3,
+		#chartdivpie4 {
 			width: 100%;
 			height: 500px;
 		}
@@ -143,7 +166,7 @@
 									<div style="background: #07b739;border-radius: 50%;padding: 20px;color: #fff;height: 60px;">
 										<i class="icon-users" style="font-size:20px"></i>
 									</div>
-									<div style="width: 50%;">
+									<div style="width: 60%;">
 										<span>Data Pegawai</span>
 										<h2 style="margin-top: -0px;font-size: 20px;font-weight: 600;"><?= $this->db->get('tb_pegawai')->num_rows() ?></h2>
 									</div>
@@ -157,7 +180,7 @@
 									<div style="background: #FFC107;border-radius: 50%;padding: 20px;color: #fff;height: 60px;">
 										<i class="icon-user-tie" style="font-size:20px"></i>
 									</div>
-									<div style="width: 50%;">
+									<div style="width: 60%;">
 										<span>Penyuluhan PKSM</span>
 										<h2 style="margin-top: -0px;font-size: 20px;font-weight: 600;"><?= $this->db->get('t_penyuluh')->num_rows() ?></h2>
 									</div>
@@ -170,9 +193,9 @@
 									<div style="background: #88857c;border-radius: 50%;padding: 20px;color: #fff;height: 60px;">
 										<i class="icon-stats-bars" style="font-size:20px"></i>
 									</div>
-									<div style="width: 50%;">
+									<div style="width: 60%;">
 										<span>Kelompok Tani</span>
-										<h2 style="margin-top: -0px;font-size: 20px;font-weight: 600;"><?= number_format($this->db->get('kelompok_tani')->num_rows(), 0, '.', '.')  ?></h2>
+										<h2 style="margin-top: -0px;font-size: 20px;font-weight: 600;"><?= number_format($this->db->get('kelompok_tani')->num_rows(), 0, '.', '.')  ?> <span style="font-size: 12px;">Kelompok</span></h2>
 									</div>
 								</div>
 							</div>
@@ -183,9 +206,9 @@
 									<div style="background: #37474F;border-radius: 50%;padding: 20px;color: #fff;height: 60px;">
 										<i class="icon-map" style="font-size:20px"></i>
 									</div>
-									<div style="width: 50%;">
+									<div style="width: 60%;">
 										<span>Kepemilikan Lahan</span>
-										<h2 style="margin-top: -0px;font-size: 20px;font-weight: 600;"><?= number_format($this->db->get('pemilik_lahan')->num_rows(), 0, '.', '.')  ?></h2>
+										<h2 style="margin-top: -0px;font-size: 20px;font-weight: 600;"><?= number_format($this->db->get('pemilik_lahan')->num_rows(), 0, '.', '.')  ?> <span style="font-size: 12px;">Persil</span></h2>
 									</div>
 								</div>
 							</div>
@@ -200,6 +223,7 @@
 										<select name="" id="kelompokdata" class="form-control">
 											<option value="tani">Kelompok Tani</option>
 											<option value="lahan">Kepemilikan Lahan</option>
+											<option value="anggota">Anggota Kelompok Tani</option>
 										</select>
 									</div>
 									<!-- kelompok tani -->
@@ -313,528 +337,104 @@
 										</div>
 									</div>
 								</div>
-								<div class="table">
-									<table>
-										<thead>
-											<tr>
-												<th>Kabupaten</th>
-												<th>Pemula</th>
-												<th>Madya</th>
-											</tr>
-										</thead>
-									</table>
-								</div>
+
 
 								<hr>
 								<div class="row">
 									<div class="col-lg-12">
-										<div id="chartdiv"></div>
+										<div class="panel panel-default tabel" style="display: none;" id="resultTable">
+											<!-- Default panel contents -->
+											<div class="panel-heading">
+												<button id="btnExport" class="btn btn-primary">Report Kelompok Tani</button>
+											</div>
+											<div id="tblData">
+												<table class="table" style="width:100%">
+													<thead>
+														<tr>
+															<th>No</th>
+															<th id="namaTabel">Nama</th>
+															<th>Pemula</th>
+															<th>Madya</th>
+															<th>Utama</th>
+															<th>Total</th>
+														</tr>
+													</thead>
+													<tbody id="tabel-tani"></tbody>
+													<tfoot>
+														<tr style="background-color: #eee9e9;color: black;;">
+															<td colspan="2">Total</td>
+															<td id="totalPemula"></td>
+															<td id="totalMadya"></td>
+															<td id="totalUtama"></td>
+															<td id="totalSemua"></td>
+														</tr>
+													</tfoot>
+												</table>
+											</div>
+										</div>
+										<div id="grafik">
+											<div id="grafikText" class="text-center">
+												<h3 style="margin-bottom:0px">Jumlah Semua Data Kelompok Tani</h3>
+												<small>Data kelompok tani Pemula, Madya dan Utama</small>
+											</div>
+											<div class="row">
+												<div class="col-lg-10">
+													<div id="chartdiv"></div>
+												</div>
+												<div class="col-lg-2">
+													<div class="panel panel-default" style="margin-top: 25px;">
+														<div class="panel-body total__data">
+															<i class="icon-stats-bars2"></i>
+															<span class="title__total">Total Data</span>
+															<hr style="margin-top: 5px;margin-bottom: -10px;">
+															<h3 style="text-align:center;">5000</h3>
+														</div>
+													</div>
+													<div class="panel panel-default" style="margin-top: 25px;">
+														<div class="total__data">
+															<div style="margin: 10px;"><i class="icon-stats-bars2"></i>
+																<span class="title__total">Data Tertinggi</span>
+															</div>
+															<hr style="margin-top: 5px;margin-bottom: -10px;">
+															<h3 style="text-align:center;">5000</h3>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+
+										<hr>
+										<br>
+										<div id="grafikTani">
+											<div id="grafikText" class="text-center">
+												<h3 style="margin-bottom:0px">Jumlah Semua Data Kelompok Tani Per Tahun</h3>
+												<small>Data kelompok tani berdasarkan tahun berdiri</small>
+											</div>
+											<div id="chartdiv2"></div>
+										</div>
+
+										<hr>
+										<br>
+										<div id="pieTani">
+											<div id="grafikText" class="text-center">
+												<h3 style="margin-bottom:0px">Jumlah Semua Data Kelompok Tani Berdasarkan File</h3>
+												<small>Data kelompok tani berdasarkan file</small>
+											</div>
+											<div id="chartdivpie1"></div>
+										</div>
 
 										<script src="https://cdn.amcharts.com/lib/4/core.js"></script>
 										<script src="https://cdn.amcharts.com/lib/4/charts.js"></script>
 										<script src="https://cdn.amcharts.com/lib/4/themes/animated.js"></script>
 										<!-- Chart code -->
 										<script>
-											barChartTotal('laporanKelas', 0, 0, 0, 'total', 0, 0);
-
-											$('#ktanibar').click(function() {
-												$(this).removeClass('btn-default').addClass('btn-primary');
-												$('#ktanipie').removeClass('btn-primary').addClass('btn-default');
-												$('#ktaniTipeGrafik').val('bar');
-												let kab = $('#kabValue').val();
-												let kec = $('#kecValue').val();
-												let tipe = $('#ktaniBtnValue').val();
-												let startDate = $('#tglawal').val() === '' ? 0 : $('#tglawal').val();
-												let endDate = $('#tglakhir').val() === '' ? 0 : $('#tglakhir').val();
-												barChart('laporanKelas', kab, kec, 0, tipe, startDate, endDate);
-											});
-
-											$('#ktanipie').click(function() {
-												$(this).removeClass('btn-default').addClass('btn-primary');
-												$('#ktanibar').removeClass('btn-primary').addClass('btn-default');
-												$('#ktaniTipeGrafik').val('pie');
-												let kab = $('#kabValue').val();
-												let kec = $('#kecValue').val();
-												let tipe = $('#ktaniBtnValue').val();
-												let startDate = $('#tglawal').val() === '' ? 0 : $('#tglawal').val();
-												let endDate = $('#tglakhir').val() === '' ? 0 : $('#tglakhir').val();
-												pieChart('laporanKelas', kab, kec, 0, tipe, startDate, endDate);
-											});
-
-											$('#kabValue').on('change', function() {
-												$.get("<?= base_url() ?>Desa/getKecamatan/" + $(this).val(),
-													function(response) {
-														$('#kecValue').empty();
-														$('#kecValue').append($("<option></option>").attr("value", '0').text('< ALL >'));
-														var dataArray = JSON.parse(response);
-														for (var i in dataArray) {
-															$('#kecValue').append($("<option></option>")
-																.attr("value", dataArray[i].id)
-																.text(dataArray[i].nama));
-														}
-													},
-												);
-											})
-
-											$('#kabValue,#kecValue').on('change', function() {
-												let kab = $('#kabValue').val();
-												let kec = $('#kecValue').val();
-												let tipe = $('#ktaniBtnValue').val();
-												let startDate = $('#tglawal').val() === '' ? 0 : $('#tglawal').val();
-												let endDate = $('#tglakhir').val() === '' ? 0 : $('#tglakhir').val();
-												if ($('#ktaniTipeGrafik').val() == 'bar') {
-													barChart('laporanKelas', kab, kec, 0, tipe, startDate, endDate);
-												} else {
-													pieChart('laporanKelas', kab, kec, 0, tipe, startDate, endDate);
-												}
-											});
-
-											function handlerDate(e) {
-												let kab = $('#kabValue').val();
-												let kec = $('#kecValue').val();
-												let tipe = $('#ktaniBtnValue').val();
-												let startDate = $('#tglawal').val() === '' ? 0 : $('#tglawal').val();
-												let endDate = $('#tglakhir').val() === '' ? 0 : $('#tglakhir').val();
-												if ($('#ktaniTipeGrafik').val() == 'bar') {
-													barChart('laporanKelas', kab, kec, 0, tipe, startDate, endDate);
-												} else {
-													pieChart('laporanKelas', kab, kec, 0, tipe, startDate, endDate);
-												}
-											}
-
-											$('#ktanitotal').on('click', function() {
-												let kab = $('#kabValue').val();
-												let kec = $('#kecValue').val();
-												let startDate = $('#tglawal').val() === '' ? 0 : $('#tglawal').val();
-												let endDate = $('#tglakhir').val() === '' ? 0 : $('#tglakhir').val();
-												$(this).removeClass('btn-default').addClass('btn-primary');
-												$('#ktanipemula,#ktanimadya,#ktaniutama').removeClass('btn-primary').addClass('btn-default');
-												$('#ktaniBtnValue').val('total');
-												if ($('#ktaniTipeGrafik').val() == 'bar') {
-													barChart('laporanKelas', kab, kec, 0, 'total', startDate, endDate);
-												} else {
-													pieChart('laporanKelas', kab, kec, 0, 'total', startDate, endDate);
-												}
-											});
-
-											$('#ktanipemula').on('click', function() {
-												let kab = $('#kabValue').val();
-												let kec = $('#kecValue').val();
-												let startDate = $('#tglawal').val() === '' ? 0 : $('#tglawal').val();
-												let endDate = $('#tglakhir').val() === '' ? 0 : $('#tglakhir').val();
-												$(this).removeClass('btn-default').addClass('btn-primary');
-												$('#ktanitotal,#ktanimadya,#ktaniutama').removeClass('btn-primary').addClass('btn-default');
-												$('#ktaniBtnValue').val('pemula');
-												if ($('#ktaniTipeGrafik').val() == 'bar') {
-													barChart('laporanKelas', kab, kec, 0, 'pemula', startDate, endDate);
-												} else {
-													pieChart('laporanKelas', kab, kec, 0, 'pemula', startDate, endDate);
-												}
-											});
-
-											$('#ktanimadya').on('click', function() {
-												let kab = $('#kabValue').val();
-												let kec = $('#kecValue').val();
-												let startDate = $('#tglawal').val() === '' ? 0 : $('#tglawal').val();
-												let endDate = $('#tglakhir').val() === '' ? 0 : $('#tglakhir').val();
-												$(this).removeClass('btn-default').addClass('btn-primary');
-												$('#ktanipemula,#ktanitotal,#ktaniutama').removeClass('btn-primary').addClass('btn-default');
-												$('#ktaniBtnValue').val('madya');
-												if ($('#ktaniTipeGrafik').val() == 'bar') {
-													barChart('laporanKelas', kab, kec, 0, 'madya', startDate, endDate);
-												} else {
-													pieChart('laporanKelas', kab, kec, 0, 'madya', startDate, endDate);
-												}
-											});
-
-											$('#ktaniutama').on('click', function() {
-												let kab = $('#kabValue').val();
-												let kec = $('#kecValue').val();
-												let startDate = $('#tglawal').val() === '' ? 0 : $('#tglawal').val();
-												let endDate = $('#tglakhir').val() === '' ? 0 : $('#tglakhir').val();
-												$(this).removeClass('btn-default').addClass('btn-primary');
-												$('#ktanipemula,#ktanimadya,#ktanitotal').removeClass('btn-primary').addClass('btn-default');
-												$('#ktaniBtnValue').val('utama');
-												if ($('#ktaniTipeGrafik').val() == 'bar') {
-													barChart('laporanKelas', kab, kec, 0, 'utama', startDate, endDate);
-												} else {
-													pieChart('laporanKelas', kab, kec, 0, 'utama', startDate, endDate);
-												}
-											});
-
-											function barChartTotal(jenis, kab, kec, cdk, tipe, startDate, endDate) {
-												am4core.ready(function() {
-													am4core.useTheme(am4themes_animated);
-													var chart = am4core.create("chartdiv", am4charts.XYChart);
-													chart.scrollbarX = new am4core.Scrollbar();
-
-													// Add data
-													chart.dataSource.url = "<?= base_url() ?>/home/" + jenis + "/" + kab + "/" + kec + "/" + cdk + "/" + tipe + "/" + startDate + "/" + endDate;
-													chart.dataSource.updateCurrentData = true;
-
-													// Create axes
-													var categoryAxis = chart.xAxes.push(new am4charts.CategoryAxis());
-													categoryAxis.dataFields.category = "kabupaten";
-													categoryAxis.renderer.grid.template.location = 0;
-													categoryAxis.renderer.minGridDistance = 30;
-													categoryAxis.renderer.labels.template.horizontalCenter = "right";
-													categoryAxis.renderer.labels.template.verticalCenter = "middle";
-													categoryAxis.renderer.labels.template.rotation = 270;
-													categoryAxis.tooltip.disabled = true;
-													categoryAxis.renderer.minHeight = 110;
-
-													var valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
-													valueAxis.renderer.minWidth = 50;
-
-													// Create series
-													var series = chart.series.push(new am4charts.ColumnSeries());
-													series.dataFields.valueY = "pemula";
-													series.dataFields.categoryX = "kabupaten";
-													series.tooltipText = "Pemula : {valueY}";
-													series.tooltip.pointerOrientation = "vertical";
-													series.columns.template.column.fillOpacity = 0.9;
-
-													var series2 = chart.series.push(new am4charts.ColumnSeries());
-													series2.dataFields.valueY = "madya";
-													series2.dataFields.categoryX = "kabupaten";
-													series2.tooltipText = "Madya : {valueY}";
-													series2.tooltip.pointerOrientation = "vertical";
-													series2.columns.template.column.fillOpacity = 0.9;
-
-													var series3 = chart.series.push(new am4charts.ColumnSeries());
-													series3.dataFields.valueY = "utama";
-													series3.dataFields.categoryX = "kabupaten";
-													series3.tooltipText = "Utama : {valueY}";
-													series3.columns.template.column.cornerRadiusTopLeft = 10;
-													series3.columns.template.column.cornerRadiusTopRight = 10;
-													series3.columns.template.column.fillOpacity = 0.9;
-
-													series.stacked = true;
-													series2.stacked = true;
-													series3.stacked = true;
-
-
-													// on hover, make corner radiuses bigger
-													var hoverState = series.columns.template.column.states.create("hover");
-													hoverState.properties.fillOpacity = 1;
-
-													series.columns.template.adapter.add("fill", function(fill, target) {
-														return chart.colors.getIndex(target.dataItem.index);
-													});
-													series2.columns.template.adapter.add("fill", function(fill, target) {
-														return chart.colors.getIndex(target.dataItem.index + 6);
-													});
-													series3.columns.template.adapter.add("fill", function(fill, target) {
-														return chart.colors.getIndex(target.dataItem.index + 10);
-													});
-
-													// Cursor
-													chart.cursor = new am4charts.XYCursor();
-
-												});
-											}
-
-											function barChart(jenis, kab, kec, cdk, tipe, startDate, endDate) {
-												am4core.ready(function() {
-													am4core.useTheme(am4themes_animated);
-													var chart = am4core.create("chartdiv", am4charts.XYChart);
-													chart.scrollbarX = new am4core.Scrollbar();
-
-													// Add data
-													chart.dataSource.url = "<?= base_url() ?>/home/" + jenis + "/" + kab + "/" + kec + "/" + cdk + "/" + tipe + "/" + startDate + "/" + endDate;
-													chart.dataSource.updateCurrentData = true;
-
-													// Create axes
-													var categoryAxis = chart.xAxes.push(new am4charts.CategoryAxis());
-													categoryAxis.dataFields.category = "country";
-													categoryAxis.renderer.grid.template.location = 0;
-													categoryAxis.renderer.minGridDistance = 30;
-													categoryAxis.renderer.labels.template.horizontalCenter = "right";
-													categoryAxis.renderer.labels.template.verticalCenter = "middle";
-													categoryAxis.renderer.labels.template.rotation = 270;
-													categoryAxis.tooltip.disabled = true;
-													categoryAxis.renderer.minHeight = 110;
-
-													var valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
-													valueAxis.renderer.minWidth = 50;
-
-													// Create series
-													var series = chart.series.push(new am4charts.ColumnSeries());
-													series.sequencedInterpolation = true;
-													series.dataFields.valueY = "visits";
-													series.dataFields.categoryX = "country";
-													series.tooltipText = "[{categoryX}: bold]{valueY}[/]";
-													series.columns.template.strokeWidth = 0;
-
-													series.tooltip.pointerOrientation = "vertical";
-													series.columns.template.column.cornerRadiusTopLeft = 10;
-													series.columns.template.column.cornerRadiusTopRight = 10;
-													series.columns.template.column.fillOpacity = 0.8;
-
-													// on hover, make corner radiuses bigger
-													var hoverState = series.columns.template.column.states.create("hover");
-													hoverState.properties.cornerRadiusTopLeft = 0;
-													hoverState.properties.cornerRadiusTopRight = 0;
-													hoverState.properties.fillOpacity = 1;
-
-													series.columns.template.adapter.add("fill", function(fill, target) {
-														return chart.colors.getIndex(target.dataItem.index);
-													});
-
-													chart.cursor = new am4charts.XYCursor();
-
-												});
-											}
-
-											// bar chart kepemilikan lahan
-											function barChartLahan(jenis, blok, filter, sdate, edate) {
-												am4core.ready(function() {
-													am4core.useTheme(am4themes_animated);
-													var chart = am4core.create("chartdiv", am4charts.XYChart);
-													chart.scrollbarX = new am4core.Scrollbar();
-
-													// Add data
-													chart.dataSource.url = "<?= base_url() ?>/home/laporanKepemilikanLahan/" + jenis + "/" + blok + "/" + filter + "/" + sdate + "/" + edate;
-													chart.dataSource.updateCurrentData = true;
-
-													// Create axes
-													var categoryAxis = chart.xAxes.push(new am4charts.CategoryAxis());
-													categoryAxis.dataFields.category = "jenis";
-													categoryAxis.renderer.grid.template.location = 0;
-													categoryAxis.renderer.minGridDistance = 30;
-													categoryAxis.renderer.labels.template.horizontalCenter = "right";
-													categoryAxis.renderer.labels.template.verticalCenter = "middle";
-													categoryAxis.renderer.labels.template.rotation = 270;
-													categoryAxis.tooltip.disabled = true;
-													categoryAxis.renderer.minHeight = 110;
-
-													var valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
-													valueAxis.renderer.minWidth = 50;
-
-													// Create series
-													var series = chart.series.push(new am4charts.ColumnSeries());
-													series.sequencedInterpolation = true;
-													series.dataFields.valueY = "total";
-													series.dataFields.categoryX = "jenis";
-													series.tooltipText = "[{categoryX}: bold]{valueY}[/]";
-													series.columns.template.strokeWidth = 0;
-
-													series.tooltip.pointerOrientation = "vertical";
-
-													series.columns.template.column.cornerRadiusTopLeft = 10;
-													series.columns.template.column.cornerRadiusTopRight = 10;
-													series.columns.template.column.fillOpacity = 0.8;
-
-													// on hover, make corner radiuses bigger
-													var hoverState = series.columns.template.column.states.create("hover");
-													hoverState.properties.cornerRadiusTopLeft = 0;
-													hoverState.properties.cornerRadiusTopRight = 0;
-													hoverState.properties.fillOpacity = 1;
-
-													series.columns.template.adapter.add("fill", function(fill, target) {
-														return chart.colors.getIndex(target.dataItem.index);
-													});
-
-													chart.cursor = new am4charts.XYCursor();
-
-												});
-											}
-
-											function pieChart(jenis, kab, kec, cdk, tipe, startDate, endDate) {
-												// pie chart 1
-												am4core.ready(function() {
-													am4core.useTheme(am4themes_animated);
-													var chart = am4core.create("chartdiv", am4charts.PieChart);
-													chart.dataSource.url = "<?= base_url() ?>/home/" + jenis + "/" + kab + "/" + kec + "/" + cdk + "/" + tipe + "/" + startDate + "/" + endDate;
-													chart.dataSource.updateCurrentData = true;
-
-													// Add and configure Series
-													var pieSeries = chart.series.push(new am4charts.PieSeries());
-													pieSeries.dataFields.value = "visits";
-													pieSeries.dataFields.category = "country";
-													pieSeries.slices.template.stroke = am4core.color("#fff");
-													pieSeries.slices.template.strokeWidth = 2;
-													pieSeries.slices.template.strokeOpacity = 1;
-
-													// This creates initial animation
-													pieSeries.hiddenState.properties.opacity = 1;
-													pieSeries.hiddenState.properties.endAngle = -90;
-													pieSeries.hiddenState.properties.startAngle = -90;
-												});
-
-											}
-
-											function pieChartLahan(jenis, blok, filter, sdate, edate) {
-												// pie chart 1
-												am4core.ready(function() {
-													am4core.useTheme(am4themes_animated);
-													var chart = am4core.create("chartdiv", am4charts.PieChart);
-													// Add data
-													chart.dataSource.url = "<?= base_url() ?>/home/laporanKepemilikanLahan/" + jenis + "/" + blok + "/" + filter + "/" + sdate + "/" + edate;
-													chart.dataSource.updateCurrentData = true;
-
-													// Add and configure Series
-													var pieSeries = chart.series.push(new am4charts.PieSeries());
-													pieSeries.dataFields.value = "total";
-													pieSeries.dataFields.category = "jenis";
-													pieSeries.slices.template.stroke = am4core.color("#fff");
-													pieSeries.slices.template.strokeWidth = 2;
-													pieSeries.slices.template.strokeOpacity = 1;
-
-													// This creates initial animation
-													pieSeries.hiddenState.properties.opacity = 1;
-													pieSeries.hiddenState.properties.endAngle = -90;
-													pieSeries.hiddenState.properties.startAngle = -90;
-
-												});
-
-												// am4core.ready(function() {
-												// 	am4core.useTheme(am4themes_animated);
-												// 	var chart = am4core.create("chartdiv", am4charts.PieChart3D);
-												// 	chart.hiddenState.properties.opacity = 0; // this creates initial fade-in
-
-												// 	chart.dataSource.url = "<?= base_url() ?>/home/laporanKepemilikanLahan/"+jenis+"/"+blok+"/"+filter;
-												// 	chart.dataSource.updateCurrentData = true;
-
-												// 	chart.innerRadius = am4core.percent(40);
-												// 	chart.depth = 120;
-												// 	chart.legend = new am4charts.Legend();
-												// 	var series = chart.series.push(new am4charts.PieSeries3D());
-												// 	series.dataFields.value = "total";
-												// 	series.dataFields.depthValue = "total";
-												// 	series.dataFields.category = "jenis";
-												// 	series.slices.template.cornerRadius = 5;
-												// 	series.colors.step = 3;
-
-												// }); // end am4core.ready()
-
-											}
-
-											function handlerDateLahan(e) {
-												let jenis = $('#jenisSertifikatValue').val();
-												let blok = $('#blokSertifikatValue').val();
-												let filter = $('#klahanBtnValue').val();
-												let startDate = $('#tglawallahan').val() === '' ? 0 : $('#tglawallahan').val();
-												let endDate = $('#tglakhirlahan').val() === '' ? 0 : $('#tglakhirlahan').val();
-												if ($('#klahanTipeGrafik').val() === 'bar') {
-													barChartLahan(jenis, blok, filter, startDate, endDate);
-												} else {
-													pieChartLahan(jenis, blok, filter, startDate, endDate);
-												}
-											}
-
-											function getBlokLahan(jenis) {
-												$.get("<?= base_url() ?>/home/getbloklahan/" + jenis,
-													function(response) {
-														$('#blokSertifikatValue').empty();
-														$('#blokSertifikatValue').append($("<option></option>").attr("value", '0').text('< Pilih Blok >'));
-														var dataArray = JSON.parse(JSON.stringify(response));
-														for (var i in dataArray) {
-															$('#blokSertifikatValue').append($("<option></option>")
-																.text(dataArray[i].blok));
-														}
-													}
-												);
-											}
-
-											$('#jenisSertifikatValue').on('change', function() {
-												getBlokLahan($(this).val());
-												let jenis = $('#jenisSertifikatValue').val();
-												let blok = $('#blokSertifikatValue').val();
-												let filter = $('#klahanBtnValue').val();
-												let startDate = $('#tglawallahan').val() === '' ? 0 : $('#tglawallahan').val();
-												let endDate = $('#tglakhirlahan').val() === '' ? 0 : $('#tglakhirlahan').val();
-												if ($('#klahanTipeGrafik').val() === 'bar') {
-													barChartLahan(jenis, blok, filter, startDate, endDate);
-												} else {
-													pieChartLahan(jenis, blok, filter, startDate, endDate);
-												}
-											});
-
-											$('#blokSertifikatValue').on('change', function() {
-												let jenis = $('#jenisSertifikatValue').val();
-												let blok = $(this).val();
-												let filter = $('#klahanBtnValue').val();
-												let startDate = $('#tglawallahan').val() === '' ? 0 : $('#tglawallahan').val();
-												let endDate = $('#tglakhirlahan').val() === '' ? 0 : $('#tglakhirlahan').val();
-												if ($('#klahanTipeGrafik').val() === 'bar') {
-													barChartLahan(jenis, blok, filter, startDate, endDate);
-												} else {
-													pieChartLahan(jenis, blok, filter, startDate, endDate);
-												}
-											});
-
-											$('#klahantotal').on('click', function() {
-												$(this).removeClass('btn-default').addClass('btn-primary');
-												$('#klahanBtnValue').val('total');
-												$('#klahanlahan').removeClass('btn-primary').addClass('btn-default');
-												let jenis = $('#jenisSertifikatValue').val();
-												let blok = $('#blokSertifikatValue').val();
-												let filter = $('#klahanBtnValue').val();
-												let startDate = $('#tglawallahan').val() === '' ? 0 : $('#tglawallahan').val();
-												let endDate = $('#tglakhirlahan').val() === '' ? 0 : $('#tglakhirlahan').val();
-												if ($('#klahanTipeGrafik').val() === 'bar') {
-													barChartLahan(jenis, blok, filter, startDate, endDate);
-												} else {
-													pieChartLahan(jenis, blok, filter, startDate, endDate);
-												}
-											})
-
-											$('#klahanlahan').on('click', function() {
-												$(this).removeClass('btn-default').addClass('btn-primary');
-												$('#klahanBtnValue').val('lahan');
-												$('#klahantotal').removeClass('btn-primary').addClass('btn-default');
-												let jenis = $('#jenisSertifikatValue').val();
-												let blok = $('#blokSertifikatValue').val();
-												let filter = $('#klahanBtnValue').val();
-												let startDate = $('#tglawallahan').val() === '' ? 0 : $('#tglawallahan').val();
-												let endDate = $('#tglakhirlahan').val() === '' ? 0 : $('#tglakhirlahan').val();
-												if ($('#klahanTipeGrafik').val() === 'bar') {
-													barChartLahan(jenis, blok, filter, startDate, endDate);
-												} else {
-													pieChartLahan(jenis, blok, filter, startDate, endDate);
-												}
-											});
-
-											$('#klahanbar').click(function() {
-												$(this).removeClass('btn-default').addClass('btn-primary');
-												$('#klahanpie').removeClass('btn-primary').addClass('btn-default');
-												$('#klahanTipeGrafik').val('bar');
-												let jenis = $('#jenisSertifikatValue').val();
-												let blok = $('#blokSertifikatValue').val();
-												let filter = $('#klahanBtnValue').val();
-												let startDate = $('#tglawallahan').val() === '' ? 0 : $('#tglawallahan').val();
-												let endDate = $('#tglakhirlahan').val() === '' ? 0 : $('#tglakhirlahan').val();
-												barChartLahan(jenis, blok, filter, startDate, endDate);
-											});
-
-											$('#klahanpie').click(function() {
-												$(this).removeClass('btn-default').addClass('btn-primary');
-												$('#klahanbar').removeClass('btn-primary').addClass('btn-default');
-												$('#klahanTipeGrafik').val('pie');
-												let jenis = $('#jenisSertifikatValue').val();
-												let blok = $('#blokSertifikatValue').val();
-												let filter = $('#klahanBtnValue').val();
-												let startDate = $('#tglawallahan').val() === '' ? 0 : $('#tglawallahan').val();
-												let endDate = $('#tglakhirlahan').val() === '' ? 0 : $('#tglakhirlahan').val();
-												pieChartLahan(jenis, blok, filter, startDate, endDate);
-											});
-
-											// pilih kelompok data
-											$('#kelompokdata').on('change', function() {
-												if ($(this).val() == 'tani') {
-													$('.keltani').show()
-													$('.kellahan').hide();
-													barChart('laporanKelas', 0, 0, 0, 'total', 0, 0);
-												} else
-												if ($(this).val() == 'lahan') {
-													$('.kellahan').show();
-													$('.keltani').hide()
-													barChartLahan(0, 0, 'total', 0, 0);
-													getBlokLahan(0);
-												}
-											})
+											const baseUrl = '<?= base_url() ?>';
 										</script>
+										<script src="<?= base_url('assets/js/dashboard.js') ?>"></script>
+
+
+
+
 									</div>
 								</div>
 							</div>
