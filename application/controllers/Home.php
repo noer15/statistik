@@ -295,10 +295,10 @@ class Home extends CI_Controller
 	{
 		if ($filter == 'umur') {
 			$data = $this->db->query('SELECT count(id) as total, 
-			( SELECT count(id) FROM anggota_kelompok_tani WHERE umur <= 17 ) as umur_17,
+			( SELECT count(id) FROM anggota_kelompok_tani WHERE umur <= 17 || umur is null) as umur_17,
 			( SELECT count(id) FROM anggota_kelompok_tani WHERE umur > 17 AND umur <= 35 ) as umur_35,
 			( SELECT count(id) FROM anggota_kelompok_tani WHERE umur > 35 AND umur <= 50 ) as umur_50,
-			( SELECT count(id) FROM anggota_kelompok_tani WHERE umur > 51 ) as umur_51
+			( SELECT count(id) FROM anggota_kelompok_tani WHERE umur > 50 ) as umur_51
 			FROM anggota_kelompok_tani')->row_object();
 		} else
 		if ($filter == 'jk') {
@@ -307,7 +307,7 @@ class Home extends CI_Controller
 				->result();
 		} else {
 			$data = $this->db->select('COUNT(anggota_kelompok_tani.id) as total, m_pendidikan.nama as name')
-			->join('m_pendidikan','pendidikan=m_pendidikan.id')
+			->join('m_pendidikan','pendidikan=m_pendidikan.id','LEFT')
 			->group_by('pendidikan')
 				->get('anggota_kelompok_tani')
 				->result();
@@ -407,5 +407,25 @@ class Home extends CI_Controller
 		$a .= ']';
 
 		return $query->result_object();
+	}
+
+	public function test()
+	{
+		$data = $this->db->query('SELECT
+		count( id ) AS total,
+		umur 
+	FROM
+		anggota_kelompok_tani 
+	WHERE umur > 35 AND umur <= 50
+	GROUP BY
+		umur 
+	ORDER BY
+		umur ASC')
+		->result_object();
+		$total = 0;
+		foreach($data as $d){
+			$total += $d->total;
+		}
+		echo $total;
 	}
 }

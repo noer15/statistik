@@ -156,28 +156,16 @@ $("#ktaniutama").on("click", function () {
 });
 
 function barChartTotal(jenis, kab, kec, cdk, tipe, startDate, endDate) {
+	$('#grafikTextTitle').text('Jumlah Semua Data Kelompok Tani');
+	$('#grafikTextSubtitle').text('Data kelompok tani Pemula, Madya dan Utama');
+	barChartTotalText(jenis, kab, kec, cdk, 'total', startDate, endDate);
 	am4core.ready(function () {
 		am4core.useTheme(am4themes_animated);
 		var chart = am4core.create("chartdiv", am4charts.XYChart);
 		chart.scrollbarX = new am4core.Scrollbar();
 
 		// Add data
-		chart.dataSource.url =
-			baseUrl +
-			"/home/" +
-			jenis +
-			"/" +
-			kab +
-			"/" +
-			kec +
-			"/" +
-			cdk +
-			"/" +
-			tipe +
-			"/" +
-			startDate +
-			"/" +
-			endDate;
+		chart.dataSource.url = baseUrl + "/home/" + jenis + "/" + kab + "/" + kec + "/" + cdk + "/" + tipe + "/" + startDate + "/" + endDate;
 		chart.dataSource.updateCurrentData = true;
 
 		// Create axes
@@ -240,7 +228,26 @@ function barChartTotal(jenis, kab, kec, cdk, tipe, startDate, endDate) {
 	});
 }
 
+function barChartTotalText(jenis, kab, kec, cdk, tipe, startDate, endDate) {
+	$.get(baseUrl + "/home/" + jenis + "/" + kab + "/" + kec + "/" + cdk + "/" + tipe + "/" + startDate + "/" + endDate,
+		function (response) {
+			let total = 0; let madya = 0; let pemula = 0; let utama = 0;
+			for (let i in response) {
+				total = total + response[i].pemula + response[i].madya + response[i].utama;
+				madya = madya + response[i].madya;
+				pemula = pemula + response[i].pemula;
+				utama = utama + response[i].utama;
+			}
+			$('#textTotalKelompokTani').html('<b>' + total + '</b> kelompok tani');
+			$('#textTotalKelompokTaniPemula').html('<b>' + pemula + '</b> kelompok tani');
+			$('#textTotalKelompokTaniMadya').html('<b>' + madya + '</b> kelompok tani');
+			$('#textTotalKelompokTaniUtama').html('<b>' + utama + '</b> kelompok tani');
+		}
+	);
+}
+
 function barChart(jenis, kab, kec, cdk, tipe, startDate, endDate) {
+	barChartTotalText(jenis, kab, kec, cdk, 'total', startDate, endDate);
 	am4core.ready(function () {
 		am4core.useTheme(am4themes_animated);
 		var chart = am4core.create("chartdiv", am4charts.XYChart);
@@ -299,7 +306,7 @@ function barChart(jenis, kab, kec, cdk, tipe, startDate, endDate) {
 		hoverState.properties.fillOpacity = 1;
 
 		series.columns.template.adapter.add("fill", function (fill, target) {
-			return chart.colors.getIndex(target.dataItem.index);
+			return chart.colors.getIndex(1);
 		});
 
 		chart.cursor = new am4charts.XYCursor();
@@ -307,6 +314,7 @@ function barChart(jenis, kab, kec, cdk, tipe, startDate, endDate) {
 }
 
 function barChartTahun() {
+	barChartTotalTahunText();
 	am4core.ready(function () {
 		am4core.useTheme(am4themes_animated);
 		var chart = am4core.create("chartdiv2", am4charts.XYChart);
@@ -354,6 +362,30 @@ function barChartTahun() {
 		// Cursor
 		chart.cursor = new am4charts.XYCursor();
 	});
+}
+
+function barChartTotalTahunText() {
+	$.get(baseUrl + "/home/laporankelastahun",
+		function (response) {
+			let total = 0; let tertinggi = 0; let terendah = 0; let tahun = 0;
+			for (let i in response) {
+				total = total + response[i].total;
+				if (response[i].total > tertinggi) {
+					tertinggi = response[i].total;
+					tahuntertinggi = response[i].tahun;
+				} else {
+					terendah = response[i].total;
+					if (response[i].tahun !== '0') {
+						tahunterendah = response[i].tahun;
+					}
+				}
+			}
+
+			$('#textTotalKelompokTaniTahun').html('<b>' + total + '</b> kelompok tani');
+			$('#textTotalKelompokTaniTahunTertinggi').html('<b>' + tertinggi + '</b> kelompok tani <br> Tahun berdiri <b>' + tahuntertinggi + '</b>');
+			$('#textTotalKelompokTaniTahunTerendah').html('<b>' + terendah + '</b> kelompok tani <br> Tahun berdiri <b>' + tahunterendah + '</b>');
+		}
+	);
 }
 
 // bar chart kepemilikan lahan
@@ -494,6 +526,7 @@ function pieChartLahan(jenis, blok, filter, sdate, edate) {
 }
 
 function pieChartTotal() {
+	pieChartTotalFile();
 	am4core.ready(function () {
 		am4core.useTheme(am4themes_animated);
 		var chart = am4core.create("chartdivpie1", am4charts.PieChart);
@@ -513,6 +546,18 @@ function pieChartTotal() {
 		pieSeries.hiddenState.properties.endAngle = -90;
 		pieSeries.hiddenState.properties.startAngle = -90;
 	});
+}
+
+function pieChartTotalFile() {
+	$.get(baseUrl + "/home/laporankelasfile",
+		function (response) {
+			$('#textTotalKelompokTaniFile').html('<b>' + (response[0].total + response[1].total + response[2].total + response[3].total) + '</b> File');
+			$('#textTotalKelompokTaniFileMenkumham').html('<b>' + response[0].total + '</b> File');
+			$('#textTotalKelompokTaniFileAkta').html('<b>' + response[1].total + '</b> File');
+			$('#textTotalKelompokTaniFileSk').html('<b>' + response[2].total + '</b> File');
+			$('#textTotalKelompokTaniFileBa').html('<b>' + response[3].total + '</b> File');
+		}
+	);
 }
 
 function pieChartAnggota() {
@@ -577,10 +622,10 @@ function pieChartAnggota() {
 	$.get(baseUrl + "/home/laporananggotakelompok/umur", function (response) {
 		$("#textTotalAnggota").text(
 			response[0].total +
-				response[1].total +
-				response[2].total +
-				response[3].total +
-				" anggota"
+			response[1].total +
+			response[2].total +
+			response[3].total +
+			" anggota"
 		);
 		$("#textTotalAnggota17").text(response[0].total + " anggota");
 		$("#textTotalAnggota35").text(response[1].total + " anggota");
@@ -600,23 +645,26 @@ function pieChartAnggota() {
 	$.get(
 		baseUrl + "/home/laporananggotakelompok/pendidikan",
 		function (response) {
-			$("#textTotalAnggotaPP").text(
-				response[0].total + response[1].total + response[2].total + " anggota"
-			);
+			let html = "";
+			let total = 0;
 			for (let i in response) {
-				let html =
-					'<div class="col-md-4">\
+				total = total + response[i].total;
+				if (response[i].name != "") {
+					$pendidikan = response[i].name;
+				} else {
+					$pendidikan = "Tidak diketahui";
+				}
+
+				html = '<div class="col-md-4">\
 							<div class="card__anggota_total">\
-								<span>' +
-					response[i].name +
-					"</span>\
-								<h3>" +
-					response[i].total +
-					" anggota</h3>\
+								<span>' + $pendidikan + '</span>\
+								<h3>' + response[i].total + ' anggota</h3>\
 							</div>\
-						</div>";
+						</div>';
+
 				$("#resultAnggotaPP").append(html);
 			}
+			$("#textTotalAnggotaPP").text(total);
 		}
 	);
 }
@@ -806,18 +854,18 @@ function getDataTable(kab, kec) {
 				let utm = data[i].utama;
 				$("#tabel-tani").append(
 					"<tr><td>" +
-						(i++ + 1) +
-						"</td><td>" +
-						kab +
-						"</td><td>" +
-						pem +
-						"</td><td>" +
-						mad +
-						"</td><td>" +
-						utm +
-						"</td><td>" +
-						(pem + mad + utm) +
-						"</td></tr>"
+					(i++ + 1) +
+					"</td><td>" +
+					kab +
+					"</td><td>" +
+					pem +
+					"</td><td>" +
+					mad +
+					"</td><td>" +
+					utm +
+					"</td><td>" +
+					(pem + mad + utm) +
+					"</td></tr>"
 				);
 			}
 			$("#totalPemula").html($totalPemula);

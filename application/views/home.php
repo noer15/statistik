@@ -138,6 +138,7 @@
 			margin: 5px 0 0 0;
 			font-weight: 300;
 		}
+
 	</style>
 </head>
 
@@ -393,32 +394,33 @@
 												</table>
 											</div>
 										</div>
+
+										<!-- grafik pertama -->
 										<div id="grafik">
 											<div id="grafikText" class="text-center">
-												<h3 style="margin-bottom:0px">Jumlah Semua Data Kelompok Tani</h3>
-												<small>Data kelompok tani Pemula, Madya dan Utama</small>
+												<h3 style="margin-bottom:0px" id="grafikTextTitle"></h3>
+												<small id="grafikTextSubtitle"></small>
 											</div>
 											<div class="row">
-												<div class="col-lg-10">
+												<div class="col-lg-9">
 													<div id="chartdiv"></div>
 												</div>
-												<div class="col-lg-2">
-													<div class="panel panel-default" style="margin-top: 25px;">
-														<div class="panel-body total__data">
-															<i class="icon-stats-bars2"></i>
-															<span class="title__total">Total Data</span>
-															<hr style="margin-top: 5px;margin-bottom: -10px;">
-															<h3 style="text-align:center;">5000</h3>
-														</div>
+												<div class="col-lg-3">
+													<div class="card__anggota_total">
+														<span>Total Data</span>
+														<h3 id="textTotalKelompokTani"></h3>
 													</div>
-													<div class="panel panel-default" style="margin-top: 25px;">
-														<div class="total__data">
-															<div style="margin: 10px;"><i class="icon-stats-bars2"></i>
-																<span class="title__total">Data Tertinggi</span>
-															</div>
-															<hr style="margin-top: 5px;margin-bottom: -10px;">
-															<h3 style="text-align:center;">5000</h3>
-														</div>
+													<div class="card__anggota_total">
+														<span>Pemula</span>
+														<h3 id="textTotalKelompokTaniPemula"></h3>
+													</div>
+													<div class="card__anggota_total">
+														<span>Madya</span>
+														<h3 id="textTotalKelompokTaniMadya"></h3>
+													</div>
+													<div class="card__anggota_total">
+														<span>Utama</span>
+														<h3 id="textTotalKelompokTaniUtama"></h3>
 													</div>
 												</div>
 											</div>
@@ -426,10 +428,28 @@
 										</div>
 										<div id="grafikTani">
 											<div id="grafikText" class="text-center">
-												<h3 style="margin-bottom:0px">Jumlah Semua Data Kelompok Tani Per Tahun</h3>
-												<small>Data kelompok tani berdasarkan tahun berdiri</small>
+												<h3 style="margin-bottom:0px" id="grafikTaniTitle">Jumlah Semua Data Kelompok Tani Per Tahun</h3>
+												<small id="grafikTaniSubtitle">Data kelompok tani berdasarkan tahun berdiri</small>
 											</div>
-											<div id="chartdiv2"></div>
+											<div class="row">
+												<div class="col-lg-9">
+													<div id="chartdiv2"></div>
+												</div>
+												<div class="col-lg-3">
+													<div class="card__anggota_total">
+														<span>Total Data</span>
+														<h3 id="textTotalKelompokTaniTahun"></h3>
+													</div>
+													<div class="card__anggota_total">
+														<span>Tertinggi</span>
+														<h3 id="textTotalKelompokTaniTahunTertinggi"></h3>
+													</div>
+													<div class="card__anggota_total">
+														<span>Terendah</span>
+														<h3 id="textTotalKelompokTaniTahunTerendah"></h3>
+													</div>
+												</div>
+											</div>
 											<hr><br>
 										</div>
 										<div id="pieTani">
@@ -437,7 +457,33 @@
 												<h3 style="margin-bottom:0px">Jumlah Semua Data Kelompok Tani Berdasarkan File</h3>
 												<small>Data kelompok tani berdasarkan file</small>
 											</div>
-											<div id="chartdivpie1"></div>
+											<div class="row">
+												<div class="col-lg-9">
+													<div id="chartdivpie1"></div>
+												</div>
+												<div class="col-lg-3">
+													<div class="card__anggota_total">
+														<span>Total Data</span>
+														<h3 id="textTotalKelompokTaniFile"></h3>
+													</div>
+													<div class="card__anggota_total">
+														<span>File Menkumham</span>
+														<h3 id="textTotalKelompokTaniFileMenkumham"></h3>
+													</div>
+													<div class="card__anggota_total">
+														<span>File Akta</span>
+														<h3 id="textTotalKelompokTaniFileAkta"></h3>
+													</div>
+													<div class="card__anggota_total">
+														<span>File SK</span>
+														<h3 id="textTotalKelompokTaniFileSk"></h3>
+													</div>
+													<div class="card__anggota_total">
+														<span>File BA</span>
+														<h3 id="textTotalKelompokTaniFileBa"></h3>
+													</div>
+												</div>
+											</div>
 											<hr><br>
 										</div>
 										<div id="pieAnggota" style="display:none">
