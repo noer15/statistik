@@ -479,9 +479,28 @@
 													<div class="card__anggota">
 														<div id="chartdivpieanggota2"></div>
 														<div class="row">
-															<div class="col-md-12">
+															<div class="col-md-6">
 																<div class="card__anggota_total">
-																	Lorem ipsum dolor sit amet consectetur, adipisicing elit. Enim debitis quisquam cumque fugiat autem, dolore vitae corrupti quo, quasi quas, fuga perspiciatis laborum aperiam asperiores eum. Eum quam quod eaque.
+																	<span>Semua Data</span>
+																	<h3 id="textTotalAnggotaJK"></h3>
+																</div>
+															</div>
+															<div class="col-md-6">
+																<div class="card__anggota_total">
+																	<span>Laki-Laki</span>
+																	<h3 id="textTotalAnggotaJKL"></h3>
+																</div>
+															</div>
+															<div class="col-md-6">
+																<div class="card__anggota_total">
+																	<span>Perempuan</span>
+																	<h3 id="textTotalAnggotaJKP"></h3>
+																</div>
+															</div>
+															<div class="col-md-6">
+																<div class="card__anggota_total">
+																	<span>Tidak diketahui</span>
+																	<h3 id="textTotalAnggotaJKN"></h3>
 																</div>
 															</div>
 														</div>
@@ -490,14 +509,14 @@
 												<div class="col-lg-6">
 													<div class="card__anggota">
 														<div id="chartdivpieanggota3"></div>
-														<div class="row">
-															<div class="col-md-12">
+														<div class="row" id="resultAnggotaPP">
+															<div class="col-md-4">
 																<div class="card__anggota_total">
-																	Lorem ipsum dolor sit amet consectetur, adipisicing elit. Enim debitis quisquam cumque fugiat autem, dolore vitae corrupti quo, quasi quas, fuga perspiciatis laborum aperiam asperiores eum. Eum quam quod eaque.
+																	<span>Semua</span>
+																	<h3 id="textTotalAnggotaPP"></h3>
 																</div>
 															</div>
 														</div>
-
 													</div>
 												</div>
 											</div>

@@ -306,14 +306,36 @@ class Home extends CI_Controller
 				->get('anggota_kelompok_tani')
 				->result();
 		} else {
-			$data = $this->db->select('COUNT(id) as total, pendidikan as name')->group_by('pendidikan')
+			$data = $this->db->select('COUNT(anggota_kelompok_tani.id) as total, m_pendidikan.nama as name')
+			->join('m_pendidikan','pendidikan=m_pendidikan.id')
+			->group_by('pendidikan')
 				->get('anggota_kelompok_tani')
 				->result();
 		}
 
 		if ($filter == 'umur') {
 			$a = '[{"name" : "Umur 0 - 17thn","total": ' . $data->umur_17 . '},{"name" : "Umur 18 - 35thn","total": ' . $data->umur_35 . '},{"name" : "Umur 36 - 50thn","total": ' . $data->umur_50 . '},{"name" : "Umur 51th+","total": ' . $data->umur_51 . '}]';
-		} else {
+		}else 
+		if($filter == 'jk'){
+			$a = '[';
+			$n = 1;
+			foreach ($data as $stat) {
+				if ($n > 1)
+					$a .= ',';
+				if($stat->name == 'P'){
+					$jk = 'Perempuan';
+				}else
+				if($stat->name == 'L'){
+					$jk = 'Laki-laki';
+				}else{
+					$jk = 'Kosong';
+				}
+
+				$a .= '{"name":"' . $jk . '","total":' . $stat->total . '}';
+				$n++;
+			}
+			$a .= ']';
+		}else {
 			$a = '[';
 			$n = 1;
 			foreach ($data as $stat) {

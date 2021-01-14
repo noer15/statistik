@@ -567,8 +567,6 @@ function pieChartAnggota() {
 		pieSeries.dataFields.value = "total";
 		pieSeries.dataFields.category = "name";
 		pieSeries.slices.template.stroke = am4core.color("#fff");
-		pieSeries.slices.template.strokeWidth = 2;
-		pieSeries.slices.template.strokeOpacity = 1;
 
 		// This creates initial animation
 		pieSeries.hiddenState.properties.opacity = 1;
@@ -589,6 +587,38 @@ function pieChartAnggota() {
 		$("#textTotalAnggota50").text(response[2].total + " anggota");
 		$("#textTotalAnggota51").text(response[3].total + " anggota");
 	});
+
+	$.get(baseUrl + "/home/laporananggotakelompok/jk", function (response) {
+		$("#textTotalAnggotaJK").text(
+			response[0].total + response[1].total + response[2].total + " anggota"
+		);
+		$("#textTotalAnggotaJKL").text(response[0].total + " anggota");
+		$("#textTotalAnggotaJKP").text(response[1].total + " anggota");
+		$("#textTotalAnggotaJKN").text(response[2].total + " anggota");
+	});
+
+	$.get(
+		baseUrl + "/home/laporananggotakelompok/pendidikan",
+		function (response) {
+			$("#textTotalAnggotaPP").text(
+				response[0].total + response[1].total + response[2].total + " anggota"
+			);
+			for (let i in response) {
+				let html =
+					'<div class="col-md-4">\
+							<div class="card__anggota_total">\
+								<span>' +
+					response[i].name +
+					"</span>\
+								<h3>" +
+					response[i].total +
+					" anggota</h3>\
+							</div>\
+						</div>";
+				$("#resultAnggotaPP").append(html);
+			}
+		}
+	);
 }
 
 function handlerDateLahan(e) {
