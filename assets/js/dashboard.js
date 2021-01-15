@@ -11,7 +11,7 @@ $("#ktanibar").click(function () {
 	let tipe = $("#ktaniBtnValue").val();
 	let startDate = $("#tglawal").val() === "" ? 0 : $("#tglawal").val();
 	let endDate = $("#tglakhir").val() === "" ? 0 : $("#tglakhir").val();
-	$("#chartdiv,#ktanitotal,#ktanipemula,#ktanimadya,#ktaniutama").show();
+	$("#chartdiv,#chartdivlahan,#ktanitotal,#ktanipemula,#ktanimadya,#ktaniutama").show();
 	$("#resultTable").hide();
 	if ($("#ktaniBtnValue").val() === "total") {
 		barChartTotal("laporanKelas", kab, kec, 0, tipe, startDate, endDate);
@@ -29,7 +29,7 @@ $("#ktanipie").click(function () {
 	let tipe = $("#ktaniBtnValue").val();
 	let startDate = $("#tglawal").val() === "" ? 0 : $("#tglawal").val();
 	let endDate = $("#tglakhir").val() === "" ? 0 : $("#tglakhir").val();
-	$("#chartdiv,#ktanitotal,#ktanipemula,#ktanimadya,#ktaniutama").show();
+	$("#chartdiv,#chartdivlahan,#ktanitotal,#ktanipemula,#ktanimadya,#ktaniutama").show();
 	$("#resultTable").hide();
 	pieChart("laporanKelas", kab, kec, 0, tipe, startDate, endDate);
 });
@@ -390,24 +390,15 @@ function barChartTotalTahunText() {
 
 // bar chart kepemilikan lahan
 function barChartLahan(jenis, blok, filter, sdate, edate) {
+	pieChartLahanTotal(jenis, blok, 'total', sdate, edate);
+	pieChartLahanTotal(jenis, blok, 'lahan', sdate, edate);
 	am4core.ready(function () {
 		am4core.useTheme(am4themes_animated);
-		var chart = am4core.create("chartdiv", am4charts.XYChart);
+		var chart = am4core.create("chartdivlahan", am4charts.XYChart);
 		chart.scrollbarX = new am4core.Scrollbar();
 
 		// Add data
-		chart.dataSource.url =
-			baseUrl +
-			"/home/laporanKepemilikanLahan/" +
-			jenis +
-			"/" +
-			blok +
-			"/" +
-			filter +
-			"/" +
-			sdate +
-			"/" +
-			edate;
+		chart.dataSource.url = baseUrl + "/home/laporanKepemilikanLahan/" + jenis + "/" + blok + "/" + filter + "/" + sdate + "/" + edate;
 		chart.dataSource.updateCurrentData = true;
 
 		// Create axes
@@ -445,7 +436,7 @@ function barChartLahan(jenis, blok, filter, sdate, edate) {
 		hoverState.properties.fillOpacity = 1;
 
 		series.columns.template.adapter.add("fill", function (fill, target) {
-			return chart.colors.getIndex(target.dataItem.index);
+			return chart.colors.getIndex(1);
 		});
 
 		chart.cursor = new am4charts.XYCursor();
@@ -457,22 +448,7 @@ function pieChart(jenis, kab, kec, cdk, tipe, startDate, endDate) {
 	am4core.ready(function () {
 		am4core.useTheme(am4themes_animated);
 		var chart = am4core.create("chartdiv", am4charts.PieChart);
-		chart.dataSource.url =
-			baseUrl +
-			"/home/" +
-			jenis +
-			"/" +
-			kab +
-			"/" +
-			kec +
-			"/" +
-			cdk +
-			"/" +
-			tipe +
-			"/" +
-			startDate +
-			"/" +
-			endDate;
+		chart.dataSource.url = baseUrl + "/home/" + jenis + "/" + kab + "/" + kec + "/" + cdk + "/" + tipe + "/" + startDate + "/" + endDate;
 		chart.dataSource.updateCurrentData = true;
 
 		// Add and configure Series
@@ -491,23 +467,14 @@ function pieChart(jenis, kab, kec, cdk, tipe, startDate, endDate) {
 }
 
 function pieChartLahan(jenis, blok, filter, sdate, edate) {
+	pieChartLahanTotal(jenis, blok, 'total', sdate, edate);
+	pieChartLahanTotal(jenis, blok, 'lahan', sdate, edate);
 	// pie chart 1
 	am4core.ready(function () {
 		am4core.useTheme(am4themes_animated);
-		var chart = am4core.create("chartdiv", am4charts.PieChart);
+		var chart = am4core.create("chartdivlahan", am4charts.PieChart);
 		// Add data
-		chart.dataSource.url =
-			baseUrl +
-			"/home/laporanKepemilikanLahan/" +
-			jenis +
-			"/" +
-			blok +
-			"/" +
-			filter +
-			"/" +
-			sdate +
-			"/" +
-			edate;
+		chart.dataSource.url = baseUrl + "/home/laporanKepemilikanLahan/" + jenis + "/" + blok + "/" + filter + "/" + sdate + "/" + edate;
 		chart.dataSource.updateCurrentData = true;
 
 		// Add and configure Series
@@ -523,6 +490,26 @@ function pieChartLahan(jenis, blok, filter, sdate, edate) {
 		pieSeries.hiddenState.properties.endAngle = -90;
 		pieSeries.hiddenState.properties.startAngle = -90;
 	});
+}
+
+function pieChartLahanTotal(jenis, blok, filter, sdate, edate) {
+	$.get(baseUrl + "/home/laporanKepemilikanLahan/" + jenis + "/" + blok + "/" + filter + "/" + sdate + "/" + edate,
+		function (response) {
+			if (filter === 'total') {
+				let persil = 0;
+				for (let i in response) {
+					persil = persil + response[i].total;
+				}
+				$('#textTotalLahanPersil').html('<b>' + persil + '</b> persil');
+			} else {
+				let lahan = 0;
+				for (let i in response) {
+					lahan = lahan + response[i].total;
+				}
+				$('#textTotalLahan').html('<b>' + (lahan / 10000).toFixed(4) + '</b> ha');
+			}
+		}
+	);
 }
 
 function pieChartTotal() {
@@ -804,18 +791,18 @@ $("#tabel").click(function () {
 // pilih kelompok data
 $("#kelompokdata").on("change", function () {
 	if ($(this).val() == "tani") {
-		$(".keltani,#grafikTani,#pieTani").show();
-		$(".kellahan,#pieAnggota").hide();
+		$(".keltani,#grafik,#grafikTani,#pieTani").show();
+		$(".kellahan,#grafikLahan,#pieAnggota").hide();
 		barChart("laporanKelas", 0, 0, 0, "total", 0, 0);
 	} else if ($(this).val() == "lahan") {
-		$(".kellahan").show();
-		$(".keltani,#grafikTani,#pieTani,#pieAnggota").hide();
+		$(".kellahan,#grafikLahan,#chartdivlahan").show();
+		$(".keltani,#grafik,#grafikTani,#pieTani,#pieAnggota").hide();
 		barChartLahan(0, 0, "total", 0, 0);
 		getBlokLahan(0);
 	} else if ($(this).val() == "anggota") {
 		pieChartAnggota();
 		$("#pieAnggota").show();
-		$("#grafik,#grafikTani,#pieTani").hide();
+		$("#grafik,#grafikLahan,#grafikTani,#pieTani,#chartdivlahan").hide();
 	}
 });
 

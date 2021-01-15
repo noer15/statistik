@@ -86,6 +86,7 @@
 
 		#chartdiv,
 		#chartdiv2,
+		#chartdivlahan,
 		#chartdivpie1,
 		#chartdivpieanggota1,
 		#chartdivpieanggota2,
@@ -356,8 +357,8 @@
 										</div>
 										<div class="row">
 											<div class="col-lg-12 text-center">
-												<button type="button" class="btn btn-primary" id="klahantotal">Total</button>
-												<button type="button" class="btn btn-default" id="klahanlahan">Jumlah Lahan</button>
+												<button type="button" class="btn btn-primary" id="klahantotal">Jumlah Persil</button>
+												<button type="button" class="btn btn-default" id="klahanlahan">Luas Lahan</button>
 												<input type="hidden" id="klahanBtnValue" value="total">
 											</div>
 										</div>
@@ -481,6 +482,28 @@
 													<div class="card__anggota_total">
 														<span>File BA</span>
 														<h3 id="textTotalKelompokTaniFileBa"></h3>
+													</div>
+												</div>
+											</div>
+											<hr><br>
+										</div>
+										<div id="grafikLahan" style="display: none;">
+											<div id="grafikLahanText" class="text-center">
+												<h3 style="margin-bottom:0px" id="grafikLahanTextTitle">Data Luas Lahan</h3>
+												<small id="grafikLahanTextSubtitle">Data jumlah lahan dan persil</small>
+											</div>
+											<div class="row">
+												<div class="col-lg-9">
+													<div id="chartdivlahan"></div>
+												</div>
+												<div class="col-lg-3">
+													<div class="card__anggota_total">
+														<span>Luas Lahan</span>
+														<h3 id="textTotalLahan"></h3>
+													</div>
+													<div class="card__anggota_total">
+														<span>Jumlah Persil</span>
+														<h3 id="textTotalLahanPersil"></h3>
 													</div>
 												</div>
 											</div>
