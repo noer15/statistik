@@ -20,7 +20,7 @@ class Home extends CI_Controller
 		$this->load->view('home', $data);
 	}
 
-	public function laporanKelas($kab, $kec, $cdk, $tipe, $startdate, $enddate, $export = null)
+	public function laporanKelas($kab, $kec, $cdk, $tipe, $startdate, $enddate, $desa = null, $anggota = null, $export = null)
 	{
 		$strWhere = "";
 
@@ -126,6 +126,10 @@ class Home extends CI_Controller
 				if ($cdk > 0) {
 					$sql = $sql . " and t1.unit_kerja_id=" . $cdk;
 				}
+
+				if (!empty($desa) && $desa > 0) {
+					$sql = $sql . " and t0.id=" . $desa;
+				}
 			}
 
 			if ($tipe == 'total') {
@@ -163,11 +167,47 @@ class Home extends CI_Controller
 			$data['title'] = 'Tabel Kelompok Tani Per ' . $fileName . ' Tanggal ' . date('d-m-Y');
 			$data['file_keltani'] = $query->result_object();
 			$this->load->view('kelompoktani/export_file', $data);
+		} else 
+		if ($desa > 0) {
+			$this->laporanKelasDesa($desa, $anggota);
 		} else {
 			$this->output
 				->set_content_type('application/json')
 				->set_output(json_decode(json_encode($a)));
 		}
+	}
+
+	private function laporanKelasDesa($desa, $anggota, $tipe = null)
+	{
+		if ($desa > 0) {
+			$sql = 'SELECT count(a.id) as total, a.nama as nama, a.nama as alias_nama , 
+					( SELECT count(id) FROM kelompok_tani WHERE nama = alias_nama AND desa_id=' . $desa . ' AND kelas = 1
+					) as pemula, 
+					( SELECT count(id) FROM kelompok_tani WHERE nama = alias_nama AND desa_id=' . $desa . ' AND kelas = 2
+					) as madya, 
+					( SELECT count(id) FROM kelompok_tani WHERE nama = alias_nama AND desa_id=' . $desa . ' AND kelas = 3
+					) as utama
+					FROM kelompok_tani a
+						INNER JOIN m_kelas_kelompok b
+						ON  a.kelas = b.id
+					WHERE desa_id = ' . $desa . ' group by a.nama';
+
+			$a = '[';
+			$n = 1;
+			foreach ($this->db->query($sql)->result_object() as $stat) {
+				if ($n > 1)
+					$a .= ',';
+				$a .= '{"kabupaten":"' . $stat->nama . '","pemula":' . $stat->pemula . ',"madya":' . $stat->madya . ',"utama":' . $stat->utama . '}';
+				$n++;
+			}
+			$a .= ']';
+		} else {
+			///
+		}
+
+		return $this->output
+			->set_content_type('application/json')
+			->set_output(json_decode(json_encode($a)));
 	}
 
 	public function laporanKelasTahun()
@@ -307,27 +347,27 @@ class Home extends CI_Controller
 				->result();
 		} else {
 			$data = $this->db->select('COUNT(anggota_kelompok_tani.id) as total, m_pendidikan.nama as name')
-			->join('m_pendidikan','pendidikan=m_pendidikan.id','LEFT')
-			->group_by('pendidikan')
+				->join('m_pendidikan', 'pendidikan=m_pendidikan.id', 'LEFT')
+				->group_by('pendidikan')
 				->get('anggota_kelompok_tani')
 				->result();
 		}
 
 		if ($filter == 'umur') {
 			$a = '[{"name" : "Umur 0 - 17thn","total": ' . $data->umur_17 . '},{"name" : "Umur 18 - 35thn","total": ' . $data->umur_35 . '},{"name" : "Umur 36 - 50thn","total": ' . $data->umur_50 . '},{"name" : "Umur 51th+","total": ' . $data->umur_51 . '}]';
-		}else 
-		if($filter == 'jk'){
+		} else 
+		if ($filter == 'jk') {
 			$a = '[';
 			$n = 1;
 			foreach ($data as $stat) {
 				if ($n > 1)
 					$a .= ',';
-				if($stat->name == 'P'){
+				if ($stat->name == 'P') {
 					$jk = 'Perempuan';
-				}else
-				if($stat->name == 'L'){
+				} else
+				if ($stat->name == 'L') {
 					$jk = 'Laki-laki';
-				}else{
+				} else {
 					$jk = 'Kosong';
 				}
 
@@ -335,7 +375,7 @@ class Home extends CI_Controller
 				$n++;
 			}
 			$a .= ']';
-		}else {
+		} else {
 			$a = '[';
 			$n = 1;
 			foreach ($data as $stat) {
@@ -421,9 +461,9 @@ class Home extends CI_Controller
 		umur 
 	ORDER BY
 		umur ASC')
-		->result_object();
+			->result_object();
 		$total = 0;
-		foreach($data as $d){
+		foreach ($data as $d) {
 			$total += $d->total;
 		}
 		echo $total;

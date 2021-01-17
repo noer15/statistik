@@ -8,15 +8,39 @@ $("#ktanibar").click(function () {
 	$("#ktaniTipeGrafik").val("bar");
 	let kab = $("#kabValue").val();
 	let kec = $("#kecValue").val();
+	let desa = $("#desaValue").val();
+	let anggota = $("#KelompokTaniValue").val();
 	let tipe = $("#ktaniBtnValue").val();
 	let startDate = $("#tglawal").val() === "" ? 0 : $("#tglawal").val();
 	let endDate = $("#tglakhir").val() === "" ? 0 : $("#tglakhir").val();
-	$("#chartdiv,#chartdivlahan,#ktanitotal,#ktanipemula,#ktanimadya,#ktaniutama").show();
+	$(
+		"#chartdiv,#chartdivlahan,#ktanitotal,#ktanipemula,#ktanimadya,#ktaniutama"
+	).show();
 	$("#resultTable").hide();
 	if ($("#ktaniBtnValue").val() === "total") {
-		barChartTotal("laporanKelas", kab, kec, 0, tipe, startDate, endDate);
+		barChartTotal(
+			"laporanKelas",
+			kab,
+			kec,
+			0,
+			tipe,
+			startDate,
+			endDate,
+			desa,
+			anggota
+		);
 	} else {
-		barChart("laporanKelas", kab, kec, 0, tipe, startDate, endDate);
+		barChart(
+			"laporanKelas",
+			kab,
+			kec,
+			0,
+			tipe,
+			startDate,
+			endDate,
+			desa,
+			anggota
+		);
 	}
 });
 
@@ -26,12 +50,26 @@ $("#ktanipie").click(function () {
 	$("#ktaniTipeGrafik").val("pie");
 	let kab = $("#kabValue").val();
 	let kec = $("#kecValue").val();
+	let desa = $("#desaValue").val();
+	let anggota = $("#KelompokTaniValue").val();
 	let tipe = $("#ktaniBtnValue").val();
 	let startDate = $("#tglawal").val() === "" ? 0 : $("#tglawal").val();
 	let endDate = $("#tglakhir").val() === "" ? 0 : $("#tglakhir").val();
-	$("#chartdiv,#chartdivlahan,#ktanitotal,#ktanipemula,#ktanimadya,#ktaniutama").show();
+	$(
+		"#chartdiv,#chartdivlahan,#ktanitotal,#ktanipemula,#ktanimadya,#ktaniutama"
+	).show();
 	$("#resultTable").hide();
-	pieChart("laporanKelas", kab, kec, 0, tipe, startDate, endDate);
+	pieChart(
+		"laporanKelas",
+		kab,
+		kec,
+		0,
+		tipe,
+		startDate,
+		endDate,
+		desa,
+		anggota
+	);
 });
 
 $("#kabValue").on("change", function () {
@@ -51,45 +89,148 @@ $("#kabValue").on("change", function () {
 	});
 });
 
-$("#kabValue,#kecValue").on("change", function () {
-	let kab = $("#kabValue").val();
-	let kec = $("#kecValue").val();
-	let tipe = $("#ktaniBtnValue").val();
-	let startDate = $("#tglawal").val() === "" ? 0 : $("#tglawal").val();
-	let endDate = $("#tglakhir").val() === "" ? 0 : $("#tglakhir").val();
-	if ($("#ktaniTipeGrafik").val() == "bar") {
-		if ($("#ktaniBtnValue").val() === "total") {
-			barChartTotal("laporanKelas", kab, kec, 0, tipe, startDate, endDate);
-		} else {
-			barChart("laporanKelas", kab, kec, 0, tipe, startDate, endDate);
+$("#kecValue").on("change", function () {
+	$.get(baseUrl + "Desa/getDesa/" + $(this).val(), function (response) {
+		$("#desaValue").empty();
+		$("#desaValue").append(
+			$("<option></option>").attr("value", "0").text("< ALL >")
+		);
+		var dataArray = JSON.parse(response);
+		for (var i in dataArray) {
+			$("#desaValue").append(
+				$("<option></option>")
+					.attr("value", dataArray[i].id)
+					.text(dataArray[i].nama)
+			);
 		}
-	} else if ($("#ktaniTipeGrafik").val() == "tabel") {
-		getDataTable(kab, kec);
-	} else {
-		pieChart("laporanKelas", kab, kec, 0, tipe, startDate, endDate);
-	}
+	});
 });
+
+$("#desaValue").on("change", function () {
+	$.get(baseUrl + "Desa/getKelompokTani/" + $(this).val(), function (response) {
+		$("#kelompokTaniValue").empty();
+		$("#kelompokTaniValue").append(
+			$("<option></option>").attr("value", "0").text("< ALL >")
+		);
+		var dataArray = JSON.parse(response);
+		for (var i in dataArray) {
+			$("#kelompokTaniValue").append(
+				$("<option></option>")
+					.attr("value", dataArray[i].id)
+					.text(dataArray[i].nama)
+			);
+		}
+	});
+});
+
+$("#kabValue,#kecValue,#desaValue,#kelompokTaniValue").on(
+	"change",
+	function () {
+		let kab = $("#kabValue").val();
+		let kec = $("#kecValue").val();
+		let desa = $("#desaValue").val();
+		let anggota = $("#KelompokTaniValue").val();
+		let tipe = $("#ktaniBtnValue").val();
+		let startDate = $("#tglawal").val() === "" ? 0 : $("#tglawal").val();
+		let endDate = $("#tglakhir").val() === "" ? 0 : $("#tglakhir").val();
+		if ($("#ktaniTipeGrafik").val() == "bar") {
+			if ($("#ktaniBtnValue").val() === "total") {
+				barChartTotal(
+					"laporanKelas",
+					kab,
+					kec,
+					0,
+					tipe,
+					startDate,
+					endDate,
+					desa,
+					anggota
+				);
+			} else {
+				barChart(
+					"laporanKelas",
+					kab,
+					kec,
+					0,
+					tipe,
+					startDate,
+					endDate,
+					desa,
+					anggota
+				);
+			}
+		} else if ($("#ktaniTipeGrafik").val() == "tabel") {
+			getDataTable(kab, kec);
+		} else {
+			pieChart(
+				"laporanKelas",
+				kab,
+				kec,
+				0,
+				tipe,
+				startDate,
+				endDate,
+				desa,
+				anggota
+			);
+		}
+	}
+);
 
 function handlerDate(e) {
 	let kab = $("#kabValue").val();
 	let kec = $("#kecValue").val();
+	let desa = $("#desaValue").val();
+	let anggota = $("#KelompokTaniValue").val();
 	let tipe = $("#ktaniBtnValue").val();
 	let startDate = $("#tglawal").val() === "" ? 0 : $("#tglawal").val();
 	let endDate = $("#tglakhir").val() === "" ? 0 : $("#tglakhir").val();
 	if ($("#ktaniTipeGrafik").val() == "bar") {
 		if ($("#ktaniBtnValue").val() === "total") {
-			barChartTotal("laporanKelas", kab, kec, 0, tipe, startDate, endDate);
+			barChartTotal(
+				"laporanKelas",
+				kab,
+				kec,
+				0,
+				tipe,
+				startDate,
+				endDate,
+				desa,
+				anggota
+			);
 		} else {
-			barChart("laporanKelas", kab, kec, 0, tipe, startDate, endDate);
+			barChart(
+				"laporanKelas",
+				kab,
+				kec,
+				0,
+				tipe,
+				startDate,
+				endDate,
+				desa,
+				anggota
+			);
 		}
 	} else {
-		pieChart("laporanKelas", kab, kec, 0, tipe, startDate, endDate);
+		pieChart(
+			"laporanKelas",
+			kab,
+			kec,
+			0,
+			tipe,
+			startDate,
+			endDate,
+			desa,
+			anggota
+		);
 	}
 }
 
 $("#ktanitotal").on("click", function () {
 	let kab = $("#kabValue").val();
 	let kec = $("#kecValue").val();
+	let desa = $("#desaValue").val();
+	let anggota = $("#KelompokTaniValue").val();
 	let startDate = $("#tglawal").val() === "" ? 0 : $("#tglawal").val();
 	let endDate = $("#tglakhir").val() === "" ? 0 : $("#tglakhir").val();
 	$(this).removeClass("btn-default").addClass("btn-primary");
@@ -98,15 +239,37 @@ $("#ktanitotal").on("click", function () {
 		.addClass("btn-default");
 	$("#ktaniBtnValue").val("total");
 	if ($("#ktaniTipeGrafik").val() == "bar") {
-		barChartTotal("laporanKelas", kab, kec, 0, "total", startDate, endDate);
+		barChartTotal(
+			"laporanKelas",
+			kab,
+			kec,
+			0,
+			"total",
+			startDate,
+			endDate,
+			desa,
+			anggota
+		);
 	} else {
-		pieChart("laporanKelas", kab, kec, 0, "total", startDate, endDate);
+		pieChart(
+			"laporanKelas",
+			kab,
+			kec,
+			0,
+			"total",
+			startDate,
+			endDate,
+			desa,
+			anggota
+		);
 	}
 });
 
 $("#ktanipemula").on("click", function () {
 	let kab = $("#kabValue").val();
 	let kec = $("#kecValue").val();
+	let desa = $("#desaValue").val();
+	let anggota = $("#KelompokTaniValue").val();
 	let startDate = $("#tglawal").val() === "" ? 0 : $("#tglawal").val();
 	let endDate = $("#tglakhir").val() === "" ? 0 : $("#tglakhir").val();
 	$(this).removeClass("btn-default").addClass("btn-primary");
@@ -115,15 +278,37 @@ $("#ktanipemula").on("click", function () {
 		.addClass("btn-default");
 	$("#ktaniBtnValue").val("pemula");
 	if ($("#ktaniTipeGrafik").val() == "bar") {
-		barChart("laporanKelas", kab, kec, 0, "pemula", startDate, endDate);
+		barChart(
+			"laporanKelas",
+			kab,
+			kec,
+			0,
+			"pemula",
+			startDate,
+			endDate,
+			desa,
+			anggota
+		);
 	} else {
-		pieChart("laporanKelas", kab, kec, 0, "pemula", startDate, endDate);
+		pieChart(
+			"laporanKelas",
+			kab,
+			kec,
+			0,
+			"pemula",
+			startDate,
+			endDate,
+			desa,
+			anggota
+		);
 	}
 });
 
 $("#ktanimadya").on("click", function () {
 	let kab = $("#kabValue").val();
 	let kec = $("#kecValue").val();
+	let desa = $("#desaValue").val();
+	let anggota = $("#KelompokTaniValue").val();
 	let startDate = $("#tglawal").val() === "" ? 0 : $("#tglawal").val();
 	let endDate = $("#tglakhir").val() === "" ? 0 : $("#tglakhir").val();
 	$(this).removeClass("btn-default").addClass("btn-primary");
@@ -132,15 +317,37 @@ $("#ktanimadya").on("click", function () {
 		.addClass("btn-default");
 	$("#ktaniBtnValue").val("madya");
 	if ($("#ktaniTipeGrafik").val() == "bar") {
-		barChart("laporanKelas", kab, kec, 0, "madya", startDate, endDate);
+		barChart(
+			"laporanKelas",
+			kab,
+			kec,
+			0,
+			"madya",
+			startDate,
+			endDate,
+			desa,
+			anggota
+		);
 	} else {
-		pieChart("laporanKelas", kab, kec, 0, "madya", startDate, endDate);
+		pieChart(
+			"laporanKelas",
+			kab,
+			kec,
+			0,
+			"madya",
+			startDate,
+			endDate,
+			desa,
+			anggota
+		);
 	}
 });
 
 $("#ktaniutama").on("click", function () {
 	let kab = $("#kabValue").val();
 	let kec = $("#kecValue").val();
+	let desa = $("#desaValue").val();
+	let anggota = $("#KelompokTaniValue").val();
 	let startDate = $("#tglawal").val() === "" ? 0 : $("#tglawal").val();
 	let endDate = $("#tglakhir").val() === "" ? 0 : $("#tglakhir").val();
 	$(this).removeClass("btn-default").addClass("btn-primary");
@@ -149,23 +356,82 @@ $("#ktaniutama").on("click", function () {
 		.addClass("btn-default");
 	$("#ktaniBtnValue").val("utama");
 	if ($("#ktaniTipeGrafik").val() == "bar") {
-		barChart("laporanKelas", kab, kec, 0, "utama", startDate, endDate);
+		barChart(
+			"laporanKelas",
+			kab,
+			kec,
+			0,
+			"utama",
+			startDate,
+			endDate,
+			desa,
+			anggota
+		);
 	} else {
-		pieChart("laporanKelas", kab, kec, 0, "utama", startDate, endDate);
+		pieChart(
+			"laporanKelas",
+			kab,
+			kec,
+			0,
+			"utama",
+			startDate,
+			endDate,
+			desa,
+			anggota
+		);
 	}
 });
 
-function barChartTotal(jenis, kab, kec, cdk, tipe, startDate, endDate) {
-	$('#grafikTextTitle').text('Jumlah Semua Data Kelompok Tani');
-	$('#grafikTextSubtitle').text('Data kelompok tani Pemula, Madya dan Utama');
-	barChartTotalText(jenis, kab, kec, cdk, 'total', startDate, endDate);
+function barChartTotal(
+	jenis,
+	kab,
+	kec,
+	cdk,
+	tipe,
+	startDate,
+	endDate,
+	desa,
+	anggota
+) {
+	$("#grafikTextTitle").text("Jumlah Semua Data Kelompok Tani");
+	$("#grafikTextSubtitle").text("Data kelompok tani Pemula, Madya dan Utama");
+	barChartTotalText(
+		jenis,
+		kab,
+		kec,
+		cdk,
+		"total",
+		startDate,
+		endDate,
+		desa,
+		anggota
+	);
 	am4core.ready(function () {
 		am4core.useTheme(am4themes_animated);
 		var chart = am4core.create("chartdiv", am4charts.XYChart);
 		chart.scrollbarX = new am4core.Scrollbar();
 
 		// Add data
-		chart.dataSource.url = baseUrl + "/home/" + jenis + "/" + kab + "/" + kec + "/" + cdk + "/" + tipe + "/" + startDate + "/" + endDate;
+		chart.dataSource.url =
+			baseUrl +
+			"/home/" +
+			jenis +
+			"/" +
+			kab +
+			"/" +
+			kec +
+			"/" +
+			cdk +
+			"/" +
+			tipe +
+			"/" +
+			startDate +
+			"/" +
+			endDate +
+			"/" +
+			desa +
+			"/" +
+			anggota;
 		chart.dataSource.updateCurrentData = true;
 
 		// Create axes
@@ -228,26 +494,85 @@ function barChartTotal(jenis, kab, kec, cdk, tipe, startDate, endDate) {
 	});
 }
 
-function barChartTotalText(jenis, kab, kec, cdk, tipe, startDate, endDate) {
-	$.get(baseUrl + "/home/" + jenis + "/" + kab + "/" + kec + "/" + cdk + "/" + tipe + "/" + startDate + "/" + endDate,
+function barChartTotalText(
+	jenis,
+	kab,
+	kec,
+	cdk,
+	tipe,
+	startDate,
+	endDate,
+	desa,
+	anggota
+) {
+	$.get(
+		baseUrl +
+			"/home/" +
+			jenis +
+			"/" +
+			kab +
+			"/" +
+			kec +
+			"/" +
+			cdk +
+			"/" +
+			tipe +
+			"/" +
+			startDate +
+			"/" +
+			endDate +
+			"/" +
+			desa +
+			"/" +
+			anggota,
 		function (response) {
-			let total = 0; let madya = 0; let pemula = 0; let utama = 0;
+			let total = 0;
+			let madya = 0;
+			let pemula = 0;
+			let utama = 0;
 			for (let i in response) {
-				total = total + response[i].pemula + response[i].madya + response[i].utama;
+				total =
+					total + response[i].pemula + response[i].madya + response[i].utama;
 				madya = madya + response[i].madya;
 				pemula = pemula + response[i].pemula;
 				utama = utama + response[i].utama;
 			}
-			$('#textTotalKelompokTani').html('<b>' + total + '</b> kelompok tani');
-			$('#textTotalKelompokTaniPemula').html('<b>' + pemula + '</b> kelompok tani');
-			$('#textTotalKelompokTaniMadya').html('<b>' + madya + '</b> kelompok tani');
-			$('#textTotalKelompokTaniUtama').html('<b>' + utama + '</b> kelompok tani');
+			$("#textTotalKelompokTani").html("<b>" + total + "</b> kelompok tani");
+			$("#textTotalKelompokTaniPemula").html(
+				"<b>" + pemula + "</b> kelompok tani"
+			);
+			$("#textTotalKelompokTaniMadya").html(
+				"<b>" + madya + "</b> kelompok tani"
+			);
+			$("#textTotalKelompokTaniUtama").html(
+				"<b>" + utama + "</b> kelompok tani"
+			);
 		}
 	);
 }
 
-function barChart(jenis, kab, kec, cdk, tipe, startDate, endDate) {
-	barChartTotalText(jenis, kab, kec, cdk, 'total', startDate, endDate);
+function barChart(
+	jenis,
+	kab,
+	kec,
+	cdk,
+	tipe,
+	startDate,
+	endDate,
+	desa,
+	anggota
+) {
+	barChartTotalText(
+		jenis,
+		kab,
+		kec,
+		cdk,
+		"total",
+		startDate,
+		endDate,
+		desa,
+		anggota
+	);
 	am4core.ready(function () {
 		am4core.useTheme(am4themes_animated);
 		var chart = am4core.create("chartdiv", am4charts.XYChart);
@@ -269,7 +594,11 @@ function barChart(jenis, kab, kec, cdk, tipe, startDate, endDate) {
 			"/" +
 			startDate +
 			"/" +
-			endDate;
+			endDate +
+			"/" +
+			desa +
+			"/" +
+			anggota;
 		chart.dataSource.updateCurrentData = true;
 
 		// Create axes
@@ -365,40 +694,64 @@ function barChartTahun() {
 }
 
 function barChartTotalTahunText() {
-	$.get(baseUrl + "/home/laporankelastahun",
-		function (response) {
-			let total = 0; let tertinggi = 0; let terendah = 0; let tahun = 0;
-			for (let i in response) {
-				total = total + response[i].total;
-				if (response[i].total > tertinggi) {
-					tertinggi = response[i].total;
-					tahuntertinggi = response[i].tahun;
-				} else {
-					terendah = response[i].total;
-					if (response[i].tahun !== '0') {
-						tahunterendah = response[i].tahun;
-					}
+	$.get(baseUrl + "/home/laporankelastahun", function (response) {
+		let total = 0;
+		let tertinggi = 0;
+		let terendah = 0;
+		let tahun = 0;
+		for (let i in response) {
+			total = total + response[i].total;
+			if (response[i].total > tertinggi) {
+				tertinggi = response[i].total;
+				tahuntertinggi = response[i].tahun;
+			} else {
+				terendah = response[i].total;
+				if (response[i].tahun !== "0") {
+					tahunterendah = response[i].tahun;
 				}
 			}
-
-			$('#textTotalKelompokTaniTahun').html('<b>' + total + '</b> kelompok tani');
-			$('#textTotalKelompokTaniTahunTertinggi').html('<b>' + tertinggi + '</b> kelompok tani <br> Tahun berdiri <b>' + tahuntertinggi + '</b>');
-			$('#textTotalKelompokTaniTahunTerendah').html('<b>' + terendah + '</b> kelompok tani <br> Tahun berdiri <b>' + tahunterendah + '</b>');
 		}
-	);
+
+		$("#textTotalKelompokTaniTahun").html("<b>" + total + "</b> kelompok tani");
+		$("#textTotalKelompokTaniTahunTertinggi").html(
+			"<b>" +
+				tertinggi +
+				"</b> kelompok tani <br> Tahun berdiri <b>" +
+				tahuntertinggi +
+				"</b>"
+		);
+		$("#textTotalKelompokTaniTahunTerendah").html(
+			"<b>" +
+				terendah +
+				"</b> kelompok tani <br> Tahun berdiri <b>" +
+				tahunterendah +
+				"</b>"
+		);
+	});
 }
 
 // bar chart kepemilikan lahan
 function barChartLahan(jenis, blok, filter, sdate, edate) {
-	pieChartLahanTotal(jenis, blok, 'total', sdate, edate);
-	pieChartLahanTotal(jenis, blok, 'lahan', sdate, edate);
+	pieChartLahanTotal(jenis, blok, "total", sdate, edate);
+	pieChartLahanTotal(jenis, blok, "lahan", sdate, edate);
 	am4core.ready(function () {
 		am4core.useTheme(am4themes_animated);
 		var chart = am4core.create("chartdivlahan", am4charts.XYChart);
 		chart.scrollbarX = new am4core.Scrollbar();
 
 		// Add data
-		chart.dataSource.url = baseUrl + "/home/laporanKepemilikanLahan/" + jenis + "/" + blok + "/" + filter + "/" + sdate + "/" + edate;
+		chart.dataSource.url =
+			baseUrl +
+			"/home/laporanKepemilikanLahan/" +
+			jenis +
+			"/" +
+			blok +
+			"/" +
+			filter +
+			"/" +
+			sdate +
+			"/" +
+			edate;
 		chart.dataSource.updateCurrentData = true;
 
 		// Create axes
@@ -448,7 +801,22 @@ function pieChart(jenis, kab, kec, cdk, tipe, startDate, endDate) {
 	am4core.ready(function () {
 		am4core.useTheme(am4themes_animated);
 		var chart = am4core.create("chartdiv", am4charts.PieChart);
-		chart.dataSource.url = baseUrl + "/home/" + jenis + "/" + kab + "/" + kec + "/" + cdk + "/" + tipe + "/" + startDate + "/" + endDate;
+		chart.dataSource.url =
+			baseUrl +
+			"/home/" +
+			jenis +
+			"/" +
+			kab +
+			"/" +
+			kec +
+			"/" +
+			cdk +
+			"/" +
+			tipe +
+			"/" +
+			startDate +
+			"/" +
+			endDate;
 		chart.dataSource.updateCurrentData = true;
 
 		// Add and configure Series
@@ -467,14 +835,25 @@ function pieChart(jenis, kab, kec, cdk, tipe, startDate, endDate) {
 }
 
 function pieChartLahan(jenis, blok, filter, sdate, edate) {
-	pieChartLahanTotal(jenis, blok, 'total', sdate, edate);
-	pieChartLahanTotal(jenis, blok, 'lahan', sdate, edate);
+	pieChartLahanTotal(jenis, blok, "total", sdate, edate);
+	pieChartLahanTotal(jenis, blok, "lahan", sdate, edate);
 	// pie chart 1
 	am4core.ready(function () {
 		am4core.useTheme(am4themes_animated);
 		var chart = am4core.create("chartdivlahan", am4charts.PieChart);
 		// Add data
-		chart.dataSource.url = baseUrl + "/home/laporanKepemilikanLahan/" + jenis + "/" + blok + "/" + filter + "/" + sdate + "/" + edate;
+		chart.dataSource.url =
+			baseUrl +
+			"/home/laporanKepemilikanLahan/" +
+			jenis +
+			"/" +
+			blok +
+			"/" +
+			filter +
+			"/" +
+			sdate +
+			"/" +
+			edate;
 		chart.dataSource.updateCurrentData = true;
 
 		// Add and configure Series
@@ -493,20 +872,33 @@ function pieChartLahan(jenis, blok, filter, sdate, edate) {
 }
 
 function pieChartLahanTotal(jenis, blok, filter, sdate, edate) {
-	$.get(baseUrl + "/home/laporanKepemilikanLahan/" + jenis + "/" + blok + "/" + filter + "/" + sdate + "/" + edate,
+	$.get(
+		baseUrl +
+			"/home/laporanKepemilikanLahan/" +
+			jenis +
+			"/" +
+			blok +
+			"/" +
+			filter +
+			"/" +
+			sdate +
+			"/" +
+			edate,
 		function (response) {
-			if (filter === 'total') {
+			if (filter === "total") {
 				let persil = 0;
 				for (let i in response) {
 					persil = persil + response[i].total;
 				}
-				$('#textTotalLahanPersil').html('<b>' + persil + '</b> persil');
+				$("#textTotalLahanPersil").html("<b>" + persil + "</b> persil");
 			} else {
 				let lahan = 0;
 				for (let i in response) {
 					lahan = lahan + response[i].total;
 				}
-				$('#textTotalLahan').html('<b>' + (lahan / 10000).toFixed(4) + '</b> ha');
+				$("#textTotalLahan").html(
+					"<b>" + (lahan / 10000).toFixed(4) + "</b> Ha (Hektar)"
+				);
 			}
 		}
 	);
@@ -536,15 +928,28 @@ function pieChartTotal() {
 }
 
 function pieChartTotalFile() {
-	$.get(baseUrl + "/home/laporankelasfile",
-		function (response) {
-			$('#textTotalKelompokTaniFile').html('<b>' + (response[0].total + response[1].total + response[2].total + response[3].total) + '</b> File');
-			$('#textTotalKelompokTaniFileMenkumham').html('<b>' + response[0].total + '</b> File');
-			$('#textTotalKelompokTaniFileAkta').html('<b>' + response[1].total + '</b> File');
-			$('#textTotalKelompokTaniFileSk').html('<b>' + response[2].total + '</b> File');
-			$('#textTotalKelompokTaniFileBa').html('<b>' + response[3].total + '</b> File');
-		}
-	);
+	$.get(baseUrl + "/home/laporankelasfile", function (response) {
+		$("#textTotalKelompokTaniFile").html(
+			"<b>" +
+				(response[0].total +
+					response[1].total +
+					response[2].total +
+					response[3].total) +
+				"</b> File"
+		);
+		$("#textTotalKelompokTaniFileMenkumham").html(
+			"<b>" + response[0].total + "</b> File"
+		);
+		$("#textTotalKelompokTaniFileAkta").html(
+			"<b>" + response[1].total + "</b> File"
+		);
+		$("#textTotalKelompokTaniFileSk").html(
+			"<b>" + response[2].total + "</b> File"
+		);
+		$("#textTotalKelompokTaniFileBa").html(
+			"<b>" + response[3].total + "</b> File"
+		);
+	});
 }
 
 function pieChartAnggota() {
@@ -609,10 +1014,10 @@ function pieChartAnggota() {
 	$.get(baseUrl + "/home/laporananggotakelompok/umur", function (response) {
 		$("#textTotalAnggota").text(
 			response[0].total +
-			response[1].total +
-			response[2].total +
-			response[3].total +
-			" anggota"
+				response[1].total +
+				response[2].total +
+				response[3].total +
+				" anggota"
 		);
 		$("#textTotalAnggota17").text(response[0].total + " anggota");
 		$("#textTotalAnggota35").text(response[1].total + " anggota");
@@ -642,12 +1047,17 @@ function pieChartAnggota() {
 					$pendidikan = "Tidak diketahui";
 				}
 
-				html = '<div class="col-md-4">\
+				html =
+					'<div class="col-md-4">\
 							<div class="card__anggota_total">\
-								<span>' + $pendidikan + '</span>\
-								<h3>' + response[i].total + ' anggota</h3>\
+								<span>' +
+					$pendidikan +
+					"</span>\
+								<h3>" +
+					response[i].total +
+					" anggota</h3>\
 							</div>\
-						</div>';
+						</div>";
 
 				$("#resultAnggotaPP").append(html);
 			}
@@ -841,18 +1251,18 @@ function getDataTable(kab, kec) {
 				let utm = data[i].utama;
 				$("#tabel-tani").append(
 					"<tr><td>" +
-					(i++ + 1) +
-					"</td><td>" +
-					kab +
-					"</td><td>" +
-					pem +
-					"</td><td>" +
-					mad +
-					"</td><td>" +
-					utm +
-					"</td><td>" +
-					(pem + mad + utm) +
-					"</td></tr>"
+						(i++ + 1) +
+						"</td><td>" +
+						kab +
+						"</td><td>" +
+						pem +
+						"</td><td>" +
+						mad +
+						"</td><td>" +
+						utm +
+						"</td><td>" +
+						(pem + mad + utm) +
+						"</td></tr>"
 				);
 			}
 			$("#totalPemula").html($totalPemula);
@@ -868,7 +1278,7 @@ $("#btnExport").on("click", function () {
 	let kab = $("#kabValue").val();
 	let kec = $("#kecValue").val();
 	window.location =
-		baseUrl + "home/laporanKelas/" + kab + "/" + kec + "/0/total/0/0/excel";
+		baseUrl + "home/laporanKelas/" + kab + "/" + kec + "/0/total/0/0/0/0/excel";
 });
 
 function exportTableToExcel(tableID, filename = "") {

@@ -14,6 +14,8 @@
 	<link href="<?php echo base_url(); ?>assets/limitless/assets/css/core.css" rel="stylesheet" type="text/css">
 	<link href="<?php echo base_url(); ?>assets/limitless/assets/css/components.css" rel="stylesheet" type="text/css">
 	<link href="<?php echo base_url(); ?>assets/limitless/assets/css/colors.css" rel="stylesheet" type="text/css">
+	<link href="<?php echo base_url(); ?>assets/limitless/assets/css/main.css" rel="stylesheet" type="text/css">
+
 	<!-- /global stylesheets -->
 
 	<!-- Core JS files -->
@@ -35,157 +37,21 @@
 	<script type="text/javascript" src="<?php echo base_url(); ?>assets/limitless/assets/js/pages/form_select2.js"></script>
 	<script type="text/javascript" src="<?php echo base_url(); ?>assets/limitless/assets/js/core/app.js"></script>
 	<script type="text/javascript" src="<?php echo base_url(); ?>assets/limitless/assets/js/pages/dashboard.js"></script>
-	<!-- /theme JS files -->
 
-	<style>
-		.box-shadow {
-			-webkit-box-shadow: 0 4px 6px -1px rgba(0, 0, 0, .1), 0 2px 4px -1px rgba(0, 0, 0, .06);
-			box-shadow: 0 4px 6px -1px rgba(0, 0, 0, .1), 0 2px 4px -1px rgba(0, 0, 0, .06);
-			background: #fff;
-			padding: 1.5rem;
-			border-radius: 4px;
-			height: 100px;
-			border-bottom: 2px solid #333;
-		}
-
-		span .title__total {
-			border-bottom: 2px solid red;
-		}
-
-		tbody#tabel-tani tr:nth-child(odd) {
-			background-color: #eae9e9;
-		}
-
-		span.title__total {
-			padding-left: 10px;
-			font-weight: 600;
-		}
-
-		.box-shadow>h2 {
-			margin-top: -10px;
-			font-size: 25px;
-			font-weight: 600;
-		}
-
-		.box-shadow>span {
-			font-size: 15px;
-		}
-
-		.box-shadow-stats {
-			-webkit-box-shadow: 0 4px 6px -1px rgba(0, 0, 0, .1), 0 2px 4px -1px rgba(0, 0, 0, .06);
-			box-shadow: 0 4px 6px -1px rgba(0, 0, 0, .1), 0 2px 4px -1px rgba(0, 0, 0, .06);
-			background: #fff;
-			padding: 1.5rem;
-			border-radius: 4px;
-			height: auto;
-		}
-
-		.panel-body.total__data {
-			background-color: #eeeeee;
-		}
-
-		#chartdiv,
-		#chartdiv2,
-		#chartdivlahan,
-		#chartdivpie1,
-		#chartdivpieanggota1,
-		#chartdivpieanggota2,
-		#chartdivpieanggota3 {
-			width: 100%;
-			height: 500px;
-		}
-
-		.box-shadow.p-3.pegawai {
-			background: #2ed43730;
-			border-bottom: 3px solid #079f11;
-		}
-
-		.box-shadow.p-3.penyuluh {
-			background: #efe62b42;
-			border-bottom: 3px solid #FFC107;
-		}
-
-		.box-shadow.p-3.kelompok {
-			background: #88857c63;
-			border-bottom: 3px solid #88857c;
-		}
-
-		.box-shadow.p-3.kepemilikan {
-			background: #81b7d294;
-			border-bottom: 3px solid #37474F;
-		}
-
-		.card__anggota {
-			-webkit-box-shadow: 1px 1px 4px 1px rgba(201, 201, 201, 0.51);
-			-moz-box-shadow: 1px 1px 4px 1px rgba(201, 201, 201, 0.51);
-			box-shadow: 1px 1px 4px 1px rgba(201, 201, 201, 0.51);
-			margin: 10px;
-		}
-
-		.card__anggota_total {
-			-webkit-box-shadow: 1px 1px 4px 1px rgba(201, 201, 201, 0.51);
-			-moz-box-shadow: 1px 1px 4px 1px rgba(201, 201, 201, 0.51);
-			box-shadow: 1px 1px 4px 1px rgba(201, 201, 201, 0.51);
-			margin: 15px;
-			padding: 10px;
-		}
-
-		.card__anggota_total > span {
-			font-size: 18px;
-			font-weight: 700;
-		}
-
-		.card__anggota_total > h3 {
-			margin: 5px 0 0 0;
-			font-weight: 300;
-		}
-
-	</style>
 </head>
 
 <body>
-
-	<!-- Main navbar -->
 	<?php $this->load->view("header"); ?>
-	<!-- /main navbar -->
-
-
-	<!-- Page container -->
 	<div class="page-container">
-
-		<!-- Page content -->
 		<div class="page-content">
-
-			<!-- Main sidebar -->
 			<div class="sidebar sidebar-main">
 				<div class="sidebar-content">
-
-					<!-- User menu -->
 					<?php $this->load->view("usermenu"); ?>
-					<!-- /user menu -->
-
-
-					<!-- Main navigation -->
 					<?php $this->load->view("sidebar"); ?>
-					<!-- /main navigation -->
-
 				</div>
 			</div>
-			<!-- /main sidebar -->
-
-
-			<!-- Main content -->
 			<div class="content-wrapper">
-
-				<!-- Page header -->
-				<!-- /page header -->
-
-
-				<!-- Content area -->
 				<div class="content">
-
-
-					<!-- Dashboard content -->
 					<div class="row">
 						<div class="col-md-3">
 							<div class="box-shadow p-3 pegawai">
@@ -268,7 +134,7 @@
 												<?php }  ?>
 											</select>
 										</div>
-										<div class="form-group col-lg-3">
+										<div class="form-group col-lg-2">
 											<label for="">Kecamatan</label>
 											<select name="" id="kecValue" class="select-search" data-placeholder="Pilih Kabupaten">
 												<option value="0">
@@ -276,7 +142,23 @@
 												</option>
 											</select>
 										</div>
-										<div class="form-inline">
+										<div class="form-group col-lg-2">
+											<label for="">Desa</label>
+											<select name="" id="desaValue" class="select-search" data-placeholder="Pilih Desa">
+												<option value="0">
+													< ALL>
+												</option>
+											</select>
+										</div>
+										<div class="form-group col-lg-2">
+											<label for="">Kelompok Tani</label>
+											<select name="" id="kelompokTaniValue" class="select-search" data-placeholder="Pilih Kelompok Tani">
+												<option value="0">
+													< ALL>
+												</option>
+											</select>
+										</div>
+										<div class="form-inline hide">
 											<div class="form-group col-lg-4">
 												<label for="">Periode Tanggal</label>
 												<div class="row">
@@ -325,7 +207,7 @@
 										</div>
 									</div>
 								</div>
-								<div class="keltani">
+								<div class="keltani" style="margin-top: 20px;">
 									<div style="display: flex; justify-content:space-between;">
 										<div class="row">
 											<div class="col-lg-12">
@@ -410,6 +292,8 @@
 													<div class="card__anggota_total">
 														<span>Total Data</span>
 														<h3 id="textTotalKelompokTani"></h3>
+
+
 													</div>
 													<div class="card__anggota_total">
 														<span>Pemula</span>

@@ -1,0 +1,110 @@
+.box-shadow {
+    -webkit-box-shadow: 0 4px 6px -1px rgba(0, 0, 0, .1), 0 2px 4px -1px rgba(0, 0, 0, .06);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, .1), 0 2px 4px -1px rgba(0, 0, 0, .06);
+    background: #fff;
+    padding: 1.5rem;
+    border-radius: 4px;
+    height: 100px;
+    border-bottom: 2px solid #333;
+}
+
+span .title__total {
+    border-bottom: 2px solid red;
+}
+
+tbody#tabel-tani tr:nth-child(odd) {
+    background-color: #eae9e9;
+}
+
+span.title__total {
+    padding-left: 10px;
+    font-weight: 600;
+}
+
+.box-shadow>h2 {
+    margin-top: -10px;
+    font-size: 25px;
+    font-weight: 600;
+}
+
+.box-shadow>span {
+    font-size: 15px;
+}
+
+.box-shadow-stats {
+    -webkit-box-shadow: 0 4px 6px -1px rgba(0, 0, 0, .1), 0 2px 4px -1px rgba(0, 0, 0, .06);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, .1), 0 2px 4px -1px rgba(0, 0, 0, .06);
+    background: #fff;
+    padding: 1.5rem;
+    border-radius: 4px;
+    height: auto;
+}
+
+.panel-body.total__data {
+    background-color: #eeeeee;
+}
+
+#chartdiv,
+#chartdiv2,
+#chartdivlahan,
+#chartdivpie1,
+#chartdivpieanggota1,
+#chartdivpieanggota2,
+#chartdivpieanggota3 {
+    width: 100%;
+    height: 500px;
+}
+
+.box-shadow.p-3.pegawai {
+    background: #2ed43730;
+    border-bottom: 3px solid #079f11;
+}
+
+.box-shadow.p-3.penyuluh {
+    background: #efe62b42;
+    border-bottom: 3px solid #FFC107;
+}
+
+.box-shadow.p-3.kelompok {
+    background: #88857c63;
+    border-bottom: 3px solid #88857c;
+}
+
+.box-shadow.p-3.kepemilikan {
+    background: #81b7d294;
+    border-bottom: 3px solid #37474F;
+}
+
+.card__anggota {
+    -webkit-box-shadow: 1px 1px 4px 1px rgba(201, 201, 201, 0.51);
+    -moz-box-shadow: 1px 1px 4px 1px rgba(201, 201, 201, 0.51);
+    box-shadow: 1px 1px 4px 1px rgba(201, 201, 201, 0.51);
+    margin: 10px;
+}
+
+.card__anggota_total {
+    -webkit-box-shadow: 1px 1px 4px 1px rgba(201, 201, 201, 0.51);
+    -moz-box-shadow: 1px 1px 4px 1px rgba(201, 201, 201, 0.51);
+    box-shadow: 1px 1px 4px 1px rgba(201, 201, 201, 0.51);
+    margin: 15px;
+    padding: 10px;
+    background-color: #a1bdda40;
+    border-radius: 3px;
+    transition: width 1s;
+    color: steelblue;
+}
+
+.card__anggota_total:hover {
+    background-color: #dcdbe4;
+    color: #000000;
+}
+
+.card__anggota_total>span {
+    font-size: 18px;
+    font-weight: 700;
+}
+
+.card__anggota_total>h3 {
+    margin: 5px 0 0 0;
+    font-weight: 300;
+}
