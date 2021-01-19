@@ -164,12 +164,13 @@ class Home extends CI_Controller
 		}
 
 		if ($export == 'excel') {
-			$data['title'] = 'Tabel Kelompok Tani Per ' . $fileName . ' Tanggal ' . date('d-m-Y');
+			$data['title'] 	= 'Tabel Kelompok Tani Per ' . $fileName . ' Tanggal ' . date('d-m-Y');
 			$data['file_keltani'] = $query->result_object();
+			$data['name']	= $fileName;
 			$this->load->view('kelompoktani/export_file', $data);
 		} else 
 		if ($desa > 0) {
-			$this->laporanKelasDesa($desa, $anggota);
+			$this->laporanKelasDesa($desa, $anggota, $tipe);
 		} else {
 			$this->output
 				->set_content_type('application/json')
@@ -187,9 +188,7 @@ class Home extends CI_Controller
 					) as madya, 
 					( SELECT count(id) FROM kelompok_tani WHERE nama = alias_nama AND desa_id=' . $desa . ' AND kelas = 3
 					) as utama
-					FROM kelompok_tani a
-						INNER JOIN m_kelas_kelompok b
-						ON  a.kelas = b.id
+					FROM kelompok_tani a INNER JOIN m_kelas_kelompok b ON  a.kelas = b.id
 					WHERE desa_id = ' . $desa . ' group by a.nama';
 
 			$a = '[';
@@ -197,12 +196,49 @@ class Home extends CI_Controller
 			foreach ($this->db->query($sql)->result_object() as $stat) {
 				if ($n > 1)
 					$a .= ',';
-				$a .= '{"kabupaten":"' . $stat->nama . '","pemula":' . $stat->pemula . ',"madya":' . $stat->madya . ',"utama":' . $stat->utama . '}';
+
+				if($tipe == 'total'){
+					$a .= '{"kabupaten":"' . $stat->nama . '","pemula":' . $stat->pemula . ',"madya":' . $stat->madya . ',"utama":' . $stat->utama . '}';
+				}else{
+					switch ($tipe) {
+						case 'pemula':
+							$data = $stat->pemula; break;
+						case 'madya':
+							$data = $stat->madya; break;
+						case 'utama':
+							$data = $stat->utama; break;
+						default:
+							$data = $stat->pemula; break;
+					}
+
+					$a .= '{"kabupaten":"' . $stat->nama . '","jumlah":' . $data . '}';
+				}
+
+				
 				$n++;
 			}
 			$a .= ']';
-		} else {
-			///
+		} else if($desa > 0 && $anggota > 0) {
+			$sql = 'SELECT count(a.id) AS total, a.nama, a.nama as alias_nama,
+						(
+							SELECT count(aa.id) FROM kelompok_tani aa
+							INNER JOIN anggota_kelompok_tani ab ON aa.id=ab.kelompok_id
+							WHERE kelas = 1 AND ab.id = '.$anggota.' AND ab.nama = alias_nama
+						) as pemula,
+						(
+							SELECT count(aa.id) FROM kelompok_tani aa
+							INNER JOIN anggota_kelompok_tani ab ON aa.id=ab.kelompok_id
+							WHERE kelas = 2 AND ab.id = '.$anggota.' AND ab.nama = alias_nama
+						) as madya,
+						(
+							SELECT count(aa.id) FROM kelompok_tani aa
+							INNER JOIN anggota_kelompok_tani ab ON aa.id=ab.kelompok_id
+							WHERE kelas = 3 AND ab.id = '.$anggota.' AND ab.nama = alias_nama
+						) as utama
+						
+					FROM anggota_kelompok_tani a INNER JOIN kelompok_tani b ON  a.kelompok_id = b.id
+						INNER JOIN m_kelas_kelompok c ON b.kelas = c.id
+					WHERE a.id = '.$anggota.' GROUP BY a.nama';
 		}
 
 		return $this->output
@@ -449,23 +485,34 @@ class Home extends CI_Controller
 		return $query->result_object();
 	}
 
-	public function test()
+	public function laporanPinjamPakai($kab, $kec, $jenis)
 	{
-		$data = $this->db->query('SELECT
-		count( id ) AS total,
-		umur 
-	FROM
-		anggota_kelompok_tani 
-	WHERE umur > 35 AND umur <= 50
-	GROUP BY
-		umur 
-	ORDER BY
-		umur ASC')
-			->result_object();
-		$total = 0;
-		foreach ($data as $d) {
-			$total += $d->total;
+		if($jenis == 'kph'){
+			$sql = 'SELECT count(a.id) as total, b.nama as nama FROM t_pinjampakai a 
+					INNER JOIN m_kph b ON a.kph_id = b.id GROUP BY a.kph_id ORDER BY total DESC';
+		}else
+		if($jenis == 'kawasan'){
+			$sql = 'SELECT count(a.id) as total, b.nama as nama FROM t_pinjampakai a
+					INNER JOIN m_kawasan_hutan b ON a.kawasan_id = b.id
+					GROUP BY a.kawasan_id ORDER BY total DESC';
+		}else{
+			$sql = 'SELECT count(a.id) as total, b.nama as nama FROM t_pinjampakai a
+					INNER JOIN m_peruntukan_pinjampakai b ON a.peruntukan_id = b.id
+					GROUP BY a.peruntukan_id ORDER BY total DESC';
 		}
-		echo $total;
+
+		$a = '[';
+		$n = 1;
+		foreach ($this->db->query($sql)->result_object() as $stat) {
+			if ($n > 1)
+				$a .= ',';
+			$a .= '{"nama":"' . $stat->nama . '","total":' . $stat->total . '}';
+			$n++;
+		}
+		$a .= ']';
+
+		$this->output
+			->set_content_type('application/json')
+			->set_output(json_decode(json_encode($a)));
 	}
 }

@@ -117,6 +117,7 @@
 											<option value="tani">Kelompok Tani</option>
 											<option value="lahan">Kepemilikan Lahan</option>
 											<option value="anggota">Anggota Kelompok Tani</option>
+											<option value="pinjampakai">Pinjam Pakai Kawasan Hutan</option>
 										</select>
 									</div>
 									<!-- kelompok tani -->
@@ -192,7 +193,7 @@
 												</option>
 											</select>
 										</div>
-										<div class="form-inline">
+										<div class="form-inline hide">
 											<div class="form-group col-lg-4">
 												<label for="">Periode Tanggal</label>
 												<div class="row">
@@ -212,7 +213,7 @@
 										<div class="row">
 											<div class="col-lg-12">
 												<button type="button" class="btn btn-primary" id="ktanibar"><span class="icon-stats-bars"></span> Grafik Bar</button>
-												<button type="button" class="btn btn-default" id="ktanipie"><span class="icon-pie-chart"></span> Grafik Pie</button>
+												<button type="button" class="btn btn-default" id="ktanipie" style="display: none;"><span class="icon-pie-chart"></span> Grafik Pie</button>
 												<button type="button" class="btn btn-default" id="tabel"><span class="icon-table"></span> Tabel</button>
 												<input type="hidden" id="ktaniTipeGrafik" value="bar">
 											</div>
@@ -234,6 +235,7 @@
 											<div class="col-lg-12 text-center">
 												<button type="button" class="btn btn-primary" id="klahanbar"><span class="icon-stats-bars"></span> Grafik Bar</button>
 												<button type="button" class="btn btn-default" id="klahanpie"><span class="icon-pie-chart"></span> Grafik Pie</button>
+												<button type="button" class="btn btn-default" id="klahantable"><span class="icon-table"></span> Tabel</button>
 												<input type="hidden" id="klahanTipeGrafik" value="bar">
 											</div>
 										</div>
@@ -253,6 +255,35 @@
 											<!-- Default panel contents -->
 											<div class="panel-heading">
 												<button id="btnExport" class="btn btn-primary">Report Kelompok Tani</button>
+											</div>
+											<div id="tblData">
+												<table class="table" style="width:100%">
+													<thead>
+														<tr>
+															<th>No</th>
+															<th id="namaTabel">Nama</th>
+															<th>Pemula</th>
+															<th>Madya</th>
+															<th>Utama</th>
+															<th>Total</th>
+														</tr>
+													</thead>
+													<tbody id="tabel-tani"></tbody>
+													<tfoot>
+														<tr style="background-color: #eee9e9;color: black;;">
+															<td colspan="2">Total</td>
+															<td id="totalPemula"></td>
+															<td id="totalMadya"></td>
+															<td id="totalUtama"></td>
+															<td id="totalSemua"></td>
+												</table>
+											</div>
+										</div>
+
+										<div class="panel panel-default tabel" style="display: none;" id="resultTableLahan">
+											<!-- Default panel contents -->
+											<div class="panel-heading">
+												<button id="btnExport" class="btn btn-primary">Report Kepemilikan Lahan</button>
 											</div>
 											<div id="tblData">
 												<table class="table" style="width:100%">
@@ -473,15 +504,48 @@
 													</div>
 												</div>
 											</div>
-
-											<script src="https://cdn.amcharts.com/lib/4/core.js"></script>
-											<script src="https://cdn.amcharts.com/lib/4/charts.js"></script>
-											<script src="https://cdn.amcharts.com/lib/4/themes/animated.js"></script>
-											<!-- Chart code -->
-											<script>
-												const baseUrl = '<?= base_url() ?>';
-											</script>
-											<script src="<?= base_url('assets/js/dashboard.js') ?>"></script>
+										</div>
+										<div id="grafikPinjamPakai" style="display: none;">
+											<div id="grafikText" class="text-center">
+												<h3 style="margin-bottom:0px" id="grafikPinjamPakaiTitle">Jumlah Data Pinjam Pakai Kawasan Hutan</h3>
+												<small id="grafikPinjamPakaiSubtitle">Data Pinjam Pakai Kawasan Hutan</small>
+											</div>
+											<div class="row">
+												<div class="col-lg-9">
+													<div id="chartdiv3"></div>
+												</div>
+												<div class="col-lg-3">
+													<div class="form-group">
+														<select name="" id="selectPinjamPakai" class="form-control">
+															<option value="kph">Unit Kerja Pengelola</option>
+															<option value="kawasan">Kawasan Hutan</option>
+															<option value="peruntukan">Peruntukan</option>
+														</select>
+													</div>
+													<div class="card__anggota_total">
+														<span>Total Data</span>
+														<h3 id="textTotalPinjamPakai"></h3>
+													</div>
+													<div class="card__anggota_total">
+														<span>Tertinggi</span>
+														<h3 id="textTotalPinjamPakaiTertinggi"></h3>
+													</div>
+													<div class="card__anggota_total">
+														<span>Terendah</span>
+														<h3 id="textTotalPinjamPakaiTerendah"></h3>
+													</div>
+												</div>
+											</div>
+											<hr><br>
+										</div>
+										<script src="https://cdn.amcharts.com/lib/4/core.js"></script>
+										<script src="https://cdn.amcharts.com/lib/4/charts.js"></script>
+										<script src="https://cdn.amcharts.com/lib/4/themes/animated.js"></script>
+										<!-- Chart code -->
+										<script>
+											const baseUrl = '<?= base_url() ?>';
+										</script>
+										<script src="<?= base_url('assets/js/dashboard.js') ?>"></script>
 										</div>
 									</div>
 								</div>
