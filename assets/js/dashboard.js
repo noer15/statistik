@@ -1,4 +1,4 @@
-barChartTotal("laporanKelas", 0, 0, 0, "total", 0, 0);
+barChartTotal("laporanKelas", 0, 0, 0, "total", 0, 0, 0, 0);
 barChartTahun();
 pieChartTotal();
 

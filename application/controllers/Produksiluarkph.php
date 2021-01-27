@@ -1,8 +1,9 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Produksikph extends CI_Controller {
-	private $judul = "Produksi Hasil Hutan per KPH ";
+class Produksiluarkph extends CI_Controller {
+
+	private $judul = "Produksi Hasil Hutan Luar Kawasan Hutan ";
 
 	function __construct()
 	{
@@ -15,57 +16,57 @@ class Produksikph extends CI_Controller {
 	public function index()
 	{
 
-		$list = $this->db->query("Select a.*, b.nama as namakph, c.nama as namapotensi from produksi_kph a 
-			inner join m_kph b on b.id=a.kph_id 
-			inner join m_jenis_potensi c on c.id=a.jenis_potensi
-			")->result_object();				
+		$list = $this->db->query("SELECT a.*, b.nama AS nama_desa, c.nama AS nama_kec, d.nama AS nama_kab, e.nama AS potensi
+				FROM produksi_luar_kph AS a INNER JOIN m_desa AS b ON a.desa_id = b.id INNER JOIN m_kecamatan AS c
+				ON b.kecamatan_id = c.id INNER JOIN m_kabupaten AS d ON c.kabupaten_id = d.id INNER JOIN m_jenis_potensi AS e
+				ON a.jenis_potensi_id = e.id")->result_object();				
 
 		$data['data']	 = $list;
-		$data['page']	 ='produksikph';
+		$data['page']	 ='produksiluarkph';
 		$data['subpage'] ='list';
 		$data['judul']	 =$this->judul;
 		$data['header']	 =$this->judul;
-		$this->load->view('produksikph/index',$data);
+		$this->load->view('produksiluarkph/index',$data);
 	}	
 	
 	public function tambah(){
 
-		$kph = $this->db->query("Select a.* from m_kph a ")->result_object();
 		$jenis = $this->db->query("Select a.* from m_jenis_potensi a where jenis=2")->result_object();
-		$list = $this->db->query("Select a.*, b.nama as namakph, c.nama as namapotensi from produksi_kph a 
-			inner join m_kph b on b.id=a.kph_id inner join m_jenis_potensi c on c.id=a.jenis_potensi
-			WHERE tanggal = '".date('y-m-d')."'")->result_object();
+		$list = $this->db->query("SELECT a.*, b.nama AS nama_desa, c.nama AS nama_kec, d.nama AS nama_kab, e.nama AS potensi
+		FROM produksi_luar_kph AS a INNER JOIN m_desa AS b ON a.desa_id = b.id INNER JOIN m_kecamatan AS c
+		ON b.kecamatan_id = c.id INNER JOIN m_kabupaten AS d ON c.kabupaten_id = d.id INNER JOIN m_jenis_potensi AS e
+		ON a.jenis_potensi_id = e.id WHERE tanggal = '".date("y-m-d")."'")
+		->result_object();
 		
 		$data['list']	 = $list;
 		$data['jenis'] 	 = $jenis;
-		$data['kph'] 	 = $kph;
-		$data['page'] 	 = 'produksikph';
-		$data['subpage'] ='tambah';		
-		$data['judul']	 =$this->judul;
-		$data['header']	 ='Tambah '.$this->judul;
-		$this->load->view('produksikph/index',$data);	
+		$data['page'] 	 = 'produksiluarkph';
+		$data['subpage'] = 'tambah';		
+		$data['judul']	 = $this->judul;
+		$data['header']	 = 'Tambah '.$this->judul;
+		$this->load->view('produksiluarkph/index',$data);	
 	}
 
 	public function store(){
+		$desa = $this->input->post('desa');
 		$jml_produksi = $this->input->post('jml_produksi');
 		$satuan = $this->input->post('satuan');
 		$jenis = $this->input->post('jenis');
-		$kphId = $this->input->post('kph');
 		$bulan = $this->input->post('bulan');
 		$tahun = $this->input->post('tahun');
 		
 		$post_data = array(
+				'desa_id' => $desa,
+				'jenis_potensi_id' => $jenis,
 	      		'jml_produksi' 	=> $jml_produksi,
-	        	'satuan' => $satuan,	        	
-	        	'jenis_potensi' => $jenis,	  
-				'kph_id' => $kphId,
+	        	'satuan' => $satuan,
 				'bulan'	=> $bulan,
 				'tahun' => $tahun,
 				'tanggal' => date('y-m-d')
 	    		);
-	    $this->db->insert('produksi_kph',$post_data);
+	    $this->db->insert('produksi_luar_kph',$post_data);
 
-		redirect(base_url().'Produksikph/tambah');
+		redirect(base_url().'Produksiluarkph/tambah');
 	}
 
 	public function edit($id){
@@ -77,11 +78,11 @@ class Produksikph extends CI_Controller {
 		$data['data'] = $dt;
 		$data['kph'] 	 = $kph;
 		$data['potensi'] 	 = $potensi[0]->jenis;
-		$data['page'] 	 = 'produksikph';
+		$data['page'] 	 = 'produksiluarkph';
 		$data['subpage'] ='edit';		
 		$data['judul']	 =$this->judul;
 		$data['header']	 ='Edit '.$this->judul;
-		$this->load->view('produksikph/index',$data);	
+		$this->load->view('produksiluarkph/index',$data);	
 	}
 
 	public function update(){
@@ -97,16 +98,29 @@ class Produksikph extends CI_Controller {
 	        	'jenis_potensi' => $jenis 	
 	    		);
 		$this->db->where('id',$id);
-	    $this->db->update('produksi_kph',$post_data);
+	    $this->db->update('produksi_luar_kph',$post_data);
 
-		redirect(base_url().'Produksikph');
+		redirect(base_url().'Produksiluarkph');
 	}
 
 	public function delete($id){
 		// delete detail dasar
-		$result = $this->db->delete('produksi_kph', array('id' => $id));
-        // print_r($nip);
+		$result = $this->db->delete('produksi_luar_kph', array('id' => $id));
 	 }
 
+	 public function getKec($kode)
+	 {
+		 $data = $this->db->get_where('m_kecamatan', ['kodeKab' => $kode])->result();
+		 $this->output
+		 ->set_content_type('appluication/json')
+		 ->set_output(json_encode(json_encode($data)));
+	 }
 	
+	 public function getDesa($kode)
+	 {
+		 $data = $this->db->get_where('m_desa', ['kodeKec' => $kode])->result();
+		 $this->output
+		 ->set_content_type('appluication/json')
+		 ->set_output(json_encode(json_encode($data)));
+	 }
 }

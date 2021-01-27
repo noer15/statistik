@@ -86,7 +86,7 @@
                             <div class="col-lg-5">
                                 <select class="form-control" name="penunjukan_pilihan" id="penunjukan_pilihan">
                                     <option value="Darat" <?php if($data[0]->penunjukan_pilihan=="Darat") { echo "selected";  } ?> >Darat</option>
-                                    <option value="Laut" <?php if($data[0]->penunjukan_pilihan=="Darat") { echo "selected";  } ?> >Laut</option>
+                                    <option value="Laut" <?php if($data[0]->penunjukan_pilihan=="Laut") { echo "selected";  } ?> >Laut</option>
                                 </select>
                             </div>
                         </div>

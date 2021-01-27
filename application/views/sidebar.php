@@ -86,121 +86,126 @@
 			</li>
 			<?php } ?>
 
-<!-- <?php 
+			<!-- <?php 
 					if($page=='kelompok_tani' || $page=='pemiliklahan' || $page=='penyuluh'
 						|| $page=='datagangguan' || $page=='lsm' || $page=='produksikph')
 				{ ?> class="active" <?php } ?> -->
 				
 			<li>
-				<a href="#"><i class="icon-grid"></i> <span>Data</span></a>
+				<a href="#"><i class="icon-grid"></i> <span>Input Data</span></a>
 				<ul>
 
 				<?php if($role==18 || $role==1) { ?>
-
-					<li <?php if($page=='pegawai'){ ?> class="active" <?php }?>>
-						<a href="<?php echo base_url();?>pegawai">Data Pegawai</a>
-					</li>
-
-					<li <?php if($page=='penyuluh'){ ?> class="active" <?php }?> >
-						<a href="<?php echo base_url();?>penyuluh"><span>Penyuluh PKSM</span></a>
-					</li>
-
-				<?php } ?>
-
-				<?php if($role==3 || $role==1 ) { ?>
-
-					<li <?php if($page=='kelompok_tani'){ ?> class="active" <?php } ?>>
-						<a href="<?php echo base_url();?>Kelompoktani">Kelompok Tani</a>
-					</li>
-					<li <?php if($page=='pemiliklahan'){ ?> class="active" <?php }?> >
-						<a href="<?php echo base_url();?>pemiliklahan"><span>Kepemilikan Lahan</span></a>
+					<li>
+						<a href="#"><span>Sekretariat</span></a>
+						<ul>
+							<li <?php if($page=='pegawai'){ ?> class="active" <?php }?>>
+								<a href="<?php echo base_url();?>pegawai">Data Pegawai</a>
+							</li>
+						</ul>
 					</li>
 
 				<?php } ?>
-					
+
 				<?php if($role==1){ ?>
+					<li>
+						<a href="#"><span>Bidang Pemolaan & Pemanfaatan Kawasan Hutan</span></a>
+						<ul>
+							<li <?php if($page=='luaslahan'){ ?> class="active" <?php }?>>
+								<a href="<?php echo base_url();?>luaslahan"><span>Luas Kawasan Hutan</span></a>
+							</li>
 
-					<li <?php if($page=='produksikph'){ ?> class="active" <?php }?> >
-						<a href="<?php echo base_url();?>Produksikph"><span>Produksi Hasil Hutan
+							<li <?php if($page=='pengukuhankh'){ ?> class="active" <?php }?>>
+								<a href="<?php echo base_url();?>pengukuhankh"><span>Pengukuhan Kawasan Hutan</span></a>
+							</li>
 
-						<span class="label bg-danger-400">KPH</span></span>
-						</a>
-					</li>										
-				
-					<li <?php if($page=='datagangguan'){ ?> class="active" <?php }?>>
-						<a href="<?php echo base_url();?>gangguan"><span>Gangguan dan Kerusakan Hutan</span></a>
+							<li <?php if($page=='pinjampakai'){ ?> class="active" <?php }?>>
+								<a href="<?php echo base_url();?>pinjampakai"><span>Pinjam Pakai Kawasan Hutan</span></a>
+							</li>
+						</ul>
 					</li>
 
-					<li <?php if($page=='luaslahan'){ ?> class="active" <?php }?>>
-						<a href="<?php echo base_url();?>luaslahan"><span>Luas Kawasan Hutan</span></a>
+					<li>
+						<a href="#"><span>Bidang Perlindungan & KSPAE</span></a>
+						<ul>
+							<li>
+								<a href="#"><span>Kawasan Ekosistem Esensial</span></a>
+							</li>
+							<li>
+								<a href="#"><span>Penangkaran Tumbuhan dan Satwa Liar</span></a>
+							</li>
+							<li <?php if($page=='datagangguan'){ ?> class="active" <?php }?>>
+								<a href="<?php echo base_url();?>gangguan"><span>Gangguan Kemanan dan Kerusakan Hutan</span></a>
+							</li>
+						</ul>
 					</li>
 
-					<li <?php if($page=='pengukuhankh'){ ?> class="active" <?php }?>>
-						<a href="<?php echo base_url();?>pengukuhankh"><span>Pengukuhan Kawasan Hutan</span></a>
+					<li>
+						<a href="#"><span>Bidang Pengolaan DAS</span></a>
+						<ul>
+							<li <?php if($page=='lahankritis'){ ?> class="active" <?php }?>>
+								<a href="<?php echo base_url();?>lahankritis"><span>Lahan Kritis</span></a>
+							</li>
+							<li>
+								<a href="#"><span>Sumber Benih</span></a>
+							</li>
+							<li>
+								<a href="#"><span>Penangkar / Pengada / Pengedar Benih/Bibit</span></a>
+							</li>
+						</ul>
 					</li>
 
-					<li <?php if($page=='pinjampakai'){ ?> class="active" <?php }?>>
-						<a href="<?php echo base_url();?>pinjampakai"><span>Pinjam Pakai Kawasan Hutan</span></a>
+					<li>
+						<a href="#"><span>Bidang Bina Usaha</span></a>
+						<ul>
+						<?php if($role==3 || $role==1 ) { ?>
+							<li <?php if($page=='kelompok_tani'){ ?> class="active" <?php } ?>>
+								<a href="<?php echo base_url();?>Kelompoktani">Kelompok Tani</a>
+							</li>
+							<li <?php if($page=='pemiliklahan'){ ?> class="active" <?php }?> >
+								<a href="<?php echo base_url();?>pemiliklahan"><span>Kepemilikan Lahan</span></a>
+							</li>
+							<li <?php if($page=='produksikph'){ ?> class="active" <?php }?> >
+								<a href="#"><span>Produksi Hasil Hutan
+								<span class="label bg-danger-400">KPH</span></span>
+								</a>
+								<ul>
+									<li <?php if($page=='produksikph'){ ?> class="active" <?php }?>>
+										<a href="<?php echo base_url();?>Produksikph"><span>Dalam Kawasan Hutan</span></a>
+									</li>
+									<li <?php if($page=='produksiluarkph'){ ?> class="active" <?php }?>>
+										<a href="<?php echo base_url();?>Produksiluarkph"><span>Luar Kawasan Hutan</span></a>
+									</li>
+								</ul>
+							</li>
+							<li <?php if($page=='industri'){ ?> class="active" <?php } ?>>
+								<a href="<?php echo base_url();?>Industri">Industri Sektor Kehutanan</a>
+							</li>	
+							<li <?php if($page=='lsm'){ ?> class="active" <?php }?>>
+								<a href="<?php echo base_url();?>lsm"><span>LSM/NGO Kehutanan</span></a>
+							</li>
+							<li <?php if($page=='penyuluh'){ ?> class="active" <?php }?> >
+								<a href="<?php echo base_url();?>penyuluh"><span>Penyuluh PKSM</span></a>
+							</li>
+							<li>
+								<a href="#"><span>Produksi Olahan Hasil Hutan</span></a>
+							</li>
+						<?php } ?>
+						</ul>
 					</li>
+				<?php } ?>
 
-					<li <?php if($page=='lsm'){ ?> class="active" <?php }?>>
-						<a href="<?php echo base_url();?>lsm"><span>LSM</span></a>
-					</li>
-
+					
+				<?php if($role==1){ ?>	
 					<li <?php if($page=='sertifikatbenih'){ ?> class="active" <?php }?>>
 						<a href="<?php echo base_url();?>sertifikatbenih"><span>Sertifikasi Benih</span></a>
 					</li>
-					<li <?php if($page=='lahankritis'){ ?> class="active" <?php }?>>
-						<a href="<?php echo base_url();?>lahankritis"><span>Lahan Kritis</span></a>
-					</li>											
-
-					<!-- <li >
-						<a href="#"><i class="icon-copy"></i> <span>Pemasaran Hasil Hutan</span></a>
-					</li>								
-					
-					<li >
-						<a href="#"><i class="icon-copy"></i> <span>PSDH</span></a>
-						<ul>
-							<li><a href="#">Kayu</a></li>
-							<li><a href="#">Non Kayu</a></li>
-						</ul>
-					</li>								
-					<li >
-						<a href="#"><i class="icon-copy"></i> <span>Objek Wisata</span></a>
-					</li>															 -->	
-					
-					<!-- <li >
-						<a href="#"><i class="icon-copy"></i> <span>Pembinaan MDH</span></a>
-					</li> -->
-
 				<?php } ?>
 
 				</ul>
 			</li>
 
-			<?php if($role==1) { ?>
-
-			<li <?php if($page=='industri') {?> class="active" <?php } ?>>
-				<a href="#"><i class="icon-grid"></i> <span>Industri</span></a>
-				<ul>
-					<li <?php if($page=='industri'){ ?> class="active" <?php } ?>>
-						<a href="<?php echo base_url();?>Industri">Industri Sektor Kehutanan</a>
-					</li>
-					<!-- <li <?php if($page=='industriproduk'){ ?> class="active" <?php } ?>>
-						<a href="<?php echo base_url();?>Industriproduk">Produksi</a>
-					</li>
-					<li >
-						<a href="#"><span>IUIPHHK
-							<span class="label bg-danger-400">Sektor Kehutanan</span></span>
-						</a>
-					</li>
-					<li >
-						<a href="#"><span>Penerbiatan FAKO</span></a>
-					</li> -->
-				</ul>
-			</li>			
-
-			<?php } ?>					
+								
 
 			<?php if($role==1 || $role==3 || $role==18){ ?>
 			
