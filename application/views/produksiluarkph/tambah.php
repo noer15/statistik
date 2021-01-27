@@ -209,7 +209,7 @@
                             </script>
                         </div>
 						<div class="text-left">
-							<a  href="<?php echo base_url();?>Produksikph" class="btn btn-danger">Batal</a>
+							<a  href="<?php echo base_url();?>Produksiluarkph" class="btn btn-danger">Batal</a>
 							<button type="submit" class="btn btn-primary">Simpan</button>
 						</div>
 					</div>

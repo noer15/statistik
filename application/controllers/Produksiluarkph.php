@@ -70,14 +70,16 @@ class Produksiluarkph extends CI_Controller {
 	}
 
 	public function edit($id){
-		$dt = $this->db->query("Select a.* from produksi_kph a where id='".$id."'")->result_object();
-		$kph = $this->db->query("Select a.* from m_kph a where id=".$dt[0]->kph_id)->result_object();
-		$potensi = $this->db->query("Select a.* from m_jenis_potensi a where id=".$dt[0]->jenis_potensi)->result_object();
+		$data = $this->db->query("SELECT a.*, b.nama AS nama_desa, c.id AS kec_id, d.id AS kab_id
+				FROM produksi_luar_kph AS a INNER JOIN m_desa AS b ON a.desa_id = b.id
+				INNER JOIN m_kecamatan AS c ON b.kecamatan_id = c.id 
+				INNER JOIN m_kabupaten AS d ON c.kabupaten_id = d.id where a.id='".$id."'")->result_object();
+		
+		$potensi = $this->db->query("Select a.* from m_jenis_potensi a where id=".$data[0]->jenis_potensi_id)->result_object();
 		$jenis = $this->db->query("Select a.* from m_jenis_potensi a where jenis=".$potensi[0]->jenis)->result_object();
-		$data['jenis'] 	 = $jenis;		
-		$data['data'] = $dt;
-		$data['kph'] 	 = $kph;
-		$data['potensi'] 	 = $potensi[0]->jenis;
+		$data['jenis'] 	 = $jenis;
+		$data['data'] = $data;
+		$data['potensi'] = $potensi;
 		$data['page'] 	 = 'produksiluarkph';
 		$data['subpage'] ='edit';		
 		$data['judul']	 =$this->judul;
@@ -87,16 +89,22 @@ class Produksiluarkph extends CI_Controller {
 
 	public function update(){
 		$id = $this->input->post('id');
+		$desa = $this->input->post('desa');
 		$jml_produksi = $this->input->post('jml_produksi');
 		$satuan = $this->input->post('satuan');
 		$jenis = $this->input->post('jenis');
-		$kphId = $this->input->post('kph');
+		$bulan = $this->input->post('bulan');
+		$tahun = $this->input->post('tahun');
 		
 		$post_data = array(
-	      		'jml_produksi' 	=> $jml_produksi,
-	        	'satuan' => $satuan,	        	
-	        	'jenis_potensi' => $jenis 	
-	    		);
+			'desa_id' => $desa,
+			'jenis_potensi_id' => $jenis,
+			'jml_produksi' 	=> $jml_produksi,
+			'satuan' => $satuan,
+			'bulan'	=> $bulan,
+			'tahun' => $tahun,	
+		);
+				
 		$this->db->where('id',$id);
 	    $this->db->update('produksi_luar_kph',$post_data);
 
