@@ -57,6 +57,9 @@
 					<li <?php if($page=='masterpotensi'){ ?> class="active" <?php } ?>>
 						<a href="<?php echo base_url();?>Jenispotensi">Jenis Potensi</a>
 					</li>
+					<li <?php if($page=='jenisolahan'){ ?> class="active" <?php } ?>>
+						<a href="<?php echo base_url();?>Jenisolahan">Jenis Olahan Hasil Hutan</a>
+					</li>
 					<li <?php if($page=='masterkategorikel'){ ?> class="active" <?php } ?>>
 						<a href="<?php echo base_url();?>Kategorikelompok">Kategori Kelompok</a>
 					</li>
@@ -187,8 +190,8 @@
 							<li <?php if($page=='penyuluh'){ ?> class="active" <?php }?> >
 								<a href="<?php echo base_url();?>penyuluh"><span>Penyuluh PKSM</span></a>
 							</li>
-							<li>
-								<a href="#"><span>Produksi Olahan Hasil Hutan</span></a>
+							<li <?php if($page=='produksiolahan'){ ?> class="active" <?php }?>>
+								<a href="<?php echo base_url();?>Produksiolahan"><span>Produksi Olahan Hasil Hutan</span></a>
 							</li>
 						<?php } ?>
 						</ul>
