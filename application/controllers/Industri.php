@@ -212,4 +212,39 @@ class Industri extends CI_Controller {
         print_r($nip);
 	 }
 
+	 public function rekap($thn = null,$bln = null)
+	 {
+		 $list = $this->db->query('SELECT b.nama, count(a.id) as total, sum(a.kapasitas_izin) as jumlah
+	 				FROM t_industri a INNER JOIN m_kabupaten b ON a.kabupaten_id = b.id GROUP BY b.nama')->result_object();
+		 
+		 $data['data'] 	 = $list;
+		 $data['page']	 = 'reportindustri';
+		 $data['subpage'] = 'rekap';
+		 $data['judul']	 =$this->judul;
+		 $data['header']	 =$this->judul;
+ 
+		 $this->load->view('industri/index',$data);
+	 }
+ 
+	 public function print(){
+		 
+		 $this->load->library('pdfgenerator');
+		 date_default_timezone_set('GMT');
+ 
+		 $list = $this->db->query('SELECT b.nama, count(a.id) as total, sum(a.kapasitas_izin) as jumlah
+		 FROM t_industri a INNER JOIN m_kabupaten b ON a.kabupaten_id = b.id GROUP BY b.nama')->result_object();
+ 
+		 $data['list'] = $list;
+ 
+		 $html = $this->load->view('industri/print', $data, true);		  		
+ 
+		 $paper = array(
+					 "A5" => 'A5',
+					 "Legal" => 'Legal',
+					  "folio" => array(0,0,612.00,936.00)
+				  );
+ 
+		 $this->pdfgenerator->generate($html,'rekap_industri_sektor_kehutanan',TRUE,$paper['Legal']);
+	 }
+
 }

@@ -77,6 +77,7 @@
                                 <label for="" class="col-lg-2 control-label">Tahun</label>
                                 <div class="col-lg-4">
                                     <select name="tahun" id="tahun" class="form-control">
+                                        <option value="2017" <?= $data[0]->tahun == '2017' ? 'selected' : ''?>>2017</option>
                                         <option value="2018" <?= $data[0]->tahun == '2018' ? 'selected' : ''?>>2018</option>
                                         <option value="2019" <?= $data[0]->tahun == '2019' ? 'selected' : ''?>>2019</option>
                                         <option value="2020" <?= $data[0]->tahun == '2020' ? 'selected' : ''?>>2020</option>

@@ -36,7 +36,7 @@
 	<script type="text/javascript" src="<?php echo base_url(); ?>assets/limitless/assets/js/plugins/forms/selects/select2.min.js"></script>
 	<script type="text/javascript" src="<?php echo base_url(); ?>assets/limitless/assets/js/pages/form_select2.js"></script>
 	<script type="text/javascript" src="<?php echo base_url(); ?>assets/limitless/assets/js/core/app.js"></script>
-	<script type="text/javascript" src="<?php echo base_url(); ?>assets/limitless/assets/js/pages/dashboard.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
 
 </head>
 
@@ -235,7 +235,7 @@
 											<div class="col-lg-12 text-center">
 												<button type="button" class="btn btn-primary" id="klahanbar"><span class="icon-stats-bars"></span> Grafik Bar</button>
 												<button type="button" class="btn btn-default" id="klahanpie"><span class="icon-pie-chart"></span> Grafik Pie</button>
-												<button type="button" class="btn btn-default" id="klahantable"><span class="icon-table"></span> Tabel</button>
+												<button type="button" class="btn btn-default hide" id="klahantable"><span class="icon-table"></span> Tabel</button>
 												<input type="hidden" id="klahanTipeGrafik" value="bar">
 											</div>
 										</div>
@@ -320,11 +320,9 @@
 													<div id="chartdiv"></div>
 												</div>
 												<div class="col-lg-3">
-													<div class="card__anggota_total">
+													<div class="card__anggota_total hide">
 														<span>Total Data</span>
 														<h3 id="textTotalKelompokTani"></h3>
-
-
 													</div>
 													<div class="card__anggota_total">
 														<span>Pemula</span>
@@ -352,7 +350,7 @@
 													<div id="chartdiv2"></div>
 												</div>
 												<div class="col-lg-3">
-													<div class="card__anggota_total">
+													<div class="card__anggota_total hide">
 														<span>Total Data</span>
 														<h3 id="textTotalKelompokTaniTahun"></h3>
 													</div>
@@ -413,12 +411,12 @@
 												</div>
 												<div class="col-lg-3">
 													<div class="card__anggota_total">
-														<span>Luas Lahan</span>
-														<h3 id="textTotalLahan"></h3>
-													</div>
-													<div class="card__anggota_total">
 														<span>Jumlah Persil</span>
 														<h3 id="textTotalLahanPersil"></h3>
+													</div>
+													<div class="card__anggota_total">
+														<span>Luas Lahan</span>
+														<h3 id="textTotalLahan"></h3>
 													</div>
 												</div>
 											</div>

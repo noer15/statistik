@@ -141,6 +141,66 @@ class Produksiolahan extends CI_Controller {
 		);
 
 		echo json_encode($json_data); 
-    }
+	}
+	
+	public function rekap($thn = null,$bln = null)
+	{
+		if($thn && $thn > 0 && empty($bln)){
+			$tgl = ' WHERE a.tahun='.$thn;
+		}else if($thn && $thn > 0 && $bln > 0){
+			$tgl = ' WHERE a.tahun='.$thn.' AND a.bulan='.$bln;
+		}else{
+			$tgl = '';
+		}
+
+		$list = $this->db->query('SELECT c.nama_industri as industri, b.nama as olahan, SUM(a.jml_produksi) as jumlah, a.satuan,a.bulan,a.tahun
+				FROM produksi_olahan a INNER JOIN m_jenis_olahan b ON a.jenis_olahan_id = b.id
+				INNER JOIN t_industri c ON a.industri_id = c.id '.$tgl.'
+				GROUP BY industri,olahan, a.satuan, a.bulan, a.tahun')->result_object();
+		
+		$data['data'] 	 = $list;
+		$data['page']	 = 'reportproduksiolahan';
+		$data['subpage'] = 'rekap';
+		$data['tahun']	 = $thn;
+		$data['bulan']	 = $bln;
+		$data['judul']	 =$this->judul;
+		$data['header']	 =$this->judul;
+
+		$this->load->view('produksiolahan/index',$data);
+	}
+
+	public function print(){
+		
+		$this->load->library('pdfgenerator');
+		date_default_timezone_set('GMT');
+
+		$thn = $this->input->post('tahun');
+		$bln = $this->input->post('bulan');
+
+		if($thn && $thn > 0 && empty($bln)){
+			$tgl = ' WHERE a.tahun='.$thn;
+		}else if($thn && $thn > 0 && $bln > 0){
+			$tgl = ' WHERE a.tahun='.$thn.' AND a.bulan='.$bln;
+		}else{
+			$tgl = '';
+		}
+
+		$list = $this->db->query('SELECT c.nama_industri as industri, b.nama as olahan, SUM(a.jml_produksi) as jumlah, a.satuan,a.bulan,a.tahun
+				FROM produksi_olahan a INNER JOIN m_jenis_olahan b ON a.jenis_olahan_id = b.id
+				INNER JOIN t_industri c ON a.industri_id = c.id '.$tgl.'
+				GROUP BY industri,olahan, a.satuan, a.bulan, a.tahun')->result_object();
+
+		$data['list'] = $list;
+
+		$html = $this->load->view('produksiolahan/print', $data, true);		  		
+
+		$paper = array(
+					"A5" => 'A5',
+					"Legal" => 'Legal',
+		 			"folio" => array(0,0,612.00,936.00)
+		 		);
+
+	    $this->pdfgenerator->generate($html,'rekap_produksi_olahan_hasil_hutan',TRUE,$paper['Legal']);
+	}
 
 }

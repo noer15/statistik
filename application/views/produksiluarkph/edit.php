@@ -160,14 +160,12 @@
 
 						<div class="form-group">
 							<label class="col-lg-2 control-label">Jml Produksi</label>
-							<div class="col-lg-10">
+							<div class="col-lg-4">
 								<input type="number" class="form-control" placeholder="jml_produksi" name="jml_produksi"
 									value="<?php echo $data[0]->jml_produksi;?>">
 							</div>
-						</div>
-						<div class="form-group">
-							<label class="col-lg-2 control-label">Satuan</label>
-							<div class="col-lg-10">
+							<label class="col-lg-1 control-label">Satuan</label>
+							<div class="col-lg-5">
 								<select name="satuan" id="" class="form-control">
 									<?php foreach($this->db->get('m_satuan')->result() as $satuan): ?>
 									<option value="<?=$satuan->nama?>"
@@ -178,10 +176,30 @@
 							</div>
 						</div>
 						<div class="form-group">
+							<label class="col-lg-2 control-label">Luas Produksi/Jumlah Budidaya</label>
+							<div class="col-lg-4">
+								<input type="number" class="form-control" placeholder="Luas Produksi/Jumlah Budidaya" name="luas_produksi" value="<?=$data[0]->luas_produksi?>">
+							</div>
+                            <label class="col-lg-1 control-label">Satuan</label>
+							<div class="col-lg-5">
+                            <select name="luas_satuan" id="" class="form-control">
+                                <?php foreach($this->db->get('m_satuan')->result() as $satuan): ?>
+                                    <option value="<?=$satuan->nama?>" <?= $satuan->nama == $data[0]->luas_satuan ? 'selected' : ''?>><?=$satuan->nama?></option>
+                                <?php endforeach; ?>
+                                </select>
+							</div>
+						</div>
+						<div class="form-group">
 							<div id="vtahun">
 								<label for="" class="col-lg-2 control-label">Tahun</label>
 								<div class="col-lg-4">
 									<select name="tahun" id="tahun" class="form-control">
+										<option value="2017" <?= $data[0]->tahun == '2017' ? 'selected' : ''?>>2017
+										</option>
+										<option value="2018" <?= $data[0]->tahun == '2018' ? 'selected' : ''?>>2018
+										</option>
+										<option value="2019" <?= $data[0]->tahun == '2019' ? 'selected' : ''?>>2019
+										</option>
 										<option value="2020" <?= $data[0]->tahun == '2020' ? 'selected' : ''?>>2020
 										</option>
 										<option value="2021" <?= $data[0]->tahun == '2021' ? 'selected' : ''?>>2021
@@ -198,8 +216,8 @@
 								</div>
 							</div>
 							<div id="vbulan" <?= $data[0]->tahun == '2020' ? 'style="display:none"' : ''?>>
-								<label for="" class="col-lg-2 control-label">Bulan</label>
-								<div class="col-lg-4">
+								<label for="" class="col-lg-1 control-label">Bulan</label>
+								<div class="col-lg-5">
 									<input type="hidden" name="bulan" id="bulanValue" value="<?=$data[0]->bulan?>">
 									<select id="bulan" class="form-control">
 										<option value="01" <?= $data[0]->bulan == '01' ? 'selected' : ''?>>January

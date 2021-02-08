@@ -253,7 +253,44 @@ class Pinjampakai extends CI_Controller {
 			"data"            => $data 
 		);
 		echo json_encode($json_data); 
-    }
+	}
+	
+	public function rekap()
+	{
+		$list = $this->db->query('SELECT d.nama as kab, count(a.id) as jumlah_lokasi, ROUND(sum(a.luas), 2) as luas
+		FROM t_pinjampakai a INNER JOIN m_desa b ON a.desa_id = b.id INNER JOIN m_kecamatan c ON b.kecamatan_id = c.id
+		INNER JOIN m_kabupaten d ON c.kabupaten_id = d.id GROUP BY d.nama')->result_object();
+		
+		$data['data'] 	 = $list;
+		$data['page']	 = 'reportpinjampakai';
+		$data['subpage'] = 'rekap';
+		$data['judul']	 =$this->judul;
+		$data['header']	 =$this->judul;
+
+		$this->load->view('pinjampakai/index',$data);
+	}
+
+	public function print(){
+		
+		$this->load->library('pdfgenerator');
+		date_default_timezone_set('GMT');
+
+		$list = $this->db->query('SELECT d.nama as kab, count(a.id) as jumlah_lokasi, ROUND(sum(a.luas), 2) as luas
+		FROM t_pinjampakai a INNER JOIN m_desa b ON a.desa_id = b.id INNER JOIN m_kecamatan c ON b.kecamatan_id = c.id
+		INNER JOIN m_kabupaten d ON c.kabupaten_id = d.id GROUP BY d.nama')->result_object();	
+
+		$data['list'] = $list;
+
+		$html = $this->load->view('pinjampakai/print', $data, true);		  		
+
+		$paper = array(
+					"A5" => 'A5',
+					"Legal" => 'Legal',
+		 			"folio" => array(0,0,612.00,936.00)
+		 		);
+
+	    $this->pdfgenerator->generate($html,'rekap_pinjam_pakai_kawasan',TRUE,$paper['Legal']);
+	}
 
 	
 }

@@ -61,7 +61,6 @@
 			</div>
 			<!-- /main sidebar -->
 
-
 			<!-- Main content -->
 			<div class="content-wrapper">
 
@@ -95,6 +94,9 @@
                     }else
                     if ($subpage=='edit'){
                         include "edit.php";
+                    }else
+                    if ($subpage=='rekap'){
+                        include "rekap.php";
                     }
 
                 ?>

@@ -216,5 +216,38 @@ class pemiliklahan extends CI_Controller {
 		echo json_encode($json_data); 
     }
 
+	public function rekap()
+	{
+		$list = $this->db->query('SELECT b.nama, count(a.id) as persil, ROUND(sum(a.luas_lahan)/1000, 2) as luas_lahan, (SELECT count(id) FROM pemilik_lahan ) as total
+				FROM pemilik_lahan a INNER JOIN m_jenis_sertifikat b ON a.jenis_sertifikat = b.id GROUP BY b.nama')->result_object();
+		
+		$data['data'] 	 = $list;
+		$data['page']	 = 'reportkepemilikan';
+		$data['subpage'] = 'rekap';
+		$data['judul']	 =$this->judul;
+		$data['header']	 =$this->judul;
 
+		$this->load->view('pemiliklahan/index',$data);
+	}
+
+	public function print(){
+		
+		$this->load->library('pdfgenerator');
+		date_default_timezone_set('GMT');
+
+		$list = $this->db->query('SELECT b.nama, count(a.id) as persil, ROUND(sum(a.luas_lahan)/1000, 2) as luas_lahan, (SELECT count(id) FROM pemilik_lahan ) as total
+		FROM pemilik_lahan a INNER JOIN m_jenis_sertifikat b ON a.jenis_sertifikat = b.id GROUP BY b.nama')->result_object();	
+
+		$data['list'] = $list;
+
+		$html = $this->load->view('pemiliklahan/print', $data, true);		  		
+
+		$paper = array(
+					"A5" => 'A5',
+					"Legal" => 'Legal',
+		 			"folio" => array(0,0,612.00,936.00)
+		 		);
+
+	    $this->pdfgenerator->generate($html,'rekap_kepemilikan_lahan',TRUE,$paper['Legal']);
+	}
 }

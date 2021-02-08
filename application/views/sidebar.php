@@ -25,9 +25,13 @@
 			<?php if($this->session->userdata('role_id')==1){ ?>
 
 			<li <?php 
-					if($page=='kabupaten' || $page=='kecamatan' || $page=='desa' 
-						|| $page=='gangguan' || $page=='kawasan' || $page=='masterpotensi')
-				{ ?> class="active" <?php } ?>>
+					if($page=='kabupaten' 
+						|| $page=='kecamatan' 
+						|| $page=='desa' 
+						|| $page=='gangguan' 
+						|| $page=='kawasan' 
+						|| $page=='masterpotensi'
+					){ ?> class="active" <?php } ?>>
 				<a href="#"><i class="icon-grid"></i> <span>Master Data</span></a>
 				<ul>
 					<li <?php if($page=='kabupaten'){ ?> class="active" <?php } ?>>
@@ -169,9 +173,7 @@
 								<a href="<?php echo base_url();?>pemiliklahan"><span>Kepemilikan Lahan</span></a>
 							</li>
 							<li <?php if($page=='produksikph'){ ?> class="active" <?php }?> >
-								<a href="#"><span>Produksi Hasil Hutan
-								<span class="label bg-danger-400">KPH</span></span>
-								</a>
+								<a href="#"><span>Produksi Hasil Hutan</a>
 								<ul>
 									<li <?php if($page=='produksikph'){ ?> class="active" <?php }?>>
 										<a href="<?php echo base_url();?>Produksikph"><span>Dalam Kawasan Hutan</span></a>
@@ -221,7 +223,24 @@
 					<li <?php if($page=='reportkelompoktani'){ ?> class="active" <?php } ?>> 
 						<a href="<?php echo base_url();?>Kelompoktani/rekap">Kelompok Tani</a>
 					</li>
-					<li> <a href="#">Luas Kawasan Hutan</a></li>
+					<li <?php if($page=='reportpengukuhan'){ ?> class="active" <?php } ?>> 
+						<a href="<?php echo base_url();?>pengukuhankh/rekap">Pengukuhan Kawasan Hutan</a>
+					</li>
+					<li <?php if($page=='reportpinjampakai'){ ?> class="active" <?php } ?>> 
+						<a href="<?php echo base_url();?>pinjampakai/rekap">Pinjam Pakai Kawasan Hutan</a>
+					</li>
+					<li <?php if($page=='reportkepemilikan'){ ?> class="active" <?php } ?>> 
+						<a href="<?php echo base_url();?>pemiliklahan/rekap">Kepemilikan Lahan</a>
+					</li>
+					<li <?php if($page=='reportproduksihasil'){ ?> class="active" <?php } ?>> 
+						<a href="<?php echo base_url();?>produksiolahan/rekap">Produksi Hasil Hutan</a>
+					</li>
+					<li <?php if($page=='reportindustri'){ ?> class="active" <?php } ?>> 
+						<a href="<?php echo base_url();?>Industri/rekap">Industri</a>
+					</li>
+					<li <?php if($page=='reportproduksiolahan'){ ?> class="active" <?php } ?>> 
+						<a href="<?php echo base_url();?>produksiolahan/rekap">Produksi Olahan Hasil Hutan</a>
+					</li>
 				</ul>
 			</li>
 			

@@ -12,13 +12,13 @@
 	},
 	"require": {
 		"php": ">=5.2.4",
-		"dompdf/dompdf" : "0.6.*",
-		"phpoffice/phpword": "v0.14.*"
+		"dompdf/dompdf" : "*",
+		"phpoffice/phpword": "^0.13.0"
 	},
 	"suggest": {
 		"paragonie/random_compat": "Provides better randomness in PHP 5.x"
 	},
 	"require-dev": {
-		"mikey179/vfsStream": "1.1.*"
+		"mikey179/vfsstream": "1.1.*"
 	}
 }

@@ -95,7 +95,10 @@
                     }else
                     if ($subpage=='edit'){
                         include "edit.php";
-                    }
+					}else
+					if($subpage=='rekap'){
+						include "rekap.php";
+					}
 
                 ?>
 				<!-- /content area -->

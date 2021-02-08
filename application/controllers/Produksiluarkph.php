@@ -16,10 +16,10 @@ class Produksiluarkph extends CI_Controller {
 	public function index()
 	{
 
-		$list = $this->db->query("SELECT a.*, b.nama AS nama_desa, c.nama AS nama_kec, d.nama AS nama_kab, e.nama AS potensi
-				FROM produksi_luar_kph AS a INNER JOIN m_desa AS b ON a.desa_id = b.id INNER JOIN m_kecamatan AS c
-				ON b.kecamatan_id = c.id INNER JOIN m_kabupaten AS d ON c.kabupaten_id = d.id INNER JOIN m_jenis_potensi AS e
-				ON a.jenis_potensi_id = e.id")->result_object();				
+		$list = $this->db->query("SELECT a.*, b.nama AS nama_desa, c.nama AS nama_kec, d.nama AS nama_kab, e.nama AS potensi, f.nama as nama_kec_2, g.nama as nama_kab_2
+		FROM produksi_luar_kph AS a LEFT JOIN m_desa AS b ON a.desa_id = b.id LEFT JOIN m_kecamatan AS c ON b.kecamatan_id = c.id
+		LEFT JOIN m_kabupaten AS d ON c.kabupaten_id = d.id LEFT JOIN m_jenis_potensi AS e ON a.jenis_potensi_id = e.id
+		LEFT JOIN m_kecamatan AS f ON a.kec_id = f.id LEFT JOIN m_kabupaten AS g ON a.kab_id = g.id ")->result_object();				
 
 		$data['data']	 = $list;
 		$data['page']	 ='produksiluarkph';
@@ -32,10 +32,11 @@ class Produksiluarkph extends CI_Controller {
 	public function tambah(){
 
 		$jenis = $this->db->query("Select a.* from m_jenis_potensi a where jenis=2")->result_object();
-		$list = $this->db->query("SELECT a.*, b.nama AS nama_desa, c.nama AS nama_kec, d.nama AS nama_kab, e.nama AS potensi
-		FROM produksi_luar_kph AS a INNER JOIN m_desa AS b ON a.desa_id = b.id INNER JOIN m_kecamatan AS c
-		ON b.kecamatan_id = c.id INNER JOIN m_kabupaten AS d ON c.kabupaten_id = d.id INNER JOIN m_jenis_potensi AS e
-		ON a.jenis_potensi_id = e.id WHERE tanggal = '".date("y-m-d")."'")
+		$list = $this->db->query("SELECT a.*, b.nama AS nama_desa, c.nama AS nama_kec, d.nama AS nama_kab, e.nama AS potensi, f.nama as nama_kec_2, g.nama as nama_kab_2
+								FROM produksi_luar_kph AS a LEFT JOIN m_desa AS b ON a.desa_id = b.id LEFT JOIN m_kecamatan AS c ON b.kecamatan_id = c.id
+								LEFT JOIN m_kabupaten AS d ON c.kabupaten_id = d.id LEFT JOIN m_jenis_potensi AS e ON a.jenis_potensi_id = e.id
+								LEFT JOIN m_kecamatan AS f ON a.kec_id = f.id LEFT JOIN m_kabupaten AS g ON a.kab_id = g.id 
+								WHERE tanggal = '".date("y-m-d")."'")
 		->result_object();
 		
 		$data['list']	 = $list;
@@ -48,32 +49,40 @@ class Produksiluarkph extends CI_Controller {
 	}
 
 	public function store(){
+		$kab = $this->input->post('kab');
+		$kec = $this->input->post('kec');
 		$desa = $this->input->post('desa');
 		$jml_produksi = $this->input->post('jml_produksi');
 		$satuan = $this->input->post('satuan');
 		$jenis = $this->input->post('jenis');
 		$bulan = $this->input->post('bulan');
 		$tahun = $this->input->post('tahun');
+		$luas = $this->input->post('luas_produksi');
+		$lsatuan = $this->input->post('luas_satuan');
 		
 		$post_data = array(
+				'kab_id' => $kab,
+				'kec_id' => $kec,
 				'desa_id' => $desa,
 				'jenis_potensi_id' => $jenis,
 	      		'jml_produksi' 	=> $jml_produksi,
-	        	'satuan' => $satuan,
+				'satuan' => $satuan,
+				'luas_produksi' => $luas,
+				'luas_satuan' => $lsatuan,
 				'bulan'	=> $bulan,
 				'tahun' => $tahun,
 				'tanggal' => date('y-m-d')
-	    		);
+	    	);
 	    $this->db->insert('produksi_luar_kph',$post_data);
 
 		redirect(base_url().'Produksiluarkph/tambah');
 	}
 
 	public function edit($id){
-		$data = $this->db->query("SELECT a.*, b.nama AS nama_desa, c.id AS kec_id, d.id AS kab_id
-				FROM produksi_luar_kph AS a INNER JOIN m_desa AS b ON a.desa_id = b.id
-				INNER JOIN m_kecamatan AS c ON b.kecamatan_id = c.id 
-				INNER JOIN m_kabupaten AS d ON c.kabupaten_id = d.id where a.id='".$id."'")->result_object();
+		$data = $this->db->query("SELECT a.*, a.kec_id AS kec_id, a.kab_id AS kab_id
+				FROM produksi_luar_kph AS a where a.id='".$id."'")->result_object();
+
+		// print_r($data); exit;
 		
 		$potensi = $this->db->query("Select a.* from m_jenis_potensi a where id=".$data[0]->jenis_potensi_id)->result_object();
 		$jenis = $this->db->query("Select a.* from m_jenis_potensi a where jenis=".$potensi[0]->jenis)->result_object();
@@ -95,6 +104,8 @@ class Produksiluarkph extends CI_Controller {
 		$jenis = $this->input->post('jenis');
 		$bulan = $this->input->post('bulan');
 		$tahun = $this->input->post('tahun');
+		$luas = $this->input->post('luas_produksi');
+		$lsatuan = $this->input->post('luas_satuan');
 		
 		$post_data = array(
 			'desa_id' => $desa,
@@ -103,6 +114,8 @@ class Produksiluarkph extends CI_Controller {
 			'satuan' => $satuan,
 			'bulan'	=> $bulan,
 			'tahun' => $tahun,	
+			'luas_produksi' => $luas,
+			'luas_satuan' => $lsatuan,
 		);
 				
 		$this->db->where('id',$id);

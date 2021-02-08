@@ -53,16 +53,20 @@ class Produksikph extends CI_Controller {
 		$kphId = $this->input->post('kph');
 		$bulan = $this->input->post('bulan');
 		$tahun = $this->input->post('tahun');
+		$luas  = $this->input->post('luas_produksi');
+		$lsatuan = $this->input->post('luas_satuan');  
 		
 		$post_data = array(
 	      		'jml_produksi' 	=> $jml_produksi,
-	        	'satuan' => $satuan,	        	
+				'satuan' => $satuan,
+				'luas_produksi' => $luas,
+				'luas_satuan' => $lsatuan,	        	
 	        	'jenis_potensi' => $jenis,	  
 				'kph_id' => $kphId,
 				'bulan'	=> $bulan,
 				'tahun' => $tahun,
 				'tanggal' => date('y-m-d')
-	    		);
+	    	);
 	    $this->db->insert('produksi_kph',$post_data);
 
 		redirect(base_url().'Produksikph/tambah');
@@ -90,11 +94,19 @@ class Produksikph extends CI_Controller {
 		$satuan = $this->input->post('satuan');
 		$jenis = $this->input->post('jenis');
 		$kphId = $this->input->post('kph');
+		$bulan = $this->input->post('bulan');
+		$tahun = $this->input->post('tahun');
+		$luas  = $this->input->post('luas_produksi');
+		$lsatuan = $this->input->post('luas_satuan'); 
 		
 		$post_data = array(
 	      		'jml_produksi' 	=> $jml_produksi,
 	        	'satuan' => $satuan,	        	
-	        	'jenis_potensi' => $jenis 	
+				'jenis_potensi' => $jenis,
+				'luas_produksi' => $luas,
+				'luas_satuan' => $lsatuan,
+				'bulan' => $bulan,
+				'tahun' => $tahun
 	    		);
 		$this->db->where('id',$id);
 	    $this->db->update('produksi_kph',$post_data);

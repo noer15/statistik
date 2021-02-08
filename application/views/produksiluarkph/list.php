@@ -25,18 +25,22 @@
 				<th>Jenis Produksi</th>
 				<th>Jumlah</th>
 				<th>Satuan</th>
+				<th>Luas Produksi</th>
+				<th>Satuan</th>
 				<th class="text-center">Aksi</th>
 			</tr>
 		</thead>
 		<tbody>
 		<?php foreach($data as $key => $value){ ?>
 			<tr>
-				<td><?php echo $value->nama_kab; ?></td>
-				<td><?php echo $value->nama_kec; ?></td>
+				<td><?php echo empty($value->nama_kab) ? $value->nama_kab_2 : $value->nama_kab; ?></td>
+                <td><?php echo empty($value->nama_kec) ? $value->nama_kec_2 : $value->nama_kec; ?></td>
 				<td><?php echo $value->nama_desa; ?></td>
 				<th><?php echo $value->potensi; ?></th>
 				<th><?php echo $value->jml_produksi; ?></th>
 				<td><?php echo $value->satuan; ?></td>
+				<th><?php echo $value->luas_produksi; ?></th>
+				<td><?php echo $value->luas_satuan; ?></td>
 				<td class="text-center">
 					<ul class="icons-list">
 						<li class="dropdown">

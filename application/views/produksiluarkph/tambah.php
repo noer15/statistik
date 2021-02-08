@@ -80,21 +80,27 @@
 						    <div class="form-group">
                                 <label class="col-lg-2 control-label">Kabupaten</label>
                                 <div class="col-lg-10">
-                                <select name="kab" id="kab" class="form-control" required
+                                <select name="kabSelect" id="kab" class="form-control" required
                                     data-placeholder="Pilih Kabupaten">
                                     <option value="0">Pilih Kabupaten</option>
                                     <?php foreach ($this->db->get('m_kabupaten')->result() as $key => $value) { ?>
-                                        <option value="<?php echo $value->kode?>">
+                                        <option value="<?php echo $value->kode?>" data-id="<?= $value->id ?>">
                                             <?php echo $value->nama?>                                    		
                                         </option>
                                     <?php }  ?>
                                 </select>
+                                <input type="hidden" name="kab" id="kabval">
+                                <script>
+                                    $('#kab').change(function(){
+                                        $('#kabval').val($('#kab option:selected').attr('data-id'));
+                                    })
+                                </script>
                                 </div>
 					        </div>
                             <div class="form-group">
                                 <label class="col-lg-2 control-label">Kecamatan</label>
                                 <div class="col-lg-10">
-                                <select name="kec"  id="kec" class="form-control" required
+                                <select name="kec"  id="kec" class="form-control"
                                     data-placeholder="Pilih Kecamatan">
                                     <option value="0"> Pilih Kecamatan</option>
                                 </select>
@@ -103,7 +109,7 @@
                             <div class="form-group">
                                 <label class="col-lg-2 control-label">Desa</label>
                                 <div class="col-lg-10">
-                                <select name="desa" id="desa" class="form-control" required
+                                <select name="desa" id="desa" class="form-control"
                                     data-placeholder="Pilih Desa">
                                     <option value="0"> Pilih Desa</option>
                                 </select>
@@ -115,14 +121,14 @@
                                 <div class="col-lg-10">
                                     <select name="potensi"  id="potensi" class="form-control" required
                                         data-placeholder="Pilih Potensi">
-                                            <option value="2">Non Kayu</option>
+                                            <option value="2">Bukan Kayu</option>
                                             <option value="1">Kayu</option>                                
                                     </select>
                                 </div>
                             </div>
 
                             <div class="form-group">
-                                    <label class="col-lg-2 control-label">Jenis Produksi</label>
+                                <label class="col-lg-2 control-label">Jenis Produksi</label>
                                 <div class="col-lg-10">
                                     <select name="jenis"  id="jenis" class="form-control" required
                                         data-placeholder="Pilih Jenis Potensi">
@@ -136,16 +142,13 @@
                                 </div>
                             </div>
 
-
 						<div class="form-group">
 							<label class="col-lg-2 control-label">Jml Produksi</label>
-							<div class="col-lg-10">
+							<div class="col-lg-4">
 								<input type="number" class="form-control" placeholder="Jumlah Produksi" name="jml_produksi">
 							</div>
-						</div>
-						<div class="form-group">
-							<label class="col-lg-2 control-label">Satuan</label>
-							<div class="col-lg-10">
+                            <label class="col-lg-1 control-label">Satuan</label>
+							<div class="col-lg-5">
                             <select name="satuan" id="" class="form-control">
                                 <?php foreach($this->db->get('m_satuan')->result() as $satuan): ?>
                                     <option value="<?=$satuan->nama?>"><?=$satuan->nama?></option>
@@ -153,14 +156,30 @@
                                 </select>
 							</div>
 						</div>
+
+                        <div class="form-group">
+							<label class="col-lg-2 control-label">Luas Produksi/Jumlah Budidaya</label>
+							<div class="col-lg-4">
+								<input type="number" class="form-control" placeholder="Luas Produksi/Jumlah Budidaya" name="luas_produksi">
+							</div>
+                            <label class="col-lg-1 control-label">Satuan</label>
+							<div class="col-lg-5">
+                            <select name="luas_satuan" id="" class="form-control">
+                                <?php foreach($this->db->get('m_satuan')->result() as $satuan): ?>
+                                    <option value="<?=$satuan->nama?>"><?=$satuan->nama?></option>
+                                <?php endforeach; ?>
+                                </select>
+							</div>
+						</div>
+
                         <div class="form-group">
                             <div id="vtahun">
                                 <label for="" class="col-lg-2 control-label">Tahun</label>
                                 <div class="col-lg-4">
                                     <select name="tahun" id="tahun" class="form-control">
-                                        <option value="2020">2017</option>
-                                        <option value="2020">2018</option>
-                                        <option value="2020">2019</option>
+                                        <option value="2017">2017</option>
+                                        <option value="2018">2018</option>
+                                        <option value="2019">2019</option>
                                         <option value="2020">2020</option>
                                         <option value="2021" selected>2021</option>
                                         <option value="2022">2022</option>
@@ -171,8 +190,8 @@
                                 </div>
                             </div>
                             <div id="vbulan">
-                                <label for="" class="col-lg-2 control-label">Bulan</label>
-                                <div class="col-lg-4">
+                                <label for="" class="col-lg-1 control-label">Bulan</label>
+                                <div class="col-lg-5">
                                     <input type="hidden" name="bulan" id="bulanValue" value="01">
                                     <select id="bulan" class="form-control">
                                         <option value="01" selected>January</option>
@@ -240,18 +259,22 @@
                             <th>Jenis Produksi</th>
                             <th>Jumlah</th>
                             <th>Satuan</th>
+                            <th>Luas Produksi</th>
+                            <th>Satuan</th>
                             <th class="text-center">Aksi</th>
                         </tr>
                     </thead>
                     <tbody>
                     <?php foreach($list as $key => $value){ ?>
                         <tr>
-                            <td><?php echo $value->nama_kab; ?></td>
-                            <td><?php echo $value->nama_kec; ?></td>
+                            <td><?php echo empty($value->nama_kab) ? $value->nama_kab_2 : $value->nama_kab; ?></td>
+                            <td><?php echo empty($value->nama_kec) ? $value->nama_kec_2 : $value->nama_kec; ?></td>
                             <td><?php echo $value->nama_desa; ?></td>
                             <th><?php echo $value->potensi; ?></th>
                             <th><?php echo $value->jml_produksi; ?></th>
                             <td><?php echo $value->satuan; ?></td>
+                            <th><?php echo $value->luas_produksi; ?></th>
+                            <td><?php echo $value->luas_satuan; ?></td>
                             <td class="text-center">
                                 <ul class="icons-list">
                                     <li class="dropdown">

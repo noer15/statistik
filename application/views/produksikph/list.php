@@ -23,6 +23,8 @@
 				<th>Jenis Produksi</th>
 				<th>Jumlah</th>
 				<th>Satuan</th>
+				<th>Luas Produksi/Jumlah Budidaya</th>
+				<th>Satuan</th>
 				<th class="text-center">Aksi</th>
 			</tr>
 		</thead>
@@ -33,6 +35,8 @@
 				<td><?php echo $value->namapotensi; ?></td>
 				<td><?php echo $value->jml_produksi; ?></td>
 				<td><?php echo $value->satuan; ?></td>
+				<td><?php echo $value->luas_produksi; ?></td>
+				<td><?php echo $value->luas_satuan; ?></td>
 				<td class="text-center">
 					<ul class="icons-list">
 						<li class="dropdown">

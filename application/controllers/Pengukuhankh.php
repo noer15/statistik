@@ -178,7 +178,7 @@ class Pengukuhankh extends CI_Controller {
 	}
 
 
-	 public function getdata(){
+	public function getdata(){
 
 		$sql = " Select a.*, b.nama as namakawasan from t_pengukuhan_kawasanhutan a
 				inner join m_kawasan_hutan b on b.id=a.kawasan_id";
@@ -256,7 +256,47 @@ class Pengukuhankh extends CI_Controller {
 			"data"            => $data 
 		);
 		echo json_encode($json_data); 
-    }
-
+	}
 	
+	public function rekap()
+	{
+		$list = $this->db->query('SELECT b.nama, a.penunjukan_no as sk_penunjukan, a.penunjukan_date as tgl_penunjukan, a.penunjukan_pilihan as wilayah,
+				IF(penunjukan_pilihan = "Darat", ROUND(a.penunjukan_luas, 2) , 0 ) as luas_darat,
+				IF(penunjukan_pilihan = "Laut", ROUND(a.penunjukan_luas, 2) , 0 ) as luas_laut,
+				a.tetap_no as sk_penetapan FROM t_pengukuhan_kawasanhutan a
+				INNER JOIN m_kawasan_hutan b ON a.kawasan_id = b.id')->result_object();
+		
+		$data['data'] 	 = $list;
+		$data['page']	 = 'reportpengukuhan';
+		$data['subpage'] = 'rekap';
+		$data['judul']	 =$this->judul;
+		$data['header']	 =$this->judul;
+
+		$this->load->view('pengukuhan/index',$data);
+	}
+
+	public function print(){
+		
+		$this->load->library('pdfgenerator');
+		date_default_timezone_set('GMT');
+
+		$list = $this->db->query('SELECT b.nama, a.penunjukan_no as sk_penunjukan, a.penunjukan_date as tgl_penunjukan, a.penunjukan_pilihan as wilayah,
+				IF(penunjukan_pilihan = "Darat", ROUND(a.penunjukan_luas, 2) , 0 ) as luas_darat,
+				IF(penunjukan_pilihan = "Laut", ROUND(a.penunjukan_luas, 2) , 0 ) as luas_laut,
+				a.tetap_no as sk_penetapan FROM t_pengukuhan_kawasanhutan a
+				INNER JOIN m_kawasan_hutan b ON a.kawasan_id = b.id')->result_object();	
+
+		$data['list'] = $list;
+
+		$html = $this->load->view('pengukuhan/print', $data, true);		  		
+
+		$paper = array(
+					"A5" => 'A5',
+					"Legal" => 'Legal',
+		 			"folio" => array(0,0,612.00,936.00)
+		 		);
+
+	    $this->pdfgenerator->generate($html,'rekap_pengukuhan_lahan',TRUE,$paper['Legal'],'landscape');
+	}
+
 }
