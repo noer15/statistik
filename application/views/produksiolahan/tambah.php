@@ -109,7 +109,7 @@
                             <script>
                                 $('#tahun').change(function(){
                                     let thn = $(this).val();
-                                    if(thn == '2020'){
+                                    if(thn <= '2020'){
                                         $('#vbulan').hide();
                                         $('#bulanValue').val("");
                                     }else{

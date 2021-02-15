@@ -280,11 +280,12 @@ class Pengukuhankh extends CI_Controller {
 		$this->load->library('pdfgenerator');
 		date_default_timezone_set('GMT');
 
-		$list = $this->db->query('SELECT b.nama, a.penunjukan_no as sk_penunjukan, a.penunjukan_date as tgl_penunjukan, a.penunjukan_pilihan as wilayah,
+		$list = $this->db->query('SELECT b.nama, c.nama as kabupaten, a.penunjukan_no as sk_penunjukan, a.penunjukan_date as tgl_penunjukan, a.penunjukan_pilihan as wilayah,
 				IF(penunjukan_pilihan = "Darat", ROUND(a.penunjukan_luas, 2) , 0 ) as luas_darat,
 				IF(penunjukan_pilihan = "Laut", ROUND(a.penunjukan_luas, 2) , 0 ) as luas_laut,
 				a.tetap_no as sk_penetapan FROM t_pengukuhan_kawasanhutan a
-				INNER JOIN m_kawasan_hutan b ON a.kawasan_id = b.id')->result_object();	
+				INNER JOIN m_kawasan_hutan b ON a.kawasan_id = b.id LEFT JOIN m_kabupaten c ON b.kode = c.kode
+				ORDER BY b.nama ASC')->result_object();	
 
 		$data['list'] = $list;
 

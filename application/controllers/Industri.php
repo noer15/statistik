@@ -231,8 +231,12 @@ class Industri extends CI_Controller {
 		 $this->load->library('pdfgenerator');
 		 date_default_timezone_set('GMT');
  
-		 $list = $this->db->query('SELECT b.nama, count(a.id) as total, sum(a.kapasitas_izin) as jumlah
-		 FROM t_industri a INNER JOIN m_kabupaten b ON a.kabupaten_id = b.id GROUP BY b.nama')->result_object();
+		 $list = $this->db->query('SELECT b.id, b.nama,
+		 						(SELECT count(id) FROM t_industri WHERE kapasitas_izin <= 2000 AND kabupaten_id = b.id) as m2,
+		 						(SELECT count(id) FROM t_industri WHERE kapasitas_izin > 2000 AND kapasitas_izin <= 6000 AND kabupaten_id = b.id) as m26,
+		 						(SELECT count(id) FROM t_industri WHERE kapasitas_izin > 6000 AND kabupaten_id = b.id) as m6
+		 						FROM t_industri a RIGHT JOIN m_kabupaten b ON a.kabupaten_id = b.id 
+		 						GROUP BY b.id,b.nama')->result_object();
  
 		 $data['list'] = $list;
  

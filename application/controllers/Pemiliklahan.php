@@ -235,8 +235,108 @@ class pemiliklahan extends CI_Controller {
 		$this->load->library('pdfgenerator');
 		date_default_timezone_set('GMT');
 
-		$list = $this->db->query('SELECT b.nama, count(a.id) as persil, ROUND(sum(a.luas_lahan)/1000, 2) as luas_lahan, (SELECT count(id) FROM pemilik_lahan ) as total
-		FROM pemilik_lahan a INNER JOIN m_jenis_sertifikat b ON a.jenis_sertifikat = b.id GROUP BY b.nama')->result_object();	
+		$list = $this->db->query('SELECT
+									kab.id AS kabId,
+									kab.nama AS kabupaten,
+									(
+									SELECT
+										count( distinct pl.anggota_id ) 
+									FROM
+										pemilik_lahan AS pl
+										INNER JOIN anggota_kelompok_tani AS akt ON pl.anggota_id = akt.id
+										INNER JOIN kelompok_tani AS kt ON akt.kelompok_id = kt.id
+										INNER JOIN m_desa AS ds ON kt.desa_id = ds.id
+										INNER JOIN m_kecamatan AS kc ON ds.kecamatan_id = kc.id
+										RIGHT JOIN m_kabupaten AS kb ON kc.kabupaten_id = kb.id 
+									WHERE
+										kb.id = kabId
+									) AS pemilik_lahan,
+									(
+									SELECT
+										count( pl.id ) 
+									FROM
+										pemilik_lahan AS pl
+										INNER JOIN anggota_kelompok_tani AS akt ON pl.anggota_id = akt.id
+										INNER JOIN kelompok_tani AS kt ON akt.kelompok_id = kt.id
+										INNER JOIN m_desa AS ds ON kt.desa_id = ds.id
+										INNER JOIN m_kecamatan AS kc ON ds.kecamatan_id = kc.id
+										RIGHT JOIN m_kabupaten AS kb ON kc.kabupaten_id = kb.id 
+									WHERE
+										pl.jenis_sertifikat = 3 
+										AND kb.id = kabId 
+									) AS persil_c,
+									(
+									SELECT
+										ROUND( SUM( pl.luas_lahan ) / 10000, 2 ) 
+									FROM
+										pemilik_lahan AS pl
+										INNER JOIN anggota_kelompok_tani AS akt ON pl.anggota_id = akt.id
+										INNER JOIN kelompok_tani AS kt ON akt.kelompok_id = kt.id
+										INNER JOIN m_desa AS ds ON kt.desa_id = ds.id
+										INNER JOIN m_kecamatan AS kc ON ds.kecamatan_id = kc.id
+										RIGHT JOIN m_kabupaten AS kb ON kc.kabupaten_id = kb.id 
+									WHERE
+										pl.jenis_sertifikat = 3 
+										AND kb.id = kabId 
+									) AS luas_c,
+									(
+									SELECT
+										count( pl.id ) 
+									FROM
+										pemilik_lahan AS pl
+										INNER JOIN anggota_kelompok_tani AS akt ON pl.anggota_id = akt.id
+										INNER JOIN kelompok_tani AS kt ON akt.kelompok_id = kt.id
+										INNER JOIN m_desa AS ds ON kt.desa_id = ds.id
+										INNER JOIN m_kecamatan AS kc ON ds.kecamatan_id = kc.id
+										RIGHT JOIN m_kabupaten AS kb ON kc.kabupaten_id = kb.id 
+									WHERE
+										pl.jenis_sertifikat = 2 
+										AND kb.id = kabId 
+									) AS persil_ajb,
+									(
+									SELECT
+										ROUND( SUM( pl.luas_lahan ) / 10000, 2 ) 
+									FROM
+										pemilik_lahan AS pl
+										INNER JOIN anggota_kelompok_tani AS akt ON pl.anggota_id = akt.id
+										INNER JOIN kelompok_tani AS kt ON akt.kelompok_id = kt.id
+										INNER JOIN m_desa AS ds ON kt.desa_id = ds.id
+										INNER JOIN m_kecamatan AS kc ON ds.kecamatan_id = kc.id
+										RIGHT JOIN m_kabupaten AS kb ON kc.kabupaten_id = kb.id 
+									WHERE
+										pl.jenis_sertifikat = 2 
+										AND kb.id = kabId 
+									) AS luas_ajb,
+									(
+									SELECT
+										count( pl.id ) 
+									FROM
+										pemilik_lahan AS pl
+										INNER JOIN anggota_kelompok_tani AS akt ON pl.anggota_id = akt.id
+										INNER JOIN kelompok_tani AS kt ON akt.kelompok_id = kt.id
+										INNER JOIN m_desa AS ds ON kt.desa_id = ds.id
+										INNER JOIN m_kecamatan AS kc ON ds.kecamatan_id = kc.id
+										RIGHT JOIN m_kabupaten AS kb ON kc.kabupaten_id = kb.id 
+									WHERE
+										pl.jenis_sertifikat = 1 
+										AND kb.id = kabId 
+									) AS persil_sertifikat,
+									(
+									SELECT
+										ROUND( SUM( pl.luas_lahan ) / 10000, 2 ) 
+									FROM
+										pemilik_lahan AS pl
+										INNER JOIN anggota_kelompok_tani AS akt ON pl.anggota_id = akt.id
+										INNER JOIN kelompok_tani AS kt ON akt.kelompok_id = kt.id
+										INNER JOIN m_desa AS ds ON kt.desa_id = ds.id
+										INNER JOIN m_kecamatan AS kc ON ds.kecamatan_id = kc.id
+										RIGHT JOIN m_kabupaten AS kb ON kc.kabupaten_id = kb.id 
+									WHERE
+										pl.jenis_sertifikat = 1 
+										AND kb.id = kabId 
+									) AS luas_sertifikat
+								FROM
+									m_kabupaten kab')->result_object();	
 
 		$data['list'] = $list;
 

@@ -1,24 +1,44 @@
 <!-- Theme JS files -->
-<script type="text/javascript"
-	src="<?php echo base_url();?>assets/limitless/assets/js/plugins/tables/datatables/datatables.min.js"></script>
+<!-- <script type="text/javascript"
+	src="<?php echo base_url();?>assets/limitless/assets/js/plugins/tables/datatables/datatables.min.js"></script> -->
 <script type="text/javascript"
 	src="<?php echo base_url();?>assets/limitless/assets/js/plugins/tables/datatables/extensions/responsive.min.js">
 </script>
 <script type="text/javascript"
 	src="<?php echo base_url();?>assets/limitless/assets/js/plugins/forms/selects/select2.min.js"></script>
-<script type="text/javascript" src="<?php echo base_url();?>assets/limitless/assets/js/pages/datatables_responsive.js">
-</script>
 
 
 <div class="content">
 	<!-- Basic datatable -->
 	<div class="panel panel-flat">
 		<div class="panel-heading">
-            <div class="form-group text-left">	
-                    <a href="<?php echo base_url();?>pemiliklahan/print" class="btn btn-default" id="cetak"
-                        target="_blank">
-                        <i class="icon-printer2"></i>Cetak</a>
-            </div>
+			<div class="row">
+				<form action="<?php echo base_url();?>Produksikph/print" method="POST" target="_blank">
+					<div class="col-lg-3">
+						<div class="form-group text-left">	
+							<select name="jenis" id="" class="form-control">
+								<option value="1">Jenis Produksi</option>
+								<option value="1">Kayu</option>
+								<option value="2">Bukan Kayu</option>
+							</select>
+						</div>
+					</div>
+					<div class="col-lg-3">
+						<div class="form-group text-left">
+							<select name="kertas" id="" class="form-control">
+								<option value="potrait">Orientasi Kertas</option>
+								<option value="potrait">Potrait</option>
+								<option value="landscape">Landscape</option>
+							</select>
+						</div>
+					</div>
+					<div class="col-lg-1">
+						<div class="form-group text-left">	
+							<button type="submit" class="btn btn-default" id="cetak"><i class="icon-printer2"></i> Cetak</button>
+						</div>
+					</div>
+				</form>
+			</div>
 			<h5 class="panel-title"><?php echo $header;?></h5>
 			<div class="heading-elements">
 				<ul class="icons-list">
@@ -34,27 +54,26 @@
 				<thead>
 					<tr class="bg-teal-400">
                         <th>No</th>
-						<th>Jenis Sertifikas</th>
-                        <th style="text-align: center;">Jumlah Persil</th>
-                        <th style="text-align: center;">Luas Lahan (Ha)</th>
+						<th>KPH</th>
+                        <th>Jumlah Produksi</th>
+						<th>Luas Produksi/Jumlah Budidaya</th>
 					</tr>
 				</thead>
                 <tbody>
-                    <?php $totalPersil = 0; $totalLuas = 0; $no=1; foreach($data as $data): ?>
+                    <?php $jumlah = 0; $luas = 0; $no=1; foreach($data as $data): ?>
                     <tr>
                         <td><?=$no?></td>
                         <td><?=$data->nama?></td>
-                        <td style="text-align: right;"><?=number_format($data->persil,0,'.','.')?></td>
-                        <td style="text-align: right;"><?=number_format($data->luas_lahan,0,',','.')?></td>
+                        <td style="text-align:right"><?=number_format($data->jumlah_produksi,0,',','.')?></td>
+                        <td style="text-align:right"><?=number_format($data->luas_produksi,0,',','.')?></td>
                     </tr>
-                    <?php $totalPersil += $data->persil; $totalLuas += $data->luas_lahan;  $no++; endforeach; ?>
+                    <?php $jumlah += $data->jumlah_produksi; $luas += $data->luas_produksi; $no++; endforeach; ?>
                     <tr>
                         <td colspan="2">Jumlah</td>
-                        <td style="text-align: right;"><?=number_format($totalPersil,0,'.','.')?></td>
-                        <td style="text-align: right;"><?=number_format($totalLuas,0,',','.')?></td>
+                        <td style="text-align:right"><?=number_format($jumlah,0,',','.')?></td>
+						<td style="text-align:right"><?=number_format($luas,0,',','.')?></td>
                     </tr>
                 </tbody>
-
 			</table>
 		</div>
 	</div>

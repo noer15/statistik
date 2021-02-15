@@ -174,33 +174,50 @@ class Produksiolahan extends CI_Controller {
 		$this->load->library('pdfgenerator');
 		date_default_timezone_set('GMT');
 
-		$thn = $this->input->post('tahun');
-		$bln = $this->input->post('bulan');
-
-		if($thn && $thn > 0 && empty($bln)){
-			$tgl = ' WHERE a.tahun='.$thn;
-		}else if($thn && $thn > 0 && $bln > 0){
-			$tgl = ' WHERE a.tahun='.$thn.' AND a.bulan='.$bln;
-		}else{
-			$tgl = '';
+		$olahan = ''; $no=1;
+		foreach($this->db->get('m_jenis_olahan')->result() as $result){
+			$olahan .= ',(
+							SELECT
+								count( aa'.$no.'.id ) 
+							FROM
+								produksi_olahan aa'.$no.'
+								INNER JOIN t_industri bb'.$no.' ON aa'.$no.'.industri_id = bb'.$no.'.id
+								INNER JOIN m_jenis_olahan cc'.$no.' ON aa'.$no.'.jenis_olahan_id = cc'.$no.'.id
+								RIGHT JOIN m_kabupaten AS dd'.$no.' ON bb'.$no.'.kabupaten_id = dd'.$no.'.id
+							WHERE
+								aa'.$no.'.jenis_olahan_id = '.$result->id.' AND dd'.$no.'.id = idkab
+							) AS unit_'.$no.',
+							
+							(
+							SELECT
+								sum( aa'.$no.'.jml_produksi )
+							FROM
+								produksi_olahan aa'.$no.'
+								INNER JOIN t_industri bb'.$no.' ON aa'.$no.'.industri_id = bb'.$no.'.id
+								INNER JOIN m_jenis_olahan cc'.$no.' ON aa'.$no.'.jenis_olahan_id = cc'.$no.'.id
+								RIGHT JOIN m_kabupaten AS dd'.$no.' ON bb'.$no.'.kabupaten_id = dd'.$no.'.id
+							WHERE
+								aa'.$no.'.jenis_olahan_id = '.$result->id.' AND dd'.$no.'.id = idkab
+							) AS jumlah_'.$no; 
+			$no++;
 		}
 
-		$list = $this->db->query('SELECT c.nama_industri as industri, b.nama as olahan, SUM(a.jml_produksi) as jumlah, a.satuan,a.bulan,a.tahun
-				FROM produksi_olahan a INNER JOIN m_jenis_olahan b ON a.jenis_olahan_id = b.id
-				INNER JOIN t_industri c ON a.industri_id = c.id '.$tgl.'
-				GROUP BY industri,olahan, a.satuan, a.bulan, a.tahun')->result_object();
+		$query = 'SELECT b.id as idkab, b.nama as namakab '.$olahan.' FROM produksi_olahan AS a INNER JOIN t_industri
+					ON a.industri_id = t_industri.id RIGHT JOIN m_kabupaten AS b ON t_industri.kabupaten_id = b.id';
 
+		$list = $this->db->query($query)->result_object();
 		$data['list'] = $list;
-
-		$html = $this->load->view('produksiolahan/print', $data, true);		  		
-
+		$data['jenis'] = $this->db->get('m_jenis_olahan')->result();
+		$data['total'] = $this->db->query('SELECT b.nama, count(a.id) as industri, sum(a.jml_produksi) as jumlah
+											FROM produksi_olahan a RIGHT JOIN m_jenis_olahan b
+											ON a.jenis_olahan_id = b.id GROUP BY b.nama')->result_object();
+		$html = $this->load->view('produksiolahan/print', $data, true);
 		$paper = array(
 					"A5" => 'A5',
 					"Legal" => 'Legal',
 		 			"folio" => array(0,0,612.00,936.00)
-		 		);
-
-	    $this->pdfgenerator->generate($html,'rekap_produksi_olahan_hasil_hutan',TRUE,$paper['Legal']);
+				 );
+	    $this->pdfgenerator->generate($html,'rekap_produksi_olahan_hasil_hutan',TRUE,$paper['Legal'],'landscape');
 	}
 
 }

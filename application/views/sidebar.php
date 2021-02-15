@@ -159,6 +159,9 @@
 							<li>
 								<a href="#"><span>Penangkar / Pengada / Pengedar Benih/Bibit</span></a>
 							</li>
+							<li <?php if($page=='sertifikatbenih'){ ?> class="active" <?php }?>>
+								<a href="<?php echo base_url();?>sertifikatbenih"><span>Sertifikasi Benih</span></a>
+							</li>
 						</ul>
 					</li>
 
@@ -200,13 +203,6 @@
 					</li>
 				<?php } ?>
 
-					
-				<?php if($role==1){ ?>	
-					<li <?php if($page=='sertifikatbenih'){ ?> class="active" <?php }?>>
-						<a href="<?php echo base_url();?>sertifikatbenih"><span>Sertifikasi Benih</span></a>
-					</li>
-				<?php } ?>
-
 				</ul>
 			</li>
 
@@ -232,8 +228,16 @@
 					<li <?php if($page=='reportkepemilikan'){ ?> class="active" <?php } ?>> 
 						<a href="<?php echo base_url();?>pemiliklahan/rekap">Kepemilikan Lahan</a>
 					</li>
-					<li <?php if($page=='reportproduksihasil'){ ?> class="active" <?php } ?>> 
-						<a href="<?php echo base_url();?>produksiolahan/rekap">Produksi Hasil Hutan</a>
+					<li <?php if($page=='reportproduksikph'){ ?> class="active" <?php } ?>> 
+						<a href="javascript:;">Produksi Hasil Hutan</a>
+						<ul>
+							<li>
+								<a href="<?php echo base_url();?>produksikph/rekap">Dalam Kawasan</a>
+							</li>
+							<li>
+								<a href="<?php echo base_url();?>produksiluarkph/rekap">Luar Kawasan</a>
+							</li>
+						</ul>
 					</li>
 					<li <?php if($page=='reportindustri'){ ?> class="active" <?php } ?>> 
 						<a href="<?php echo base_url();?>Industri/rekap">Industri</a>

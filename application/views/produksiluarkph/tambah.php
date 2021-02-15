@@ -212,12 +212,14 @@
                             <script>
                                 $('#tahun').change(function(){
                                     let thn = $(this).val();
-                                    if(thn == '2020'){
+                                    if(thn <= '2020'){
                                         $('#vbulan').hide();
                                         $('#bulanValue').val("");
+                                        $('#kec,#desa').attr('disabled','disabled');
                                     }else{
                                         $('#vbulan').show();
                                         $('#bulanValue').val($('#bulan').val());
+                                        $('#kec,#desa').removeAttr('disabled');
                                     }
                                 });
 
