@@ -182,6 +182,17 @@
 						</div>
 
 						<div class="form-group">
+							<label class="col-lg-2 control-label">Perizinan</label>
+							<div class="col-lg-4">
+								<input type="text" class="form-control" placeholder="Perizinan Industri" name="perizinan" value="<?php echo $data[0]->perizinan;?>">
+							</div>
+							<label class="col-lg-2 control-label">Tanggal</label>
+							<div class="col-lg-4">
+								<input type="date" class="form-control" placeholder="Tanggal Perizinan" name="tgl_perizinan" value="<?php echo $data[0]->tgl_perizinan;?>">
+							</div>
+						</div>
+
+						<div class="form-group">
 							<label class="col-lg-2 control-label">Kapasitas Izin Produksi</label>
 							<div class="col-lg-10">
 								<input type="number" class="form-control" placeholder="Kapasitas" name="kapasitas"

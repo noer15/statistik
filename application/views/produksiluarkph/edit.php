@@ -92,10 +92,10 @@
 						<div class="form-group">
 							<label class="col-lg-2 control-label">Kabupaten</label>
 							<div class="col-lg-10">
-								<select name="kab" id="kab" class="form-control" required
+								<select name="kab" id="kab" class="form-control" required disabled
 									data-placeholder="Pilih Kabupaten">
 									<option value="0">Pilih Kabupaten</option>
-									<?php foreach ($this->db->get('m_kabupaten')->result() as $key => $value) { ?>
+									<?php foreach ($kabupaten as $key => $value) { ?>
 									<option value="<?php echo $value->kode?>" <?= $value->id == $data[0]->kab_id ? 'selected' : '' ?>>
 										<?php echo $value->nama?>
 									</option>
@@ -106,10 +106,10 @@
 						<div class="form-group">
 							<label class="col-lg-2 control-label">Kecamatan</label>
 							<div class="col-lg-10">
-								<select name="kec" id="kec" class="form-control" required
+								<select name="kec" id="kec" class="form-control" required disabled
 									data-placeholder="Pilih Kecamatan">
 									<option value="0"> Pilih Kecamatan</option>
-                                    <?php foreach ($this->db->get('m_kecamatan')->result() as $key => $value) { ?>
+                                    <?php foreach ($kecamatan as $key => $value) { ?>
 									<option value="<?php echo $value->kode?>" <?= $value->id == $data[0]->kec_id ? 'selected' : '' ?>>
 										<?php echo $value->nama?>
 									</option>
@@ -120,10 +120,10 @@
 						<div class="form-group">
 							<label class="col-lg-2 control-label">Desa</label>
 							<div class="col-lg-10">
-								<select name="desa" id="desa" class="form-control" required
+								<select name="desa" id="desa" class="form-control" required disabled
 									data-placeholder="Pilih Desa">
 									<option value="0"> Pilih Desa</option>
-                                    <?php foreach ($this->db->get('m_desa')->result() as $key => $value) { ?>
+                                    <?php foreach ($desa as $key => $value) { ?>
 									<option value="<?php echo $value->kode?>" <?= $value->id == $data[0]->desa_id ? 'selected' : '' ?>>
 										<?php echo $value->nama?>
 									</option>
@@ -136,7 +136,10 @@
 							<label class="col-lg-2 control-label">Potensi</label>
 							<div class="col-lg-10">
 								<select name="potensi" id="potensi" class="form-control" required
-									data-placeholder="Pilih Potensi">
+									data-placeholder="Pilih Potensi"
+									<?php if($this->session->userdata('role_id') == 22): ?>
+									disabled
+									<?php endif; ?>>
 									<option value="2" <?php if($potensi==2) {echo "selected";} ?>>Non Kayu</option>
 									<option value="1" <?php if($potensi==1) {echo "selected";} ?>>Kayu</option>
 								</select>
@@ -147,7 +150,10 @@
 							<label class="col-lg-2 control-label">Jenis Produksi</label>
 							<div class="col-lg-10">
 								<select name="jenis" id="jenis" class="form-control" required
-									data-placeholder="Pilih Jenis Potensi">
+									data-placeholder="Pilih Jenis Potensi"
+									<?php if($this->session->userdata('role_id') == 22): ?>
+									disabled
+									<?php endif; ?>>
 									<?php foreach ($jenis as $key => $value) { ?>
 									<option value="<?php echo $value->id?>"
 										<?php if($data[0]->jenis_potensi_id==$value->id){ echo "selected"; } ?>>
@@ -162,11 +168,18 @@
 							<label class="col-lg-2 control-label">Jml Produksi</label>
 							<div class="col-lg-4">
 								<input type="number" class="form-control" placeholder="jml_produksi" name="jml_produksi"
-									value="<?php echo $data[0]->jml_produksi;?>">
+									value="<?php echo $data[0]->jml_produksi;?>"
+									<?php if($this->session->userdata('role_id') == 22): ?>
+									disabled
+									<?php endif; ?>>
 							</div>
 							<label class="col-lg-1 control-label">Satuan</label>
 							<div class="col-lg-5">
-								<select name="satuan" id="" class="form-control">
+								<select name="satuan" id="" class="form-control"
+								<?php if($this->session->userdata('role_id') == 22): ?>
+									disabled
+								<?php endif; ?>
+								>
 									<?php foreach($this->db->get('m_satuan')->result() as $satuan): ?>
 									<option value="<?=$satuan->nama?>"
 										<?= $satuan->nama == $data[0]->satuan ? 'selected' : ''?>><?=$satuan->nama?>
@@ -178,11 +191,19 @@
 						<div class="form-group">
 							<label class="col-lg-2 control-label">Luas Produksi/Jumlah Budidaya</label>
 							<div class="col-lg-4">
-								<input type="number" class="form-control" placeholder="Luas Produksi/Jumlah Budidaya" name="luas_produksi" value="<?=$data[0]->luas_produksi?>">
+								<input type="number" class="form-control" placeholder="Luas Produksi/Jumlah Budidaya" name="luas_produksi" value="<?=$data[0]->luas_produksi?>"
+								<?php if($this->session->userdata('role_id') == 22): ?>
+									disabled
+								<?php endif; ?>
+								>
 							</div>
                             <label class="col-lg-1 control-label">Satuan</label>
 							<div class="col-lg-5">
-                            <select name="luas_satuan" id="" class="form-control">
+                            <select name="luas_satuan" id="" class="form-control"
+							<?php if($this->session->userdata('role_id') == 22): ?>
+								disabled
+							<?php endif; ?>
+							>
                                 <?php foreach($this->db->get('m_satuan')->result() as $satuan): ?>
                                     <option value="<?=$satuan->nama?>" <?= $satuan->nama == $data[0]->luas_satuan ? 'selected' : ''?>><?=$satuan->nama?></option>
                                 <?php endforeach; ?>
@@ -193,7 +214,11 @@
 							<div id="vtahun">
 								<label for="" class="col-lg-2 control-label">Tahun</label>
 								<div class="col-lg-4">
-									<select name="tahun" id="tahun" class="form-control">
+									<select name="tahun" id="tahun" class="form-control"
+									<?php if($this->session->userdata('role_id') == 22): ?>
+									disabled
+									<?php endif; ?>
+									>
 										<option value="2017" <?= $data[0]->tahun == '2017' ? 'selected' : ''?>>2017
 										</option>
 										<option value="2018" <?= $data[0]->tahun == '2018' ? 'selected' : ''?>>2018
@@ -218,8 +243,11 @@
 							<div id="vbulan" <?= $data[0]->tahun == '2020' ? 'style="display:none"' : ''?>>
 								<label for="" class="col-lg-1 control-label">Bulan</label>
 								<div class="col-lg-5">
-									<input type="hidden" name="bulan" id="bulanValue" value="<?=$data[0]->bulan?>">
-									<select id="bulan" class="form-control">
+									<input type="hidden" name="bulan" id="bulanValue" value="<?=$data[0]->bulan?>"
+									<?php if($this->session->userdata('role_id') == 22): ?>
+									disabled
+									<?php endif; ?>>
+									<select id="bulan" class="form-control" >
 										<option value="01" <?= $data[0]->bulan == '01' ? 'selected' : ''?>>January
 										</option>
 										<option value="02" <?= $data[0]->bulan == '02' ? 'selected' : ''?>>Februari
@@ -262,6 +290,26 @@
 								})
 
 							</script>
+						</div>
+						<div class="form-group">
+						<?php if($this->session->userdata('role_id') == 22): ?>
+                            <label class="col-lg-2 control-label">Status Validasi Data</label>
+                            <div class="col-lg-4">
+                                <select name="status"  id="status" class="select-search" required data-placeholder="Pilih Status">
+                                    <option value="0" <?= $data[0]->status == 0 ? 'selected' : ''?>>Belum Disetujui</option>
+                                    <option value="1" <?= $data[0]->status == 1 ? 'selected' : ''?>>Setujui</option>
+                                </select>
+                            </div>
+                            <?php endif; ?>
+                            <?php if($this->session->userdata('role_id') == 24): ?>
+                            <label class="col-lg-2 control-label">Status Validasi Data</label>
+                            <div class="col-lg-4">
+                                <select name="status"  id="status" class="select-search" required data-placeholder="Pilih Status">
+                                    <option value="1" <?= $data[0]->status == 1 ? 'selected' : ''?>>Belum Disetujui</option>
+                                    <option value="2" <?= $data[0]->status == 2 ? 'selected' : ''?>>Setujui</option>
+                                </select>
+                            </div>
+                            <?php endif; ?>
 						</div>
 						<div class="text-left">
 							<a href="<?php echo base_url();?>Produksiluarkph" class="btn btn-danger">Batal</a>

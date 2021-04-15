@@ -515,4 +515,19 @@ class Home extends CI_Controller
 			->set_content_type('application/json')
 			->set_output(json_decode(json_encode($a)));
 	}
+
+	public function importdata()
+	{
+		$desa = $this->db->query('SELECT * FROM m_desa WHERE latitude IS NULL')->result_object();
+		foreach($desa as $d){
+			$updatedesa = $this->db->query('SELECT * FROM desa WHERE nama_desa = "'.$d->nama.'"')->row_object();
+			if($updatedesa){
+				$this->db->where('id', $d->id);
+				$this->db->update('m_desa',[
+					'latitude' => $updatedesa->latitude,
+					'longitude' => $updatedesa->longitude,
+				]);
+			}
+		}
+	}
 }

@@ -71,7 +71,9 @@
                 </div>
 			</div>
 			<br>
-
+            <?php 
+            $role = $this->session->userdata('role_id');
+            if($role == 24 && $role == 1):?>
             <div class="form-group" id="divCDK">            
                 <label class="col-lg-2 control-label">CDK </label>
                 <div class="col-lg-5">
@@ -86,7 +88,7 @@
                     </select>
                 </div>
             </div>
-			
+			<?php endif; ?>
 		</div>
 
 		

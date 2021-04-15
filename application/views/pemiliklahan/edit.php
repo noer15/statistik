@@ -161,10 +161,28 @@
 
 						<div class="form-group">
 							<label class="col-lg-2 control-label">Luas Lahan</label>
-							<div class="col-lg-10">
+							<div class="col-lg-4">
 								<input type="text" class="form-control" placeholder="Luas Lahan" name="luaslahan"
 								 value="<?php echo $data[0]->luas_lahan?>">
 							</div>
+							<?php if($this->session->userdata('role_id') == 21): ?>
+                            <label class="col-lg-2 control-label">Status Validasi Data</label>
+                            <div class="col-lg-4">
+                                <select name="status"  id="status" class="select-search" required data-placeholder="Pilih Status">
+                                    <option value="0" <?= $data[0]->status == 0 ? 'selected' : ''?>>Belum Disetujui</option>
+                                    <option value="1" <?= $data[0]->status == 1 ? 'selected' : ''?>>Setujui</option>
+                                </select>
+                            </div>
+                            <?php endif; ?>
+                            <?php if($this->session->userdata('role_id') == 24): ?>
+                            <label class="col-lg-2 control-label">Status Validasi Data</label>
+                            <div class="col-lg-4">
+                                <select name="status"  id="status" class="select-search" required data-placeholder="Pilih Status">
+                                    <option value="1" <?= $data[0]->status == 1 ? 'selected' : ''?>>Belum Disetujui</option>
+                                    <option value="2" <?= $data[0]->status == 2 ? 'selected' : ''?>>Setujui</option>
+                                </select>
+                            </div>
+                            <?php endif; ?>
 						</div>
 						
 						<div class="text-left">

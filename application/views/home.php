@@ -73,8 +73,8 @@
 									<div style="background: #FFC107;border-radius: 50%;padding: 20px;color: #fff;height: 60px;">
 										<i class="icon-user-tie" style="font-size:20px"></i>
 									</div>
-									<div style="width: 60%;">
-										<span>Penyuluhan PKSM</span>
+									<div style="width: 70%;">
+										<span>Penyuluhan Kehutanan Swadaya Masyarakat (PKSM)</span>
 										<h2 style="margin-top: -0px;font-size: 20px;font-weight: 600;"><?= $this->db->get('t_penyuluh')->num_rows() ?></h2>
 									</div>
 								</div>
@@ -87,7 +87,7 @@
 										<i class="icon-stats-bars" style="font-size:20px"></i>
 									</div>
 									<div style="width: 60%;">
-										<span>Kelompok Tani</span>
+										<span>Kelompok Tani Hutan</span>
 										<h2 style="margin-top: -0px;font-size: 20px;font-weight: 600;"><?= number_format($this->db->get('kelompok_tani')->num_rows(), 0, '.', '.')  ?> <span style="font-size: 12px;">Kelompok</span></h2>
 									</div>
 								</div>
@@ -342,7 +342,7 @@
 										</div>
 										<div id="grafikTani">
 											<div id="grafikText" class="text-center">
-												<h3 style="margin-bottom:0px" id="grafikTaniTitle">Jumlah Semua Data Kelompok Tani Per Tahun</h3>
+												<h3 style="margin-bottom:0px" id="grafikTaniTitle">Jumlah Kelompok Tani Hutan Per Tahun</h3>
 												<small id="grafikTaniSubtitle">Data kelompok tani berdasarkan tahun berdiri</small>
 											</div>
 											<div class="row">
@@ -368,8 +368,8 @@
 										</div>
 										<div id="pieTani">
 											<div id="grafikText" class="text-center">
-												<h3 style="margin-bottom:0px">Jumlah Semua Data Kelompok Tani Berdasarkan File</h3>
-												<small>Data kelompok tani berdasarkan file</small>
+												<h3 style="margin-bottom:0px">Jumlah Kelompok Tani Hutan Berdasarkan Dasar Hukum</h3>
+												<small>Data kelompok tani berdasarkan dasar hukum</small>
 											</div>
 											<div class="row">
 												<div class="col-lg-9">
@@ -381,19 +381,19 @@
 														<h3 id="textTotalKelompokTaniFile"></h3>
 													</div>
 													<div class="card__anggota_total">
-														<span>File Menkumham</span>
+														<span>Pengesahan Menkumham</span>
 														<h3 id="textTotalKelompokTaniFileMenkumham"></h3>
 													</div>
 													<div class="card__anggota_total">
-														<span>File Akta</span>
+														<span>Pengesahan Akta</span>
 														<h3 id="textTotalKelompokTaniFileAkta"></h3>
 													</div>
 													<div class="card__anggota_total">
-														<span>File SK</span>
+														<span>Pengesahan SK</span>
 														<h3 id="textTotalKelompokTaniFileSk"></h3>
 													</div>
 													<div class="card__anggota_total">
-														<span>File BA</span>
+														<span>Pengesahan BA</span>
 														<h3 id="textTotalKelompokTaniFileBa"></h3>
 													</div>
 												</div>
@@ -402,7 +402,7 @@
 										</div>
 										<div id="grafikLahan" style="display: none;">
 											<div id="grafikLahanText" class="text-center">
-												<h3 style="margin-bottom:0px" id="grafikLahanTextTitle">Data Luas Lahan</h3>
+												<h3 style="margin-bottom:0px" id="grafikLahanTextTitle">Luas Lahan Kepemilikan</h3>
 												<small id="grafikLahanTextSubtitle">Data jumlah lahan dan persil</small>
 											</div>
 											<div class="row">
@@ -424,7 +424,7 @@
 										</div>
 										<div id="pieAnggota" style="display:none">
 											<div id="grafikText" class="text-center">
-												<h3 style="margin-bottom:0px">Jumlah Data Anggota Kelompok Tani</h3>
+												<h3 style="margin-bottom:0px">Jumlah Anggota Kelompok Tani Hutan</h3>
 												<small>Data Anggota Kelompok tani</small>
 											</div>
 											<div class="row">
@@ -505,7 +505,7 @@
 										</div>
 										<div id="grafikPinjamPakai" style="display: none;">
 											<div id="grafikText" class="text-center">
-												<h3 style="margin-bottom:0px" id="grafikPinjamPakaiTitle">Jumlah Data Pinjam Pakai Kawasan Hutan</h3>
+												<h3 style="margin-bottom:0px" id="grafikPinjamPakaiTitle">Data Pinjam Pakai Kawasan Hutan Pada Hutan Lindung dan Hutan Produksi</h3>
 												<small id="grafikPinjamPakaiSubtitle">Data Pinjam Pakai Kawasan Hutan</small>
 											</div>
 											<div class="row">

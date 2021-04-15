@@ -468,7 +468,7 @@ function exportTableToExcel(tableID, filename = "") {
 // FUNGSI CHART 
 
 function barChartTotal(jenis, kab, kec, cdk, tipe, startDate, endDate, desa, anggota) {
-	$("#grafikTextTitle").text("Jumlah Semua Data Kelompok Tani");
+	$("#grafikTextTitle").text("Jumlah Kelompok Tani Hutan Per Kab/Kota");
 	$("#grafikTextSubtitle").text("Data kelompok tani Pemula, Madya dan Utama");
 	barChartTotalText(jenis, kab, kec, cdk, "total", startDate, endDate, desa, anggota);
 	am4core.ready(function () {
@@ -693,14 +693,14 @@ function barChartTotalTahunText() {
 		$("#textTotalKelompokTaniTahunTertinggi").html(
 			"<b>" +
 			tertinggi +
-			"</b> kelompok tani <br> Tahun berdiri <b>" +
+			"</b> kelompok <br> Tahun berdiri <b>" +
 			tahuntertinggi +
 			"</b>"
 		);
 		$("#textTotalKelompokTaniTahunTerendah").html(
 			"<b>" +
 			terendah +
-			"</b> kelompok tani <br> Tahun berdiri <b>" +
+			"</b> kelompok <br> Tahun berdiri <b>" +
 			tahunterendah +
 			"</b>"
 		);
@@ -946,21 +946,21 @@ function pieChartAnggota() {
 			response[1].total +
 			response[2].total +
 			response[3].total +
-			" anggota"
+			" orang"
 		);
-		$("#textTotalAnggota17").text(response[0].total + " anggota");
-		$("#textTotalAnggota35").text(response[1].total + " anggota");
-		$("#textTotalAnggota50").text(response[2].total + " anggota");
-		$("#textTotalAnggota51").text(response[3].total + " anggota");
+		$("#textTotalAnggota17").text(response[0].total + " orang");
+		$("#textTotalAnggota35").text(response[1].total + " orang");
+		$("#textTotalAnggota50").text(response[2].total + " orang");
+		$("#textTotalAnggota51").text(response[3].total + " orang");
 	});
 
 	$.get(baseUrl + "/home/laporananggotakelompok/jk", function (response) {
 		$("#textTotalAnggotaJK").text(
-			response[0].total + response[1].total + response[2].total + " anggota"
+			response[0].total + response[1].total + response[2].total + " orang"
 		);
-		$("#textTotalAnggotaJKL").text(response[0].total + " anggota");
-		$("#textTotalAnggotaJKP").text(response[1].total + " anggota");
-		$("#textTotalAnggotaJKN").text(response[2].total + " anggota");
+		$("#textTotalAnggotaJKL").text(response[0].total + " orang");
+		$("#textTotalAnggotaJKP").text(response[1].total + " orang");
+		$("#textTotalAnggotaJKN").text(response[2].total + " orang");
 	});
 
 	$.get(
@@ -984,7 +984,7 @@ function pieChartAnggota() {
 					"</span>\
 								<h3>" +
 					response[i].total +
-					" anggota</h3>\
+					" orang</h3>\
 							</div>\
 						</div>";
 

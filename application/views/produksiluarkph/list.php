@@ -1,3 +1,4 @@
+<?php setlocale(LC_ALL, 'id-ID', 'id_ID'); ?>
 <div class="content">
 	<!-- Basic datatable -->
 	<div class="panel panel-flat">
@@ -13,40 +14,44 @@
 		</div>
 
 		<div class="panel-body">
-			<a href="<?php echo base_url();?>Produksiluarkph/tambah" class="btn btn-primary">Tambah</a>			
-		
+		<?php $role = $this->session->userdata('role_id');
+			  if($role != 22 && $role != 24): ?>
+				<a href="<?php echo base_url();?>Produksiluarkph/tambah" class="btn btn-primary">Tambah</a>			
+		<?php endif; ?>
 
 		<table class="table datatable-basic table-hover table-bordered striped" id="table-penyuluh">
 		<thead>
 			<tr class="bg-teal-400">
 				<th>No</th>
-				<th>Nama Kabupaten</th>
-				<th>Kecamatan</th>
+				<th>Kab/Kota</th>
+				<th>Kec.</th>
 				<th>Desa</th>
-				<th>Jenis Produksi</th>
+				<th>Jenis</th>
 				<th>Jumlah</th>
-				<th>Satuan</th>
-				<th>Luas Produksi</th>
-				<th>Satuan</th>
-				<th>Bulan</th>
-				<th>Tahun</th>
+				<th>Luas/Volume</th>
+				<th>Tanggal</th>
+				<th>Status</th>
 				<th class="text-center">Aksi</th>
 			</tr>
 		</thead>
 		<tbody>
-		<?php $no=1; foreach($data as $key => $value){ ?>
+		<?php $no=1; foreach($data as $key => $value){ 
+			switch ($value->status) {
+				case 	0: $status = 'Menunggu Persetujuan Kepala Seksi PSDH'; break;
+				case 	1: $status = 'Menunggu Persetujuan Kabid BUPM'; break;
+				case 	2: $status = 'Data Telah Disetujui'; break;
+				default	 : $status = 'Menunggu Persetujuan'; break;
+			}?>
 			<tr>
 				<td><?=$no?></td>
 				<td><?php echo empty($value->nama_kab) ? $value->nama_kab_2 : $value->nama_kab; ?></td>
                 <td><?php echo empty($value->nama_kec) ? $value->nama_kec_2 : $value->nama_kec; ?></td>
 				<td><?php echo $value->nama_desa; ?></td>
-				<th><?php echo $value->potensi; ?></th>
-				<th><?php echo $value->jml_produksi; ?></th>
-				<td><?php echo $value->satuan; ?></td>
-				<th><?php echo $value->luas_produksi; ?></th>
-				<td><?php echo $value->luas_satuan; ?></td>
-				<td><?php echo $value->bulan; ?></td>
-				<td><?php echo $value->tahun; ?></td>
+				<td><?php echo $value->potensi; ?></td>
+				<td><?php echo $value->jml_produksi; ?> <?php echo $value->satuan; ?></td>
+				<td><?php echo $value->luas_produksi; ?> <?php echo $value->luas_satuan; ?></td>
+				<td><?php echo $value->bulan ? strftime('%B', strtotime($value->bulan)) . ' -' : ''; ?> <?php echo $value->tahun; ?></td>
+				<td><?php echo $status; ?></td>
 				<td class="text-center">
 					<ul class="icons-list">
 						<li class="dropdown">
@@ -55,11 +60,13 @@
 							</a>
 							<ul class="dropdown-menu dropdown-menu-right">
 								<li><a href="<?php echo base_url();?>Produksiluarkph/edit/<?php echo $value->id;?>">
-									<i class="icon-pencil"></i> Edit</a>
+									<i class="icon-pencil"></i> Edit/Lihat</a>
 								</li>
+								<?php if($role == 24 || $role == 1): ?>
 								<li>
 									<a href="#" onclick="deleteData(<?php echo $value->id;?>)"><i class="icon-cross2 text-danger-600"></i> Delete</a>
 								</li>
+								<?php endif; ?>
 							</ul>
 						</li>
 					</ul>
@@ -101,11 +108,8 @@
                 },
                 error: function (data) {
                     resp = JSON.parse(data.responseText);
-                    //swal('Terjadi Kesalahan!', resp.message, 'error');
                 },
                 success: function (resp) {
-                    //swal('Sukses!', resp.message, 'success');
-                    //table.ajax.reload();
                     location.reload();
 
                 },

@@ -1,12 +1,11 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
 
-$config['base_url'] = 'https://statistik.test/';
+$config['base_url'] = 'https://ed162f380952.ngrok.io/';
 
 $config['index_page'] = '';
 
 $config['uri_protocol']    = 'REQUEST_URI';
-
 
 $config['url_suffix'] = '';
 

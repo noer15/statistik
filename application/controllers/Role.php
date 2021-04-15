@@ -77,7 +77,6 @@ class Role extends CI_Controller {
 	public function delete($id){
 		// delete detail dasar
 		$result = $this->db->delete('role', array('id' => $id));
-        print_r($nip);
 	 }
 
 	 public function module($id){
@@ -85,7 +84,7 @@ class Role extends CI_Controller {
 	 	$role = $this->db->query("Select a.* from role a where id=".$id)->result_object();		
 	 	$list = $this->db->query("Select a.*,
 	 		(Select b.module_id from role_module_asignment b where b.role_id=".$id." and b.module_id=a.id ) as rolemodule_id
-	 	 from module a ")->result_object();
+	 	 from module a ORDER BY a.module DESC")->result_object();
 	 	
 		$data['role']	 = $role;
 		$data['data']	 = $list;
@@ -110,16 +109,16 @@ class Role extends CI_Controller {
 	    // Role-module-ass
 
 	    $list = $this->db->query("Select a.* from module a ")->result_object();
+		$delete = $this->db->delete('role_module_asignment', array('role_id' => $roleId));
 	    foreach ($list as $key => $value) {
 	    	# code...
 	    	$ch = $this->input->post('select_'.$value->id);
 	    	if ($ch=="on"){
-	    		$result = $this->db->delete('role_module_asignment', 
-	    						array('role_id' => $roleId, 'module_id' => $value->id));
-	    		$insert = $this->db->insert('role_module_asignment', array(
-	    											'role_id' => $roleId, 
-	    											'module_id' => $value->id)
-	    								);	    	
+	    		$insert = $this->db->insert('role_module_asignment', 
+											array(
+												'role_id' => $roleId, 
+												'module_id' => $value->id)
+	    									);	    	
 	    	}	    	
 	    }
 

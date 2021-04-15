@@ -1,5 +1,4 @@
 <!-- Theme JS files -->
-
 <script type="text/javascript" src="<?php echo base_url();?>assets/limitless/assets/js/core/libraries/jquery_ui/interactions.min.js"></script>
 <script type="text/javascript" src="<?php echo base_url();?>assets/limitless/assets/js/plugins/forms/selects/select2.min.js"></script>
 <script type="text/javascript" src="<?php echo base_url();?>assets/limitless/assets/js/pages/form_select2.js"></script>
@@ -102,6 +101,14 @@
     });
 </script>
 
+<?php 
+    $role = $this->session->userdata('role_id');
+    if($role == 21 || $role == 24){
+        $disabled = 'disabled';
+    }else{
+        $disabled = '';
+    }
+?>
 
 <!-- /theme JS files -->
 
@@ -184,7 +191,7 @@
                             <label class="col-lg-2 control-label">Kategori</label>
                             <div class="col-lg-10">
                             <select name="kategori"  id="kategori" class="select-search" required
-                                data-placeholder="Pilih Kategori">
+                                data-placeholder="Pilih Kategori" <?= $disabled ?>>
                                 <?php foreach ($kategori as $key => $value) { ?>
                                     <option value="<?php echo $value->id?>"
                                     	<?php if($data[0]->kategori==$value->id) { ?> selected <?php } ?> >
@@ -202,14 +209,14 @@
 								<input type="hidden" class="form-control" placeholder="id" name="id" readonly
 									value="<?php echo $data[0]->id?>">
 								<input type="text" class="form-control" placeholder="nama" name="nama" required
-									value="<?php echo $data[0]->nama?>">
+									value="<?php echo $data[0]->nama?>" <?= $disabled ?>>
 							</div>
 						</div>
 						<div class="form-group">
 							<label class="col-lg-2 control-label">Alamat</label>
 							<div class="col-lg-10">
 								<input type="text" class="form-control" placeholder="Alamat" name="alamat" required
-									value="<?php echo $data[0]->alamat?>">
+									value="<?php echo $data[0]->alamat?>" <?= $disabled ?>>
 							</div>
 						</div>
 
@@ -217,29 +224,29 @@
 							<label class="col-lg-2 control-label">Phone</label>
 							<div class="col-lg-10">
 								<input type="text" class="form-control" placeholder="Phone" name="phone" required
-									value="<?php echo $data[0]->phone?>">
+									value="<?php echo $data[0]->phone?>" <?= $disabled ?>>
 							</div>
 						</div>
 
 						<div class="form-group">
 							<label class="col-lg-2 control-label">Email</label>
 							<div class="col-lg-10">
-								<input type="email" class="form-control" placeholder="Email" name="email" required
-									value="<?php echo $data[0]->email?>">
+								<input type="email" class="form-control" placeholder="Email" name="email"
+									value="<?php echo $data[0]->email?>" <?= $disabled ?>>
 							</div>
 						</div>
 
 						<div class="form-group">
                             <label class="col-lg-2 control-label">Tahun Berdiri</label>
                             <div class="col-lg-4">
-                                <input type="number" class="form-control" placeholder="Tahun Berdiri" name="tahun_berdiri" value="<?php echo $data[0]->tahun_berdiri?>" required>
+                                <input type="number" class="form-control" placeholder="Tahun Berdiri" name="tahun_berdiri" value="<?php echo $data[0]->tahun_berdiri?>" required <?= $disabled ?>>
                             </div>
                         </div>
 
                         <div class="form-group">
                             <label class="col-lg-2 control-label">SK Menkumham</label>
                             <div class="col-lg-2">
-                                <select class="form-control" id="cbmenkumham">
+                                <select class="form-control" id="cbmenkumham" <?= $disabled ?>>
                                     <option value="ada" <?php if($data[0]->sk_menkumham!="") { ?> selected <?php } ?> >Ada</option>
                                     <option value="tidak" <?php if($data[0]->sk_menkumham=="") { ?> selected <?php } ?>>Tidak Ada</option>
                                 </select>
@@ -247,12 +254,12 @@
                             </div>                                          
                             
                             <div class="col-lg-3">
-                                <input type="text" class="form-control" placeholder="SK Menkumham" name="menkumham" id="menkumham" value="<?php echo $data[0]->sk_menkumham?>">
+                                <input type="text" class="form-control" placeholder="SK Menkumham" name="menkumham" id="menkumham" value="<?php echo $data[0]->sk_menkumham?>" <?= $disabled ?>>
                             </div>                            
 
                             <div class="col-lg-5" id="filemenkumham">
                                 <input type="file" class="form-control" name="file_menkumham" data-show-preview="false"
-                                 placeholder="File Menkumham" value="<?php echo $data[0]->sk_menkumham?>">
+                                 placeholder="File Menkumham" value="<?php echo $data[0]->sk_menkumham?>" <?= $disabled ?>>
                             </div>
 
                         </div>
@@ -260,7 +267,7 @@
                         <div class="form-group">
                             <label class="col-lg-2 control-label">Akta Notaris</label>
                             <div class="col-lg-2">
-                                <select class="form-control" id="cbakta">
+                                <select class="form-control" id="cbakta" <?= $disabled ?>>
                                     <option value="ada" <?php if($data[0]->akta_notaris!="") { ?> selected <?php } ?>>Ada</option>
                                     <option value="tidak" <?php if($data[0]->akta_notaris=="") { ?> selected <?php } ?>>Tidak Ada</option>
                                 </select>
@@ -268,11 +275,11 @@
                             </div>  
                             
                             <div class="col-lg-3">
-                                <input type="text" class="form-control" placeholder="Akta Notaris" name="akta" id="akta" value="<?php echo $data[0]->akta_notaris?>">
+                                <input type="text" class="form-control" placeholder="Akta Notaris" name="akta" id="akta" value="<?php echo $data[0]->akta_notaris?>" <?= $disabled ?>>
                             </div>
 
                             <div class="col-lg-5" id="file_akta">
-                                <input type="file" class="form-control" name="file_akta" data-show-preview="false">
+                                <input type="file" class="form-control" name="file_akta" data-show-preview="false" <?= $disabled ?>>
                             </div>
                         	
                         </div>
@@ -280,7 +287,7 @@
                         <div class="form-group">
                             <label class="col-lg-2 control-label">SK Pengukuhan</label>
                             <div class="col-lg-2">
-                                <select class="form-control" id="cbsk">
+                                <select class="form-control" id="cbsk" <?= $disabled ?>>
                                     <option value="ada" <?php if($data[0]->sk_berdiri!="") { ?> selected <?php } ?> >Ada</option>
                                     <option value="tidak" <?php if($data[0]->sk_berdiri=="") { ?> selected <?php } ?>>Tidak Ada</option>
                                 </select>
@@ -288,11 +295,11 @@
                             </div>  
 
                             <div class="col-lg-3">
-                                <input type="text" class="form-control" placeholder="Sk Pendirian" name="sk" id="sk" value="<?php echo $data[0]->sk_berdiri?>">
+                                <input type="text" class="form-control" placeholder="Sk Pendirian" name="sk" id="sk" value="<?php echo $data[0]->sk_berdiri?>" <?= $disabled ?>>
                             </div>
 
                             <div class="col-lg-5" id="file_sk">
-                                <input type="file" class="form-control" name="file_sk" data-show-preview="false">
+                                <input type="file" class="form-control" name="file_sk" data-show-preview="false" <?= $disabled ?>>
                             </div>
                         	
                         </div>
@@ -300,7 +307,7 @@
                         <div class="form-group">
                             <label class="col-lg-2 control-label">Berita Acara</label>
                             <div class="col-lg-2">
-                                <select class="form-control" id="cbba">
+                                <select class="form-control" id="cbba" <?= $disabled ?>>
                                     <option value="ada" <?php if($data[0]->berita_acara!="") { ?> selected <?php } ?>>Ada</option>
                                     <option value="tidak" <?php if($data[0]->berita_acara=="") { ?> selected <?php } ?>>Tidak Ada</option>
                                 </select>
@@ -308,31 +315,47 @@
                             </div>  
 
                             <div class="col-lg-3">
-                                <input type="text" class="form-control" placeholder="Berita Acara" name="ba" id="ba" value="<?php echo $data[0]->berita_acara?>">
+                                <input type="text" class="form-control" placeholder="Berita Acara" name="ba" id="ba" value="<?php echo $data[0]->berita_acara?>" <?= $disabled ?>>
                             </div>
 
                             <div class="col-lg-5" id="file_ba">
-                                <input type="file" class="form-control" name="file_ba" data-show-preview="false">
+                                <input type="file" class="form-control" name="file_ba" data-show-preview="false" <?= $disabled ?>>
                             </div>
                         	
                         </div>
 						
-                        
-
 						<div class="form-group">
                             <label class="col-lg-2 control-label">Kelas</label>
-                            <div class="col-lg-10">
-                            <select name="kelas"  id="kelas" class="select-search" required
-                                data-placeholder="Pilih Kelas Kelompok">
-                                <?php foreach ($kelas as $key => $value) { ?>
-                                    <option value="<?php echo $value->id?>"
-                                    	<?php if($data[0]->kelas==$value->id) { ?> selected <?php } ?> >
-                                        <?php echo $value->nama?>                                           
-                                    </option>
-                                <?php }  ?>
-                                
-                            </select>
+                            <div class="col-lg-4">
+                                <select name="kelas"  id="kelas" class="select-search" required <?= $disabled ?>
+                                    data-placeholder="Pilih Kelas Kelompok">
+                                    <?php foreach ($kelas as $key => $value) { ?>
+                                        <option value="<?php echo $value->id?>"
+                                            <?php if($data[0]->kelas==$value->id) { ?> selected <?php } ?> >
+                                            <?php echo $value->nama?>                                           
+                                        </option>
+                                    <?php }  ?>
+                                    
+                                </select>
                             </div>
+                            <?php if($this->session->userdata('role_id') == 21): ?>
+                            <label class="col-lg-2 control-label">Status Validasi Data</label>
+                            <div class="col-lg-4">
+                                <select name="status"  id="status" class="select-search" required data-placeholder="Pilih Status">
+                                    <option value="0" <?= $data[0]->status == 0 ? 'selected' : ''?>>Belum Disetujui</option>
+                                    <option value="1" <?= $data[0]->status == 1 ? 'selected' : ''?>>Setujui</option>
+                                </select>
+                            </div>
+                            <?php endif; ?>
+                            <?php if($this->session->userdata('role_id') == 24): ?>
+                            <label class="col-lg-2 control-label">Status Validasi Data</label>
+                            <div class="col-lg-4">
+                                <select name="status"  id="status" class="select-search" required data-placeholder="Pilih Status">
+                                    <option value="1" <?= $data[0]->status == 1 ? 'selected' : ''?>>Belum Disetujui</option>
+                                    <option value="2" <?= $data[0]->status == 2 ? 'selected' : ''?>>Setujui</option>
+                                </select>
+                            </div>
+                            <?php endif; ?>
                         </div>
 						
 						<div class="text-left">

@@ -171,9 +171,9 @@
     							<label class="col-lg-2 control-label">Kabupaten</label>
     							<div class="col-lg-10">
                                 <select name="kab"  id="kab" class="select-search" required
-                                    data-placeholder="Pilih Kabupaten">
+                                    data-placeholder="Pilih Kabupaten" readonly>
                                     <?php foreach ($kabupaten as $key => $value) { ?>
-                                        <option value="<?php echo $value->id?>">
+                                        <option value="<?php echo $value->id?>" <?= $value->id == $this->session->userdata('wilayah_kab_id') ? 'selected' : '' ?>>
                                         	<?php echo $value->nama?>                                    		
                                         </option>
                                     <?php }  ?>
@@ -183,12 +183,12 @@
     					   </div>                        
 
         					<div class="form-group">
-        							<label class="col-lg-2 control-label">Kecamatan</label>
+        							<label class="col-lg-2 control-label">Kecamatan </label>
         							<div class="col-lg-10">
                                     <select name="kec"  id="kec" class="select-search" required
-                                        data-placeholder="Pilih Kecamatan">
+                                        data-placeholder="Pilih Kecamatan" readonly>
                                         <?php foreach ($kecamatan as $key => $value) { ?>
-                                            <option value="<?php echo $value->id?>">
+                                            <option value="<?php echo $value->id?>" <?= $value->id == $this->session->userdata('wilayah_kec_id') ? 'selected' : '' ?>>
                                             	<?php echo $value->nama?>                                    		
                                             </option>
                                         <?php }  ?>
@@ -196,6 +196,12 @@
                                     </select>
                                     </div>
         					</div>
+                            
+                            <?php if($this->session->userdata('role_id') != 1) ?>
+                            <script>
+                                $('#kab,#kec').select2({  disabled: true })
+                            </script>
+                            </php endif; ?>
 
         					<div class="form-group">
         							<label class="col-lg-2 control-label">Desa</label>

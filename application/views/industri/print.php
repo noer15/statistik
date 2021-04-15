@@ -57,8 +57,8 @@
             <td style="text-align: right;"><?=$a->m6 > 0 ? $a->m6 : '-'?></td>
             <td style="text-align: right;"><?=($a->m2 + $a->m26 + $a->m6) > 0 ? $a->m2 + $a->m26 + $a->m6 : '-' ?></td>
         </tr>
-        <?php $no++; endif; ?>
-        <?php $m2 += $a->m2; $m26 += $a->m26; $m6 += $a->m6; $total += ($a->m2+$a->m26+$a->m6); endforeach; ?>
+        <?php $no++; $m2 += $a->m2; $m26 += $a->m26; $m6 += $a->m6; $total += ($a->m2+$a->m26+$a->m6); endif; ?>
+        <?php endforeach; ?>
         <tr><td></td><td></td><td></td><td></td><td></td><td></td></tr>
 
 
@@ -73,8 +73,8 @@
             <td style="text-align: right;"><?=$a->m6 > 0 ? $a->m6 : '-'?></td>
             <td style="text-align: right;"><?=($a->m2 + $a->m26 + $a->m6) > 0 ? $a->m2 + $a->m26 + $a->m6 : '-' ?></td>
         </tr>
-        <?php $no++; endif; ?>
-        <?php $m2 += $a->m2; $m26 += $a->m26; $m6 += $a->m6; $total += ($a->m2+$a->m26+$a->m6); endforeach; ?>
+        <?php $no++; $m2 += $a->m2; $m26 += $a->m26; $m6 += $a->m6; $total += ($a->m2+$a->m26+$a->m6); endif; ?>
+        <?php endforeach; ?>
         <tr><td></td><td></td><td></td><td></td><td></td><td></td></tr>
 
         <tr><td style="text-align: left;">III</td><td>CDK WILAYAH III</td><td></td><td></td><td></td><td></td></tr>
@@ -88,8 +88,8 @@
             <td style="text-align: right;"><?=$a->m6 > 0 ? $a->m6 : '-'?></td>
             <td style="text-align: right;"><?=($a->m2 + $a->m26 + $a->m6) > 0 ? $a->m2 + $a->m26 + $a->m6 : '-' ?></td>
         </tr>
-        <?php $no++; endif; ?>
-        <?php $m2 += $a->m2; $m26 += $a->m26; $m6 += $a->m6; $total += ($a->m2+$a->m26+$a->m6); endforeach; ?>
+        <?php $no++; $m2 += $a->m2; $m26 += $a->m26; $m6 += $a->m6; $total += ($a->m2+$a->m26+$a->m6); endif; ?>
+        <?php endforeach; ?>
         <tr><td></td><td></td><td></td><td></td><td></td><td></td></tr>
 
         <tr><td style="text-align: left;">IV</td><td>CDK WILAYAH IV</td><td></td><td></td><td></td><td></td></tr>
@@ -103,8 +103,8 @@
             <td style="text-align: right;"><?=$a->m6 > 0 ? $a->m6 : '-'?></td>
             <td style="text-align: right;"><?=($a->m2 + $a->m26 + $a->m6) > 0 ? $a->m2 + $a->m26 + $a->m6 : '-' ?></td>
         </tr>
-        <?php $no++; endif; ?>
-        <?php $m2 += $a->m2; $m26 += $a->m26; $m6 += $a->m6; $total += ($a->m2+$a->m26+$a->m6); endforeach; ?>
+        <?php $no++; $m2 += $a->m2; $m26 += $a->m26; $m6 += $a->m6; $total += ($a->m2+$a->m26+$a->m6); endif; ?>
+        <?php endforeach; ?>
         <tr><td></td><td></td><td></td><td></td><td></td><td></td></tr>
 
         <tr><td style="text-align: left;">V</td><td>CDK WILAYAH V</td><td></td><td></td><td></td><td></td></tr>
@@ -118,8 +118,8 @@
             <td style="text-align: right;"><?=$a->m6 > 0 ? $a->m6 : '-'?></td>
             <td style="text-align: right;"><?=($a->m2 + $a->m26 + $a->m6) > 0 ? $a->m2 + $a->m26 + $a->m6 : '-' ?></td>
         </tr>
-        <?php $no++; endif; ?>
-        <?php $m2 += $a->m2; $m26 += $a->m26; $m6 += $a->m6; $total += ($a->m2+$a->m26+$a->m6); endforeach; ?>
+        <?php $no++; $m2 += $a->m2; $m26 += $a->m26; $m6 += $a->m6; $total += ($a->m2+$a->m26+$a->m6); endif; ?>
+        <?php endforeach; ?>
         <tr><td></td><td></td><td></td><td></td><td></td><td></td></tr>
 
         <tr><td style="text-align: left;">VI</td><td>CDK WILAYAH VI</td><td></td><td></td><td></td><td></td></tr>
@@ -133,8 +133,8 @@
             <td style="text-align: right;"><?=$a->m6 > 0 ? $a->m6 : '-'?></td>
             <td style="text-align: right;"><?=($a->m2 + $a->m26 + $a->m6) > 0 ? $a->m2 + $a->m26 + $a->m6 : '-' ?></td>
         </tr>
-        <?php $no++; endif; ?>
-        <?php $m2 += $a->m2; $m26 += $a->m26; $m6 += $a->m6; $total += ($a->m2+$a->m26+$a->m6); endforeach; ?>
+        <?php $no++; $m2 += $a->m2; $m26 += $a->m26; $m6 += $a->m6; $total += ($a->m2+$a->m26+$a->m6); endif; ?>
+        <?php endforeach; ?>
         <tr><td></td><td></td><td></td><td></td><td></td><td></td></tr>
 
         <tr><td style="text-align: left;">VII</td><td>CDK WILAYAH VII</td><td></td><td></td><td></td><td></td></tr>
@@ -148,8 +148,8 @@
             <td style="text-align: right;"><?=$a->m6 > 0 ? $a->m6 : '-'?></td>
             <td style="text-align: right;"><?=($a->m2 + $a->m26 + $a->m6) > 0 ? $a->m2 + $a->m26 + $a->m6 : '-' ?></td>
         </tr>
-        <?php $no++; endif; ?>
-        <?php $m2 += $a->m2; $m26 += $a->m26; $m6 += $a->m6; $total += ($a->m2+$a->m26+$a->m6); endforeach; ?>
+        <?php $no++; $m2 += $a->m2; $m26 += $a->m26; $m6 += $a->m6; $total += ($a->m2+$a->m26+$a->m6); endif; ?>
+        <?php endforeach; ?>
         <tr><td></td><td></td><td></td><td></td><td></td><td></td></tr>
 
         <tr><td style="text-align: left;">VIII</td><td>CDK WILAYAH VIII</td><td></td><td></td><td></td><td></td></tr>
@@ -163,8 +163,8 @@
             <td style="text-align: right;"><?=$a->m6 > 0 ? $a->m6 : '-'?></td>
             <td style="text-align: right;"><?=($a->m2 + $a->m26 + $a->m6) > 0 ? $a->m2 + $a->m26 + $a->m6 : '-' ?></td>
         </tr>
-        <?php $no++; endif; ?>
-        <?php $m2 += $a->m2; $m26 += $a->m26; $m6 += $a->m6; $total += ($a->m2+$a->m26+$a->m6); endforeach; ?>
+        <?php $no++; $m2 += $a->m2; $m26 += $a->m26; $m6 += $a->m6; $total += ($a->m2+$a->m26+$a->m6); endif; ?>
+        <?php endforeach; ?>
         <tr><td></td><td></td><td></td><td></td><td></td><td></td></tr>
 
         <tr><td style="text-align: left;">IX</td><td>CDK WILAYAH IX</td><td></td><td></td><td></td><td></td></tr>
@@ -178,8 +178,9 @@
             <td style="text-align: right;"><?=$a->m6 > 0 ? $a->m6 : '-'?></td>
             <td style="text-align: right;"><?=($a->m2 + $a->m26 + $a->m6) > 0 ? $a->m2 + $a->m26 + $a->m6 : '-' ?></td>
         </tr>
-        <?php $no++; endif; ?>
-        <?php $m2 += $a->m2; $m26 += $a->m26; $m6 += $a->m6; $total += ($a->m2+$a->m26+$a->m6); endforeach; ?>
+        <?php $no++; $m2 += $a->m2; $m26 += $a->m26; $m6 += $a->m6; $total += ($a->m2+$a->m26+$a->m6); endif; ?>
+
+        <?php endforeach; ?>
 
         <tr>
             <td colspan="2" style="text-align: center;">Jumlah</td>

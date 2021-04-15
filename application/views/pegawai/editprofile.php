@@ -176,6 +176,10 @@
 										?>
 									</select>
 								</div>
+								<label class="col-lg-1 control-label">Wilayah</label>
+								<div class="col-lg-4">
+									<input type="text" class="form-control" value="<?=$wilayah->nama?>" disabled>
+								</div>
 							</div>
 
 							<div class="form-group">

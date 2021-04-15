@@ -25,6 +25,16 @@
 					</div>
 					<div class="col-lg-3">
 						<div class="form-group text-left">	
+							<select name="alokasi" id="" class="form-control">
+								<option value="kab">Per Kabupaten</option>
+								<?php if($this->session->userdata('role_id') != 22): ?>
+								<option value="cdk">Per CDK</option>
+								<?php endif; ?>
+							</select>
+						</div>
+					</div>
+					<div class="col-lg-3">
+						<div class="form-group text-left">
 							<select name="kertas" id="" class="form-control">
 								<option value="potrait">Orientasi Kertas</option>
 								<option value="potrait">Potrait</option>

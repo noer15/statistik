@@ -21,9 +21,11 @@
 		</div>
 
 		<div class="panel-body">
+        <?php 
+			$role = $this->session->userdata('role_id');
+			if($role != 21 && $role != 24): ?>
 			<a href="<?php echo base_url();?>/Pemiliklahan/tambah" class="btn btn-primary">Tambah</a>
-		
-
+            <?php endif; ?>
 		<table class="table datatable-basic table-hover table-bordered striped" id="table-penyuluh">
 		<thead class="bg-teal-400">
 			<tr>
@@ -31,39 +33,10 @@
 				<th>Bukti Kepemilikan</th>
 				<th>Blok</th>
 				<th>Luas Lahan</th>
+                <th>Status</th>
 				<th class="text-center">Aksi</th>
 			</tr>
 		</thead>
-		<!-- <tbody>
-		<?php foreach($data as $key => $value){ ?>
-			<tr>
-				<td><?php echo $value->nama_sertifikat; ?></td>
-				<td><?php echo $value->nama_jenis; ?></td>
-				<td><?php echo $value->blok; ?></td>
-				<td><?php echo $value->luas_lahan; ?></td>
-				<td class="text-center">
-					<ul class="icons-list">
-						<li class="dropdown">
-							<a href="#" class="dropdown-toggle" data-toggle="dropdown">
-								<i class="icon-menu9"></i>
-							</a>
-							<ul class="dropdown-menu dropdown-menu-right">
-								<li><a href="<?php echo base_url();?>Potensi/index/<?php echo $value->id;?>">
-									<i class="icon-list text-primary-600"></i> Potensi </a>
-								</li>
-								<li><a href="<?php echo base_url();?>Pemiliklahan/edit/<?php echo $value->id;?>">
-									<i class="icon-pencil"></i> Edit</a>
-								</li>
-								<li>
-									<a href="#" onclick="deleteData(<?php echo $value->id;?>)"><i class="icon-cross2 text-danger-600"></i> Delete</a>
-								</li>
-							</ul>
-						</li>
-					</ul>
-				</td>
-			</tr>
-		<?php } ?>			
-		</tbody> -->
 		</table>
 		</div>
 	</div>
@@ -98,6 +71,7 @@
                 {data: "nama_jenis"},
                 {data: "blok", width:"100px"},
                 {data: "luas_lahan", width:"150px"},
+                {data: "status"},
                 {data: "aksi", orderable: false, searchable: false, width: "100px"}
             ],            
             order: []
@@ -118,11 +92,8 @@
                 },
                 error: function (data) {
                     resp = JSON.parse(data.responseText);
-                    //swal('Terjadi Kesalahan!', resp.message, 'error');
                 },
                 success: function (resp) {
-                    //swal('Sukses!', resp.message, 'success');
-                    //table.ajax.reload();
                     location.reload();
 
                 },

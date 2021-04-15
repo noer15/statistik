@@ -31,7 +31,7 @@
 </head>
 <body>
     <div id="center" class="f14">
-        TABEL x PRODUKSI HASIL HUTAN <?=$jenisProduksi == 1 ? 'KAYU' : 'BUKAN KAYU'?> PER KPH <?=DATE('Y')?>
+        TABEL <?=$jenisProduksi == 1 ? '8.' : '11.'?> JENIS DAN PRODUKSI HASIL HUTAN <?=$jenisProduksi == 1 ? 'KAYU BULAT' : 'BUKAN KAYU'?> DI JAWA BARAT PER KPH TAHUN <?=DATE('Y')?>
     </div>
     <table>
         <tr>
@@ -102,5 +102,8 @@
             endforeach; ?>
         </tr>
     </table>    
+    <div id="center" style="padding-top: 5px;">
+        <i>Sumber: Perum Perhutani Divisi Regional Jawa Barat dan Banten</i>
+    </div> 
 </body>
 </html>

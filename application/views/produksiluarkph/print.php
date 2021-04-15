@@ -30,10 +30,12 @@
     </style>
 </head>
 <body>
-    <div id="center" class="f14">
-        TABEL x PRODUKSI HASIL HUTAN <?=$jenisProduksi == 1 ? 'KAYU' : 'BUKAN KAYU'?> LUAR KAWASAN <?=DATE('Y')?>
-    </div>
-    <table>
+    <table page-break-inside:auto;>
+        <thead>
+            <tr>
+                <th colspan="10" style="border: none; font-family:Arial; font-size:14px; padding-bottom:25px;font-weight:normal">TABEL 11.1 PRODUKSI HASIL HUTAN <?=$jenisProduksi == 1 ? 'KAYU' : 'BUKAN KAYU'?> DARI LUAR KAWASAN HUTAN TAHUN <?=DATE('Y')?></th>
+            </tr>
+        </thead>
         <tr>
             <td rowspan="3" style="text-align: center; vertical-align:middle;">No.</td>
             <td rowspan="3" style="text-align: center; vertical-align:middle;">Kab/Kota</td>
@@ -102,5 +104,8 @@
             endforeach; ?>
         </tr>
     </table>    
+    <div id="center" style="padding-top: 5px;">
+        <i>Sumber: Dinas Kehutanan Provinsi Jawa Barat</i>
+    </div> 
 </body>
 </html>

@@ -83,13 +83,13 @@
                                 <select name="kabSelect" id="kab" class="form-control" required
                                     data-placeholder="Pilih Kabupaten">
                                     <option value="0">Pilih Kabupaten</option>
-                                    <?php foreach ($this->db->get('m_kabupaten')->result() as $key => $value) { ?>
-                                        <option value="<?php echo $value->kode?>" data-id="<?= $value->id ?>">
+                                    <?php foreach ($kabupaten as $key => $value) { ?>
+                                        <option value="<?php echo $value->kode?>" data-id="<?= $value->id ?>" <?= $value->id == $this->session->userdata('wilayah_kab_id') ? 'selected' : '' ?>>
                                             <?php echo $value->nama?>                                    		
                                         </option>
                                     <?php }  ?>
                                 </select>
-                                <input type="hidden" name="kab" id="kabval">
+                                <input type="hidden" name="kab" id="kabval" value="<?=$this->session->userdata('wilayah_kab_id')?>">
                                 <script>
                                     $('#kab').change(function(){
                                         $('#kabval').val($('#kab option:selected').attr('data-id'));
@@ -98,23 +98,42 @@
                                 </div>
 					        </div>
                             <div class="form-group">
-                                <label class="col-lg-2 control-label">Kecamatan</label>
-                                <div class="col-lg-10">
-                                <select name="kec"  id="kec" class="form-control"
-                                    data-placeholder="Pilih Kecamatan">
-                                    <option value="0"> Pilih Kecamatan</option>
-                                </select>
-                                </div>
-					        </div>
-                            <div class="form-group">
-                                <label class="col-lg-2 control-label">Desa</label>
-                                <div class="col-lg-10">
-                                <select name="desa" id="desa" class="form-control"
-                                    data-placeholder="Pilih Desa">
-                                    <option value="0"> Pilih Desa</option>
-                                </select>
-                                </div>
-					        </div>
+        							<label class="col-lg-2 control-label">Kecamatan </label>
+        							<div class="col-lg-10">
+                                    <select name="kec"  id="kec" class="select-search" required
+                                        data-placeholder="Pilih Kecamatan" readonly>
+                                        <?php foreach ($kecamatan as $key => $value) { ?>
+                                            <option value="<?php echo $value->id?>" <?= $value->id == $this->session->userdata('wilayah_kec_id') ? 'selected' : '' ?>>
+                                            	<?php echo $value->nama?>                                    		
+                                            </option>
+                                        <?php }  ?>
+                                    </select>
+                                    <?php if($this->session->userdata('role_id') != 1): ?>
+                                    <input type="hidden" name="kec" id="kabval" value="<?=$this->session->userdata('wilayah_kec_id')?>">
+                                    <?php endif; ?>
+                                    </div>
+        					</div>
+                            
+                            <?php if($this->session->userdata('role_id') != 1) ?>
+                            <script>
+                                $('#kab,#kec').select2({  disabled: true })
+                            </script>
+                            </php endif; ?>
+
+        					<div class="form-group">
+        							<label class="col-lg-2 control-label">Desa</label>
+        							<div class="col-lg-10">
+                                        <select name="desa"  id="desa" class="form-control" required
+                                            data-placeholder="Pilih Desa">
+                                            <?php foreach ($desa as $key => $value) { ?>
+                                                <option value="<?php echo $value->id?>">
+                                                	<?php echo $value->nama?>                                    		
+                                                </option>
+                                            <?php }  ?>
+                                            
+                                        </select>
+                                    </div>
+        					</div>
 
                             <div class="form-group">
                                 <label class="col-lg-2 control-label">Potensi</label>
@@ -260,23 +279,27 @@
                             <th>Desa</th>
                             <th>Jenis Produksi</th>
                             <th>Jumlah</th>
-                            <th>Satuan</th>
                             <th>Luas Produksi</th>
-                            <th>Satuan</th>
+                            <th>Status</th>
                             <th class="text-center">Aksi</th>
                         </tr>
                     </thead>
                     <tbody>
-                    <?php foreach($list as $key => $value){ ?>
+                    <?php foreach($list as $key => $value){ 
+                        switch ($value->status) {
+                            case 	0: $status = 'Menunggu Persetujuan Kepala Seksi PSDH'; break;
+                            case 	1: $status = 'Menunggu Persetujuan Kabid BUPM'; break;
+                            case 	2: $status = 'Data Telah Disetujui'; break;
+                            default	 : $status = 'Menunggu Persetujuan'; break;
+                        }?>
                         <tr>
                             <td><?php echo empty($value->nama_kab) ? $value->nama_kab_2 : $value->nama_kab; ?></td>
                             <td><?php echo empty($value->nama_kec) ? $value->nama_kec_2 : $value->nama_kec; ?></td>
                             <td><?php echo $value->nama_desa; ?></td>
-                            <th><?php echo $value->potensi; ?></th>
-                            <th><?php echo $value->jml_produksi; ?></th>
-                            <td><?php echo $value->satuan; ?></td>
-                            <th><?php echo $value->luas_produksi; ?></th>
-                            <td><?php echo $value->luas_satuan; ?></td>
+                            <td><?php echo $value->potensi; ?></td>
+                            <td><?php echo $value->jml_produksi; ?> <?php echo $value->satuan; ?></td>
+                            <td><?php echo $value->luas_produksi; ?> <?php echo $value->luas_satuan; ?></td>
+                            <td><?php echo $status ?></td>
                             <td class="text-center">
                                 <ul class="icons-list">
                                     <li class="dropdown">

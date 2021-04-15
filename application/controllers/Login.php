@@ -159,31 +159,14 @@ class Login extends CI_Controller
 		$username = $this->input->post('username');
 		$password = $this->input->post('password');
 
-		/*
-		$result = $this->db->query("select * from users where username='".$username.
-							"' and password='".$password."'");
-		if ($result->num_rows()>0){
-			$users = $result->result_array();
-
-			$this->session->set_userdata('username',$username);			
-			$this->session->set_userdata('role_id',$users[0]['role_id']);
-			$this->session->set_userdata('user_id',$users[0]['id']);
-			$this->session->set_userdata('name',$users[0]['name']);
-			
-			redirect(base_url().'home');
-		}else{
-			redirect(base_url().'login');
-		}
-		*/
-		//197812221998031003
 		if ($username == "super@admin.com") {
 			$result = $this->db->query("select * from users where username='" . $username .
 				"' and password='" . $password . "'");
 		} else {
-
 			$result = $this->db->query("select * from tb_pegawai where nip='" . $username .
 				"' and password='" . $password . "'");
 		}
+
 		if ($result->num_rows() > 0) {
 			$users = $result->result_array();
 
@@ -193,6 +176,15 @@ class Login extends CI_Controller
 			$this->session->set_userdata('nip', $users[0]['nip']);
 			$this->session->set_userdata('nama', $users[0]['nama']);
 			$this->session->set_userdata('jabatan_id', $users[0]['jabatan_id']);
+			$this->session->set_userdata('unit_kerja_id', $users[0]['unit_kerja_id']);
+
+			if($username != 'super@admin.com'){
+				$wilayah = $this->db->query('SELECT c.id as kab_id, c.nama as kab, b.id as kec_id, b.nama as kec
+											FROM t_penyuluh_wilayah a INNER JOIN m_kecamatan b ON a.kecamatan_id = b.id
+											INNER JOIN m_kabupaten c ON b.kabupaten_id = c.id WHERE a.penyuluh_id = '.$users[0]['id'])->row_object();
+				$this->session->set_userdata('wilayah_kab_id', $wilayah->kab_id);
+				$this->session->set_userdata('wilayah_kec_id', $wilayah->kec_id);
+			}
 
 			redirect(base_url() . 'home');
 		} else {

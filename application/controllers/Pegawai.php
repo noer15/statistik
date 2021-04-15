@@ -59,16 +59,7 @@ class Pegawai extends CI_Controller {
 			$pendidikan = $this->input->post('pendidikan');
 			$password = '123456789'; // default created
 
-			$role_id = 2;
-			if ($jabatan>=8 && $jabatan<=14){  // jabatan penyuluh
-				$role_id = 3;
-			}else
-			if ($jabatan==18) {  // analis SDM
-				$role_id = 18;
-			}else 
-			if ($jabatan==1) { // Administrator
-				$role_id = 1;
-			}
+			$role_id = $this->input->post('role');
 			
 			$post_data = array(
 		      		'nip' 	=> $nip,
@@ -83,7 +74,7 @@ class Pegawai extends CI_Controller {
 		        	'password'=> $password,
 		        	'role_id' => $role_id,
 		        	'pendidikan' => $pendidikan
-		    		);
+		    );
 		    $this->db->insert('tb_pegawai',$post_data);
 
 		    $newId = $this->db->insert_id();
@@ -116,11 +107,15 @@ class Pegawai extends CI_Controller {
 	}
 
 	public function editprofile($id){
-		$data['data'] = $this->db->query("Select a.* from tb_pegawai a where id='".$id."'")->result_object();
-
+		$user_id = $this->session->userdata('user_id');
+		$data['data'] = $this->db->query("Select a.* from tb_pegawai a where id='".$user_id."'")->result_object();
 		$data['golongans'] = $this->db->query("select a.* from m_pangkat_golongan a")->result_object();
 		$data['units'] = $this->db->query("select a.* from m_unit_kerja a")->result_object();
 		$data['jabatans'] = $this->db->query("select a.* from m_jabatan a")->result_object();
+		$data['wilayah'] = $this->db->query("SELECT CONCAT(c.nama,' - Kec. ',b.nama) as nama FROM
+											t_penyuluh_wilayah a INNER JOIN m_kecamatan b ON a.kecamatan_id = b.id
+											INNER JOIN m_kabupaten c ON b.kabupaten_id = c.id
+											WHERE a.penyuluh_id = 6")->row_object();
 
 		$pendidikan = $this->db->query("Select a.* from m_pendidikan a ")->result_object();
 
@@ -147,16 +142,7 @@ class Pegawai extends CI_Controller {
 		$jabatan = $this->input->post('jabatan');
 		$pendidikan = $this->input->post('pendidikan');
 
-		$role_id = 2;
-		if ($jabatan>=8 && $jabatan<=14){  // jabatan penyuluh
-			$role_id = 3;
-		}else
-		if ($jabatan==18) {  // analis SDM
-			$role_id = 18;
-		}else 
-		if ($jabatan==1) { // Administrator
-			$role_id = 1;
-		}
+		$role_id = $this->input->post('role');
 
 		$post_data = array(
 	      		'nip' 	=> $nip,

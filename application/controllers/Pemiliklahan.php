@@ -14,9 +14,23 @@ class pemiliklahan extends CI_Controller {
 
 	public function index()
 	{
+		$user_id = $this->session->userdata('user_id');
+		$role_id = $this->session->userdata('role_id');
+		$unit_kerja_id = $this->session->userdata('unit_kerja_id');
 
-		$list = $this->db->query("Select a.*, b.nama as nama_jenis from pemilik_lahan a 
-			INNER JOIN m_jenis_sertifikat b on b.id=a.jenis_sertifikat")->result_object();		
+		if($role_id != 21 || $role_id != 24){
+			$list = $this->db->query("SELECT a.*, b.nama as nama_jenis from pemilik_lahan a 
+			INNER JOIN m_jenis_sertifikat b on b.id=a.jenis_sertifikat WHERE user_id = $user_id")->result_object();
+		}else{
+			if($role_id == 21){
+				$list = $this->db->query("SELECT a.*, b.nama as nama_jenis from pemilik_lahan a 
+				INNER JOIN m_jenis_sertifikat b on b.id=a.jenis_sertifikat INNER JOIN tb_pegawai 
+					ON a.user_id = tb_pegawai.id where unit_kerja_id = $unit_kerja_id AND `status` = 0")->result_object();
+			}else{
+				$list = $this->db->query("SELECT a.*, b.nama as nama_jenis from pemilik_lahan a 
+				INNER JOIN m_jenis_sertifikat b on b.id=a.jenis_sertifikat WHERE `status` = 1")->result_object();
+			}
+		}		
 
 		$data['data']	 = $list;
 		$data['page']	 ='pemiliklahan';
@@ -54,6 +68,12 @@ class pemiliklahan extends CI_Controller {
 		$luaslahan = $this->input->post('luaslahan');
 		$anggotaId = $this->input->post('anggota');
 		
+		if($this->session->userdata('role_id') != 1){
+			$user_id = $this->session->userdata('user_id');
+		}else{
+			$user_id = null;
+		}
+		
 		$post_data = array(
 	      		'nama_sertifikat' 	=> $nama,
 	        	'jenis_sertifikat' => $jenis,	        	
@@ -63,7 +83,8 @@ class pemiliklahan extends CI_Controller {
 	        	'no_blok' => $noblok,
 	        	'no_bidang' => $nobidang,
 	        	'luas_lahan' => $luaslahan,
-	        	'anggota_id' => $anggotaId
+	        	'anggota_id' => $anggotaId,
+				'user_id' => $user_id
 	    		);
 	    $this->db->insert('pemilik_lahan',$post_data);
 
@@ -90,6 +111,7 @@ class pemiliklahan extends CI_Controller {
 	}
 
 	public function update(){
+
 		$id = $this->input->post('id');
 		$nama = $this->input->post('nama');
 		$jenis = $this->input->post('jenis');
@@ -100,6 +122,14 @@ class pemiliklahan extends CI_Controller {
 		$nobidang = $this->input->post('nobidang');
 		$luaslahan = $this->input->post('luaslahan');		
 		$nosppt = $this->input->post('nosppt');
+		$status = $this->input->post('status');
+
+		$role = $this->session->userdata('role_id');
+		if($role != 1){
+			$user_id = $this->session->userdata('user_id');
+		}else{
+			$user_id = null;
+		}
 
 		$post_data = array(
 	      		'nama_sertifikat' 	=> $nama,
@@ -109,8 +139,18 @@ class pemiliklahan extends CI_Controller {
 	        	'blok' => $blok,
 	        	'no_blok' => $noblok,
 	        	'no_bidang' => $nobidang,
-	        	'luas_lahan' => $luaslahan 	
+	        	'luas_lahan' => $luaslahan,
+				'user_id' => $user_id
 	    		);
+		
+		if($role == 21 && $status != 0){
+			$post_data = array('status' => 1);
+		}
+
+		if($role == 24 && $status != 1){
+			$post_data = array('status' => 2);
+		}
+
 		$this->db->where('id',$id);
 	    $this->db->update('pemilik_lahan',$post_data);
 
@@ -120,7 +160,6 @@ class pemiliklahan extends CI_Controller {
 	public function delete($id){
 		// delete detail dasar
 		$result = $this->db->delete('pemilik_lahan', array('id' => $id));
-        print_r($nip);
 	 }
 
 	public function getAnggota($id){
@@ -130,10 +169,44 @@ class pemiliklahan extends CI_Controller {
 
 	public function getdata(){
 
-		$sql = " Select a.*, b.nama as nama_jenis from pemilik_lahan a 
-			INNER JOIN m_jenis_sertifikat b on b.id=a.jenis_sertifikat ";
+		$role = $this->session->userdata('role_id');
+		$user_id = $this->session->userdata('user_id');
+		$unit_kerja_id = $this->session->userdata('unit_kerja_id');
 
-		$query = $this->db->query($sql);
+		if($role != 1){
+			if($role == 21){
+				$sqls = " SELECT a.*, b.nama as nama_jenis from pemilik_lahan a 
+				INNER JOIN m_jenis_sertifikat b on b.id=a.jenis_sertifikat INNER JOIN tb_pegawai 
+				ON a.user_id = tb_pegawai.id where unit_kerja_id = $unit_kerja_id AND `status` = 0";
+
+				$user = " AND unit_kerja_id = $unit_kerja_id AND `status` = 0";
+			}else if ($role == 24){
+				$sqls = " SELECT a.*, b.nama as nama_jenis from pemilik_lahan a 
+				INNER JOIN m_jenis_sertifikat b on b.id=a.jenis_sertifikat INNER JOIN tb_pegawai 
+				ON a.user_id = tb_pegawai.id where `status` = 1";
+
+				$user = " AND `status` = 1";
+			}else{
+				$sqls = " Select a.*, b.nama as nama_jenis from pemilik_lahan a 
+				INNER JOIN m_jenis_sertifikat b on b.id=a.jenis_sertifikat where user_id = ".$user_id;
+				$user = " AND user_id = ".$user_id;
+			}
+		}else{
+			$sqls = " SELECT a.*, b.nama as nama_jenis from pemilik_lahan a 
+			INNER JOIN m_jenis_sertifikat b on b.id=a.jenis_sertifikat ";
+			$user = "";
+		}
+
+		if($role == 21 || $role == 24){
+			$sql = " SELECT a.*, b.nama as nama_jenis from pemilik_lahan a 
+			INNER JOIN m_jenis_sertifikat b on b.id=a.jenis_sertifikat INNER JOIN tb_pegawai 
+				ON a.user_id = tb_pegawai.id ";
+		}else{
+			$sql = " SELECT a.*, b.nama as nama_jenis from pemilik_lahan a 
+			INNER JOIN m_jenis_sertifikat b on b.id=a.jenis_sertifikat ";
+		}
+		
+		$query = $this->db->query($sqls);
 
 		//String filter = params.get("search[value]")[0];
 		$post['start'] = $this->input->get('start', TRUE); //$this->input->post('start'); BZ
@@ -168,6 +241,7 @@ class pemiliklahan extends CI_Controller {
         
 		$page = $this->db->query($sql.
 				" WHERE a.nama_sertifikat like '%".$filter."%' ".
+				$user.
 				" ORDER BY ".$orderBy.
 				" LIMIT ".$post['start'].", ".$post['length']);
         $list = $page->result_object();
@@ -180,11 +254,27 @@ class pemiliklahan extends CI_Controller {
         foreach ($list as $key => $value) {
         	$no++;                	       	
 
+			switch ($value->status) {
+				case 	0: $status = 'Menunggu Persetujuan Kepala Seksi PDAS PM'; break;
+				case 	1: $status = 'Menunggu Persetujuan Kabid BUPM'; break;
+				case 	2: $status = 'Data Telah Disetujui'; break;
+				default	 : $status = 'Menunggu Persetujuan'; break;
+			}
+
+			if($role == 24 || $role == 1){
+				$aksi_edit = '<li>
+								<a href="#" onclick="deleteData('. $value->id.')"><i class="icon-cross2 text-danger-600"></i> Delete</a>
+							</li>';
+			}else{
+				$aksi_edit = '';
+			}
+
             $row = array(
             	'nama_sertifikat'=> $value->nama_sertifikat,
             	'nama_jenis'=> $value->nama_jenis,
             	'blok'=> $value->blok,
             	'luas_lahan'=> $value->luas_lahan,
+				'status' => $status,
             	'aksi' => '<ul class="icons-list">
 						<li class="dropdown">
 							<a href="#" class="dropdown-toggle" data-toggle="dropdown">
@@ -195,11 +285,9 @@ class pemiliklahan extends CI_Controller {
 									<i class="icon-list text-primary-600"></i> Potensi </a>
 								</li>
 								<li><a href="'.base_url().'Pemiliklahan/edit/'.$value->id.'">
-									<i class="icon-pencil"></i> Edit</a>
+									<i class="icon-pencil"></i> Edit/Lihat</a>
 								</li>
-								<li>
-									<a href="#" onclick="deleteData('.$value->id.')"><i class="icon-cross2 text-danger-600"></i> Delete</a>
-								</li>
+								'.$aksi_edit.'
 							</ul>
 						</li>
 					</ul>'
@@ -218,8 +306,20 @@ class pemiliklahan extends CI_Controller {
 
 	public function rekap()
 	{
-		$list = $this->db->query('SELECT b.nama, count(a.id) as persil, ROUND(sum(a.luas_lahan)/1000, 2) as luas_lahan, (SELECT count(id) FROM pemilik_lahan ) as total
-				FROM pemilik_lahan a INNER JOIN m_jenis_sertifikat b ON a.jenis_sertifikat = b.id GROUP BY b.nama')->result_object();
+		$role = $this->session->userdata('role_id');
+		$unit_kerja = $this->session->userdata('unit_kerja_id');
+
+		$wilayah = '';
+		if($role == 21){
+			$wilayah = ' INNER JOIN tb_pegawai c ON a.user_id = c.id WHERE c.unit_kerja_id = '.$unit_kerja.' AND a.`status` = 2';
+		}
+
+		$list = $this->db->query('SELECT b.nama, count(a.id) as persil, ROUND(sum(a.luas_lahan)/1000, 2) as luas_lahan, 
+								(SELECT count(a.id) FROM pemilik_lahan a '.$wilayah.') as total
+								FROM pemilik_lahan a 
+								INNER JOIN m_jenis_sertifikat b ON a.jenis_sertifikat = b.id 
+								'.$wilayah.'
+								GROUP BY b.nama')->result_object();
 		
 		$data['data'] 	 = $list;
 		$data['page']	 = 'reportkepemilikan';
@@ -235,7 +335,16 @@ class pemiliklahan extends CI_Controller {
 		$this->load->library('pdfgenerator');
 		date_default_timezone_set('GMT');
 
-		$list = $this->db->query('SELECT
+		$role = $this->session->userdata('role_id');
+		$unit_kerja = $this->session->userdata('unit_kerja_id');
+
+		$wilayah = ''; $kondisi = '';
+		if($role == 21){
+			$wilayah = ' INNER JOIN tb_pegawai c ON pl.user_id = c.id ';
+			$kondisi = ' AND c.unit_kerja_id = '.$unit_kerja.' AND pl.`status` = 2';
+		}
+
+		$list = $this->db->query("SELECT
 									kab.id AS kabId,
 									kab.nama AS kabupaten,
 									(
@@ -248,8 +357,10 @@ class pemiliklahan extends CI_Controller {
 										INNER JOIN m_desa AS ds ON kt.desa_id = ds.id
 										INNER JOIN m_kecamatan AS kc ON ds.kecamatan_id = kc.id
 										RIGHT JOIN m_kabupaten AS kb ON kc.kabupaten_id = kb.id 
+										$wilayah
 									WHERE
-										kb.id = kabId
+										kb.id = kabId 
+										$kondisi
 									) AS pemilik_lahan,
 									(
 									SELECT
@@ -261,9 +372,11 @@ class pemiliklahan extends CI_Controller {
 										INNER JOIN m_desa AS ds ON kt.desa_id = ds.id
 										INNER JOIN m_kecamatan AS kc ON ds.kecamatan_id = kc.id
 										RIGHT JOIN m_kabupaten AS kb ON kc.kabupaten_id = kb.id 
+										$wilayah
 									WHERE
 										pl.jenis_sertifikat = 3 
 										AND kb.id = kabId 
+										$kondisi
 									) AS persil_c,
 									(
 									SELECT
@@ -275,9 +388,11 @@ class pemiliklahan extends CI_Controller {
 										INNER JOIN m_desa AS ds ON kt.desa_id = ds.id
 										INNER JOIN m_kecamatan AS kc ON ds.kecamatan_id = kc.id
 										RIGHT JOIN m_kabupaten AS kb ON kc.kabupaten_id = kb.id 
+										$wilayah
 									WHERE
 										pl.jenis_sertifikat = 3 
 										AND kb.id = kabId 
+										$kondisi
 									) AS luas_c,
 									(
 									SELECT
@@ -289,9 +404,11 @@ class pemiliklahan extends CI_Controller {
 										INNER JOIN m_desa AS ds ON kt.desa_id = ds.id
 										INNER JOIN m_kecamatan AS kc ON ds.kecamatan_id = kc.id
 										RIGHT JOIN m_kabupaten AS kb ON kc.kabupaten_id = kb.id 
+										$wilayah
 									WHERE
 										pl.jenis_sertifikat = 2 
 										AND kb.id = kabId 
+										$kondisi
 									) AS persil_ajb,
 									(
 									SELECT
@@ -303,9 +420,11 @@ class pemiliklahan extends CI_Controller {
 										INNER JOIN m_desa AS ds ON kt.desa_id = ds.id
 										INNER JOIN m_kecamatan AS kc ON ds.kecamatan_id = kc.id
 										RIGHT JOIN m_kabupaten AS kb ON kc.kabupaten_id = kb.id 
+										$wilayah
 									WHERE
 										pl.jenis_sertifikat = 2 
 										AND kb.id = kabId 
+										$kondisi
 									) AS luas_ajb,
 									(
 									SELECT
@@ -317,9 +436,11 @@ class pemiliklahan extends CI_Controller {
 										INNER JOIN m_desa AS ds ON kt.desa_id = ds.id
 										INNER JOIN m_kecamatan AS kc ON ds.kecamatan_id = kc.id
 										RIGHT JOIN m_kabupaten AS kb ON kc.kabupaten_id = kb.id 
+										$wilayah
 									WHERE
 										pl.jenis_sertifikat = 1 
 										AND kb.id = kabId 
+										$kondisi
 									) AS persil_sertifikat,
 									(
 									SELECT
@@ -331,12 +452,14 @@ class pemiliklahan extends CI_Controller {
 										INNER JOIN m_desa AS ds ON kt.desa_id = ds.id
 										INNER JOIN m_kecamatan AS kc ON ds.kecamatan_id = kc.id
 										RIGHT JOIN m_kabupaten AS kb ON kc.kabupaten_id = kb.id 
+										$wilayah
 									WHERE
 										pl.jenis_sertifikat = 1 
 										AND kb.id = kabId 
+										$kondisi
 									) AS luas_sertifikat
 								FROM
-									m_kabupaten kab')->result_object();	
+									m_kabupaten kab")->result_object();	
 
 		$data['list'] = $list;
 

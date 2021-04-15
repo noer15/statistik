@@ -35,6 +35,12 @@ class Kelompoktani extends CI_Controller {
 
 	public function lapkelas($kab, $kec, $cdk){
 
+		$role = $this->session->userdata('role_id');
+		$unit_kerja = $this->session->userdata('unit_kerja_id');
+		if($role == 21){
+			$cdk = $unit_kerja;
+		}
+
 		$strWhere = "";
 
 		if ($kab==0){			
@@ -51,28 +57,28 @@ class Kelompoktani extends CI_Controller {
 				Select count(a.id) from kelompok_tani a
 				INNER JOIN m_desa b on b.id=a.desa_id
 				INNER JOIN m_kecamatan c on c.id=b.kecamatan_id
-				WHERE a.kelas=1 and ".$strWhere."
+				WHERE a.kelas=1 and ".$strWhere." and a.status = 2
 				) as jml_pemula,
 
 				(
 				Select count(a.id) from kelompok_tani a
 				INNER JOIN m_desa b on b.id=a.desa_id
 				INNER JOIN m_kecamatan c on c.id=b.kecamatan_id
-				WHERE a.kelas=2 and ".$strWhere."
+				WHERE a.kelas=2 and ".$strWhere." and a.status = 2
 				) as jml_madya,
 
 				(
 				Select count(a.id) from kelompok_tani a
 				INNER JOIN m_desa b on b.id=a.desa_id
 				INNER JOIN m_kecamatan c on c.id=b.kecamatan_id
-				WHERE a.kelas=3 and ".$strWhere."
+				WHERE a.kelas=3 and ".$strWhere." and a.status = 2
 				) as jml_utama,
 
 				(
 				Select count(a.id) from kelompok_tani a
 				INNER JOIN m_desa b on b.id=a.desa_id
 				INNER JOIN m_kecamatan c on c.id=b.kecamatan_id
-				WHERE ".$strWhere."
+				WHERE ".$strWhere." and a.status = 2
 				) as jml
 
 				 ";
@@ -118,8 +124,23 @@ class Kelompoktani extends CI_Controller {
 
 	public function index()
 	{
+		$user_id = $this->session->userdata('user_id');
+		$role_id = $this->session->userdata('role_id');
+		$unit_kerja_id = $this->session->userdata('unit_kerja_id');
 
-		$list = $this->db->query("Select a.* from kelompok_tani a ")->result_object();		
+		if($role_id != 21 || $role_id != 24){
+			$list = $this->db->query("SELECT a.* from kelompok_tani a where user_id = ".$user_id)->result_object();
+		}else{
+			if($role_id == 21){
+				$list = $this->db->query("SELECT a.* from kelompok_tani a INNER JOIN tb_pegawai 
+					ON a.user_id = tb_pegawai.id where unit_kerja_id = ".$unit_kerja_id." and `status` = 0")->result_object();
+			}else if($role_id == 24){
+				$list = $this->db->query("SELECT a.* from kelompok_tani a INNER JOIN tb_pegawai 
+					ON a.user_id = tb_pegawai.id where `status` = 1")->result_object();
+			}else{
+				$list = $this->db->query("SELECT a.* from kelompok_tani a")->result_object();
+			}
+		}		
 
 		$data['data']	 = $list;
 		$data['page']	 ='kelompok_tani';
@@ -131,13 +152,22 @@ class Kelompoktani extends CI_Controller {
 	
 	public function tambah(){
 
-		$kab = $this->db->query("Select a.* from m_kabupaten a ")->result_object();
+		$role = $this->session->userdata('role_id');
+		$kab_id = $this->session->userdata('wilayah_kab_id');
+		$kec_id = $this->session->userdata('wilayah_kab_id');
 
-		$kec = $this->db->query("Select a.* from m_kecamatan a where a.kabupaten_id=".$kab[0]->id)->result_object();
+		$kab = $this->db->query("SELECT a.* from m_kabupaten a ")->result_object();
 
-		$desa = $this->db->query("Select a.* from m_desa a where a.kecamatan_id=".$kec[0]->id)->result_object();
-		$kategori = $this->db->query("Select a.* from m_kategori_kelompok a ")->result_object();
-		$kelas = $this->db->query("Select a.* from m_kelas_kelompok a ")->result_object();
+		if($role != 1){
+			$kec = $this->db->query("SELECT a.* from m_kecamatan a where a.kabupaten_id=".$kab_id)->result_object();
+			$desa = $this->db->query("SELECT a.* from m_desa a where a.kecamatan_id=".$kec_id)->result_object();
+		}else{
+			$kec = $this->db->query("SELECT a.* from m_kecamatan a where a.kabupaten_id=".$kab[0]->id)->result_object();
+			$desa = $this->db->query("SELECT a.* from m_desa a")->result_object();
+		}
+
+		$kategori = $this->db->query("SELECT a.* from m_kategori_kelompok a ")->result_object();
+		$kelas = $this->db->query("SELECT a.* from m_kelas_kelompok a ")->result_object();
 
 		//$noreg= "32.".$kab[0]->kode.".".$kec[0]->kode.".".$desa[0]->kode;
 
@@ -170,8 +200,15 @@ class Kelompoktani extends CI_Controller {
 		$ba = $this->input->post('ba');
 		$kelas = $this->input->post('kelas');
 
+		$role = $this->session->userdata('role_id');
+		if($role != 1){
+			$user_id = $this->session->userdata('user_id');
+		}else{
+			$user_id = null;
+		}
 
-		$desa = $this->db->query("Select a.* from m_desa a where a.id=".$desaId)->result_object();
+
+		$desa = $this->db->query("SELECT a.* from m_desa a where a.id=".$desaId)->result_object();
 		$tani = $this->db->query(" SELECT ifnull(max( substring(a.no_register, 7,4) ),0) as max, b.kodeKab 
 			from kelompok_tani a
 			INNER JOIN m_desa b on b.id=a.desa_id
@@ -204,8 +241,9 @@ class Kelompoktani extends CI_Controller {
 	        	'berita_acara' => $ba,
 	        	'kelas' => $kelas,
 	        	'tahun_berdiri' => $tahun_berdiri,	        	
-	        	'desa_id' => $desaId
-	    		);
+	        	'desa_id' => $desaId,
+				'user_id' => $user_id
+	    );
 	    $this->db->insert('kelompok_tani',$post_data);
 
 	    $insId = $this->db->insert_id();
@@ -254,6 +292,14 @@ class Kelompoktani extends CI_Controller {
 		$ba = $this->input->post('ba');
 		$kelas = $this->input->post('kelas');
 		$tahun_berdiri = $this->input->post('tahun_berdiri');
+		$status = $this->input->post('status');
+
+		$role = $this->session->userdata('role_id');
+		if($role != 1){
+			$user_id = $this->session->userdata('user_id');
+		}else{
+			$user_id = null;
+		}
 		
 		$post_data = array(
 				//'no_register' 	=> $noreg,	        	
@@ -267,34 +313,67 @@ class Kelompoktani extends CI_Controller {
 	        	'tahun_berdiri' => $tahun_berdiri,
 	        	'berita_acara' => $ba,
 	        	'email' => $email,
-	        	'kelas' => $kelas
-	    		);
+	        	'kelas' => $kelas,
+				'user_id' => $user_id
+	    );
+
+		if($role == 21 && $status != 0){
+			$post_data = array('status' => 1);
+		}
+
+		if($role == 24 && $status != 1){
+			$post_data = array('status' => 2);
+		}
+		
 		$this->db->where('id',$id);
 	    $this->db->update('kelompok_tani',$post_data);
 
-	    $this->uploadFile("file_menkumham", $id);
-	    $this->uploadFile("file_akta", $id);
-	    $this->uploadFile("file_sk", $id);
-	    $this->uploadFile("file_ba", $id);
+		if($role != 21){
+			if($role != 24){
+				$this->uploadFile("file_menkumham", $id);
+				$this->uploadFile("file_akta", $id);
+				$this->uploadFile("file_sk", $id);
+				$this->uploadFile("file_ba", $id);
+			}
+		}
 
 		redirect(base_url().'Kelompoktani');
 	}
 
 	public function delete($id){
-		// delete detail dasar
 		$result = $this->db->delete('kelompok_tani', array('id' => $id));
-        print_r($nip);
     }
 
 
 	public function getdata(){
 
-		// $role_id = $this->session->userdata('role_id');
-		// $user_id = $this->session->userdata('user_id');
-		
-		$sql = "Select a.* from kelompok_tani a ";		
+		$role_id = $this->session->userdata('role_id');
+		$user_id = $this->session->userdata('user_id');
+		$unit_kerja_id = $this->session->userdata('unit_kerja_id');
 
-		$query = $this->db->query($sql);
+		if($role_id != 1){
+			if($role_id == 21){
+				$user = 'AND unit_kerja_id = '.$unit_kerja_id.' AND `status` = 0';
+				$sqlTotal = 'SELECT a.* from kelompok_tani a INNER JOIN tb_pegawai 
+				ON a.user_id = tb_pegawai.id WHERE unit_kerja_id = '.$unit_kerja_id.' AND `status` = 0';
+			}else if($role_id == 24){
+				$user = 'AND `status` = 1';
+				$sqlTotal = 'SELECT a.* from kelompok_tani a INNER JOIN tb_pegawai 
+				ON a.user_id = tb_pegawai.id WHERE `status` = 1';
+			}else{
+				$user = 'AND user_id = '.$user_id;
+				$sqlTotal = 'SELECT a.* from kelompok_tani a WHERE user_id = '.$user_id;
+			}
+		}else{
+			$user = '';
+			$sqlTotal = 'SELECT a.* from kelompok_tani a';
+		}
+
+		if($role_id == 21 || $role_id == 24){
+			$sql = "SELECT a.* from kelompok_tani a INNER JOIN tb_pegawai ON a.user_id = tb_pegawai.id ";
+		}else{
+			$sql = "SELECT a.* from kelompok_tani a ";
+		}	
 
 		//String filter = params.get("search[value]")[0];
 		$post['start'] = $this->input->get('start', TRUE); //$this->input->post('start'); BZ
@@ -335,24 +414,43 @@ class Kelompoktani extends CI_Controller {
 				" ( a.no_register like '%".$filter."%' ".
 				" OR a.nama like '%".$filter."%' ".
 				" OR a.alamat like '%".$filter."%' ".
-				" ) ". 
+				" ) ".
+				$user.
 				" ORDER BY ".$orderBy.
 				" LIMIT ".$post['start'].", ".$post['length']);
         $list = $page->result_object();
-        
+
+		$query = $this->db->query($sqlTotal);
 		$totalData = $totalFiltered = $query->num_rows();
 
         $data = array();
         $no = $post['start'];
 
         foreach ($list as $key => $value) {
-        	$no++;                				
+        	$no++;
+			
+			switch ($value->status) {
+				case 	0: $status = 'Menunggu Persetujuan Kepala Seksi PDAS PM'; break;
+				case 	1: $status = 'Menunggu Persetujuan Kabid BUPM'; break;
+				case 	2: $status = 'Data Telah Disetujui'; break;
+				default	 : $status = 'Menunggu Persetujuan'; break;
+			}
+
+			if($role_id == 24 || $role_id == 1){
+				$aksi_edit = '<li>
+								<a href="#" onclick="deleteData('. $value->id.')"><i class="icon-cross2 text-danger-600"></i> Delete</a>
+							</li>';
+			}else{
+				$aksi_edit = '';
+			}
+
             $row = array(
      	       	'no_register'=> $value->no_register,
             	'nama'=> $value->nama,
             	'alamat'=> $value->alamat,
             	'phone'=> $value->phone,
             	'email'=> $value->email,
+				'status' => $status,
             	'aksi' => '<ul class="icons-list">
 						<li class="dropdown">
 							<a href="#" class="dropdown-toggle" data-toggle="dropdown">
@@ -363,11 +461,9 @@ class Kelompoktani extends CI_Controller {
 									<i class="icon-list text-primary-600"></i> Rincian Anggota</a>
 								</li>
 								<li><a href="Kelompoktani/edit/'.$value->id.'">
-									<i class="icon-pencil"></i> Edit</a>
+									<i class="icon-pencil"></i> Edit/Lihat</a>
 								</li>
-								<li>
-									<a href="#" onclick="deleteData('. $value->id.')"><i class="icon-cross2 text-danger-600"></i> Delete</a>
-								</li>
+								'.$aksi_edit.'
 							</ul>
 						</li>
 					</ul>'

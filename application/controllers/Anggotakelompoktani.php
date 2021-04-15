@@ -121,9 +121,7 @@ class Anggotakelompoktani extends CI_Controller {
 	}
 
 	public function delete($id){
-		// delete detail dasar
 		$result = $this->db->delete('anggota_kelompok_tani', array('id' => $id));
-        print_r($nip);
 	 }
 
 

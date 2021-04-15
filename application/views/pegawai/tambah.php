@@ -168,6 +168,18 @@
 										?>
 									</select>
 								</div>
+								<label class="col-lg-1 control-label">Role</label>
+								<div class="col-lg-4">
+									<select class="form-control select-search" name="role" id="role">	
+										<?php 
+										 foreach ($this->db->get('role')->result() as $key => $value) { ?>
+										 	<option value="<?php echo $value->id ?>">
+										 		<?php echo $value->nama; ?>
+										 	</option>
+										<?php }
+										?>
+									</select>
+								</div>
 							</div>
 											
 							<div class="text-left">

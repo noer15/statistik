@@ -1,15 +1,25 @@
 <!-- 
-
 	Role Penyuluh :
 	- Edit Profile
 	- Penyuluh ( langsung namanya dia sendiri )
 	- Kelompok Tani
-
  -->
 
- <?php 
- 	$role = $this->session->userdata('role_id'); 
- 	$jabatanId = $this->session->userdata('jabatan_id'); 
+ <?php
+ 	$role = $this->session->userdata('role_id');
+ 	$jabatanId = $this->session->userdata('jabatan_id');
+	$uri = $this->uri->segment(1);
+
+	$input = $this->db->query('SELECT b.sub1 FROM role_module_asignment a INNER JOIN module b
+								ON a.module_id = b.id WHERE a.role_id = '.$role.' AND module = "Input" AND b.sub1 IS NOT NULL AND b.sub1 != ""
+								GROUP BY b.sub1')->result_object();	
+
+	$inputSub = $this->db->query('SELECT b.sub2 FROM role_module_asignment a INNER JOIN module b
+									ON a.module_id = b.id WHERE a.role_id = '.$role.' AND module = "Input" AND b.sub2 IS NOT NULL AND b.sub2 != ""
+									GROUP BY b.sub2')->result_object();
+
+	$menu = $this->db->query('SELECT b.module FROM role_module_asignment AS a INNER JOIN module AS b
+								ON a.module_id = b.id WHERE a.role_id = '.$role.' GROUP BY b.module')->result_object();
  ?>
 
 <div class="sidebar-category sidebar-category-visible">
@@ -22,246 +32,133 @@
 				<a href="<?php echo base_url();?>home"><i class="icon-home4"></i> <span>Home</span></a>
 			</li>
 
-			<?php if($this->session->userdata('role_id')==1){ ?>
 
-			<li <?php 
-					if($page=='kabupaten' 
-						|| $page=='kecamatan' 
-						|| $page=='desa' 
-						|| $page=='gangguan' 
-						|| $page=='kawasan' 
-						|| $page=='masterpotensi'
-					){ ?> class="active" <?php } ?>>
-				<a href="#"><i class="icon-grid"></i> <span>Master Data</span></a>
-				<ul>
-					<li <?php if($page=='kabupaten'){ ?> class="active" <?php } ?>>
-						<a href="<?php echo base_url();?>Kabupaten">Kabupaten</a>
-					</li>
-					<li <?php if($page=='kecamatan'){ ?> class="active" <?php } ?>>
-						<a href="<?php echo base_url();?>Kecamatan">Kecamatan</a>
-					</li>
-					<li <?php if($page=='desa'){ ?> class="active" <?php } ?>>
-						<a href="<?php echo base_url();?>Desa">Desa</a>
-					</li>										
-					<li <?php if($page=='gangguan'){ ?> class="active" <?php } ?>>
-						<a href="<?php echo base_url();?>Gangguanhutan">Jenis Gangguan</a>
-					</li>
-					<li <?php if($page=='kph'){ ?> class="active" <?php } ?>>
-						<a href="<?php echo base_url();?>Kph">Unit Kerja Pengelola</a>
-					</li>
-					<li <?php if($page=='kawasan'){ ?> class="active" <?php } ?>>
-						<a href="<?php echo base_url();?>Kawasan">Kawasan Hutan</a>
-					</li>
-					<li <?php if($page=='konservasi'){ ?> class="active" <?php } ?>>
-						<a href="<?php echo base_url();?>Konservasi">Kawasan Konservasi</a>
-					</li>
-					<li <?php if($page=='peruntukanpinjampakai'){ ?> class="active" <?php }?>>
-						<a href="<?php echo base_url();?>peruntukanpinjampakai"><span>Peruntukan Pinjam Pakai</span></a>
-					</li>
-					<li <?php if($page=='masterpotensi'){ ?> class="active" <?php } ?>>
-						<a href="<?php echo base_url();?>Jenispotensi">Jenis Potensi</a>
-					</li>
-					<li <?php if($page=='jenisolahan'){ ?> class="active" <?php } ?>>
-						<a href="<?php echo base_url();?>Jenisolahan">Jenis Olahan Hasil Hutan</a>
-					</li>
-					<li <?php if($page=='masterkategorikel'){ ?> class="active" <?php } ?>>
-						<a href="<?php echo base_url();?>Kategorikelompok">Kategori Kelompok</a>
-					</li>
-					<li <?php if($page=='masterkelaskel'){ ?> class="active" <?php } ?>>
-						<a href="<?php echo base_url();?>Kelaskelompok">Kelas Kelompok</a>
-					</li>
-					<li <?php if($page=='masterjabatan'){ ?> class="active" <?php } ?>>
-						<a href="<?php echo base_url();?>Jabatan">Jabatan</a>
-					</li>
+			<?php foreach($menu as $menu): ?>
+				<li>
+					<a href="#"><i class="icon-grid"></i> <span><?=$menu->module?> Data</span></a>
+					<ul>
+						<?php 
+							$list = $this->db->query('SELECT b.* FROM role_module_asignment a INNER JOIN module b 
+									ON a.module_id = b.id WHERE a.role_id = '.$role.' AND b.module = "'.$menu->module.'"')->result_object();
+							$oldSub1 = ''; $oldSub2 = '';
+							foreach($list as $list): ?>
+								<?php if($menu->module == 'Input'): ?>
+									<?php if($list->sub1) :?>
+											<?php if($list->sub1 != $oldSub1): ?>
+											<li>
+												<a href="#"><?=$list->sub1?></a>
+												<ul>
+													<?php 
+														$list2 = $this->db->query('SELECT b.* FROM role_module_asignment a INNER JOIN module b 
+														ON a.module_id = b.id WHERE a.role_id = '.$role.' AND b.sub1 = "'.$list->sub1.'"')->result_object();
 
-					<li <?php if($page=='sdmsarpras'){ ?> class="active" <?php } ?>>
-						<a href="<?php echo base_url();?>Sdmsarpras">SDM dan Sarana Prasarana</a>
-					</li>
+														foreach($list2 as $sub1): ?>
+														<?php if($sub1->sub2): ?>
+															<?php if($sub1->sub2 != $oldSub2): ?>
+															<li>
+																<a href="#"><?=$sub1->sub2?></a>
+																<ul>
+																	<?php 
+																		$list3 = $this->db->query('SELECT b.* FROM role_module_asignment a INNER JOIN module b 
+																		ON a.module_id = b.id WHERE a.role_id = '.$role.' AND b.sub2 = "'.$sub1->sub2.'"')->result_object();
+																		foreach($list3 as $sub2): ?>
+																	<li>
+																		<a href="<?=base_url(''.$sub2->controller);?>"><?=$sub2->name?></a>
+																	</li>
+																	<?php endforeach; ?>
+																</ul>
+															</li>
+															<?php endif; ?>
+														<?php
+															$oldSub2 = $sub1->sub2;
+															 else: ?>
+														<li>
+															<a href="<?=base_url(''.$sub1->controller);?>"><?=$sub1->name?></a>
+														</li>
+														<?php endif; ?>
+													<?php endforeach; ?>
+												</ul>
+											</li>
+											<?php endif; ?>
+									<?php else: ?>
+										<li>
+											<a href="<?=base_url(''.$list->controller);?>"><?=$list->name?></a>
+										</li>
+									<?php endif; ?>
+								<!-- end menu input --->
 
-					<li <?php if($page=='masteruk'){ ?> class="active" <?php } ?>>
-						<a href="<?php echo base_url();?>Unitkerja">Unit Kerja</a>
-					</li>
+								 <!-- menu laporan -->
+								<?php else: if($menu->module == 'Laporan'): ?>
+									<?php if($list->sub1): ?>
+										<?php if($list->sub1 != $oldSub1): ?>
+											<li>
+												<a href="#"><?=$list->sub1?></a>
+												<ul>
+													<?php 
+														$list2 = $this->db->query('SELECT b.* FROM role_module_asignment a INNER JOIN module b 
+														ON a.module_id = b.id WHERE a.role_id = '.$role.' AND b.sub1 = "'.$list->sub1.'"')->result_object();
 
-					<li <?php if($page=='mastersatuan'){ ?> class="active" <?php } ?>>
-						<a href="<?php echo base_url();?>Satuan">Satuan</a>
-					</li>
+														foreach($list2 as $sub1): ?>
+														<?php if($sub1->sub2): ?>
+															<?php if($sub1->sub2 != $oldSub2): ?>
+															<li>
+																<a href="#"><?=$sub1->sub2?></a>
+																<ul>
+																	<?php 
+																		$list3 = $this->db->query('SELECT b.* FROM role_module_asignment a INNER JOIN module b 
+																		ON a.module_id = b.id WHERE a.role_id = '.$role.' AND b.sub2 = "'.$sub1->sub2.'"')->result_object();
+																		foreach($list3 as $sub2): ?>
+																	<li>
+																		<a href="<?=base_url(''.$sub2->controller);?>/rekap"><?=$sub2->name?></a>
+																	</li>
+																	<?php endforeach; ?>
+																</ul>
+															</li>
+															<?php endif; ?>
+														<?php 
+															$oldSub2 = $sub1->sub2;
+															else: ?>
+														<li>
+															<a href="<?=base_url(''.$sub1->controller);?>/rekap"><?=$sub1->name?></a>
+														</li>
+														<?php endif; ?>
+													<?php endforeach; ?>
+												</ul>
+											</li>
+										<?php endif; ?>
 
-					<!-- <li <?php if($page=='masterjabluh'){ ?> class="active" <?php } ?>>
-						<a href="<?php echo base_url();?>Jabluh">Jabatan Penyuluh</a>
-					</li> -->
-				</ul>
-			</li>
-			<?php } ?>
-
-			<!-- <?php 
-					if($page=='kelompok_tani' || $page=='pemiliklahan' || $page=='penyuluh'
-						|| $page=='datagangguan' || $page=='lsm' || $page=='produksikph')
-				{ ?> class="active" <?php } ?> -->
-				
-			<li>
-				<a href="#"><i class="icon-grid"></i> <span>Input Data</span></a>
-				<ul>
-
-				<?php if($role==18 || $role==1) { ?>
-					<li>
-						<a href="#"><span>Sekretariat</span></a>
-						<ul>
-							<li <?php if($page=='pegawai'){ ?> class="active" <?php }?>>
-								<a href="<?php echo base_url();?>pegawai">Data Pegawai</a>
-							</li>
-						</ul>
-					</li>
-
-				<?php } ?>
-
-				<?php if($role==1){ ?>
-					<li>
-						<a href="#"><span>Bidang Pemolaan & Pemanfaatan Kawasan Hutan</span></a>
-						<ul>
-							<li <?php if($page=='luaslahan'){ ?> class="active" <?php }?>>
-								<a href="<?php echo base_url();?>luaslahan"><span>Luas Kawasan Hutan</span></a>
-							</li>
-
-							<li <?php if($page=='pengukuhankh'){ ?> class="active" <?php }?>>
-								<a href="<?php echo base_url();?>pengukuhankh"><span>Pengukuhan Kawasan Hutan</span></a>
-							</li>
-
-							<li <?php if($page=='pinjampakai'){ ?> class="active" <?php }?>>
-								<a href="<?php echo base_url();?>pinjampakai"><span>Pinjam Pakai Kawasan Hutan</span></a>
-							</li>
-						</ul>
-					</li>
-
-					<li>
-						<a href="#"><span>Bidang Perlindungan & KSPAE</span></a>
-						<ul>
-							<li>
-								<a href="#"><span>Kawasan Ekosistem Esensial</span></a>
-							</li>
-							<li>
-								<a href="#"><span>Penangkaran Tumbuhan dan Satwa Liar</span></a>
-							</li>
-							<li <?php if($page=='datagangguan'){ ?> class="active" <?php }?>>
-								<a href="<?php echo base_url();?>gangguan"><span>Gangguan Kemanan dan Kerusakan Hutan</span></a>
-							</li>
-						</ul>
-					</li>
-
-					<li>
-						<a href="#"><span>Bidang Pengolaan DAS</span></a>
-						<ul>
-							<li <?php if($page=='lahankritis'){ ?> class="active" <?php }?>>
-								<a href="<?php echo base_url();?>lahankritis"><span>Lahan Kritis</span></a>
-							</li>
-							<li>
-								<a href="#"><span>Sumber Benih</span></a>
-							</li>
-							<li>
-								<a href="#"><span>Penangkar / Pengada / Pengedar Benih/Bibit</span></a>
-							</li>
-							<li <?php if($page=='sertifikatbenih'){ ?> class="active" <?php }?>>
-								<a href="<?php echo base_url();?>sertifikatbenih"><span>Sertifikasi Benih</span></a>
-							</li>
-						</ul>
-					</li>
-
-					<li>
-						<a href="#"><span>Bidang Bina Usaha</span></a>
-						<ul>
-						<?php if($role==3 || $role==1 ) { ?>
-							<li <?php if($page=='kelompok_tani'){ ?> class="active" <?php } ?>>
-								<a href="<?php echo base_url();?>Kelompoktani">Kelompok Tani</a>
-							</li>
-							<li <?php if($page=='pemiliklahan'){ ?> class="active" <?php }?> >
-								<a href="<?php echo base_url();?>pemiliklahan"><span>Kepemilikan Lahan</span></a>
-							</li>
-							<li <?php if($page=='produksikph'){ ?> class="active" <?php }?> >
-								<a href="#"><span>Produksi Hasil Hutan</a>
-								<ul>
-									<li <?php if($page=='produksikph'){ ?> class="active" <?php }?>>
-										<a href="<?php echo base_url();?>Produksikph"><span>Dalam Kawasan Hutan</span></a>
+									<?php else: ?>
+									<li>
+										<a href="<?=base_url(''.$list->controller);?>/rekap"><?=$list->name?></a>
 									</li>
-									<li <?php if($page=='produksiluarkph'){ ?> class="active" <?php }?>>
-										<a href="<?php echo base_url();?>Produksiluarkph"><span>Luar Kawasan Hutan</span></a>
-									</li>
-								</ul>
-							</li>
-							<li <?php if($page=='industri'){ ?> class="active" <?php } ?>>
-								<a href="<?php echo base_url();?>Industri">Industri Sektor Kehutanan</a>
-							</li>	
-							<li <?php if($page=='lsm'){ ?> class="active" <?php }?>>
-								<a href="<?php echo base_url();?>lsm"><span>LSM/NGO Kehutanan</span></a>
-							</li>
-							<li <?php if($page=='penyuluh'){ ?> class="active" <?php }?> >
-								<a href="<?php echo base_url();?>penyuluh"><span>Penyuluh PKSM</span></a>
-							</li>
-							<li <?php if($page=='produksiolahan'){ ?> class="active" <?php }?>>
-								<a href="<?php echo base_url();?>Produksiolahan"><span>Produksi Olahan Hasil Hutan</span></a>
-							</li>
-						<?php } ?>
-						</ul>
-					</li>
-				<?php } ?>
+									<?php endif; ?>
+									<!-- end list menu laporan -->
+									
+									<?php else: ?>
+										<!-- list menu master -->
+										<li>
+											<a href="<?=base_url(''.$list->controller);?>"><?=$list->name?></a>
+										</li>
+									<?php endif; ?>
+								<?php endif; ?>
+								<?php $oldSub1 = $list->sub1; ?>
+						<?php 
+							endforeach; ?>
+					</ul>
+				</li>
+			<?php endforeach; ?>
 
-				</ul>
-			</li>
-
-								
-
-			<?php if($role==1 || $role==3 || $role==18){ ?>
-			
-			<li>
-				<a href="#"><i class="icon-puzzle2"></i> <span>Laporan</span></a>
-				<ul>					
-					<li <?php if($page=='reportpenyuluh'){ ?> class="active" <?php } ?> >
-						 <a href="<?php echo base_url();?>penyuluh/rekap">Penyuluh</a>
-					</li>
-					<li <?php if($page=='reportkelompoktani'){ ?> class="active" <?php } ?>> 
-						<a href="<?php echo base_url();?>Kelompoktani/rekap">Kelompok Tani</a>
-					</li>
-					<li <?php if($page=='reportpengukuhan'){ ?> class="active" <?php } ?>> 
-						<a href="<?php echo base_url();?>pengukuhankh/rekap">Pengukuhan Kawasan Hutan</a>
-					</li>
-					<li <?php if($page=='reportpinjampakai'){ ?> class="active" <?php } ?>> 
-						<a href="<?php echo base_url();?>pinjampakai/rekap">Pinjam Pakai Kawasan Hutan</a>
-					</li>
-					<li <?php if($page=='reportkepemilikan'){ ?> class="active" <?php } ?>> 
-						<a href="<?php echo base_url();?>pemiliklahan/rekap">Kepemilikan Lahan</a>
-					</li>
-					<li <?php if($page=='reportproduksikph'){ ?> class="active" <?php } ?>> 
-						<a href="javascript:;">Produksi Hasil Hutan</a>
-						<ul>
-							<li>
-								<a href="<?php echo base_url();?>produksikph/rekap">Dalam Kawasan</a>
-							</li>
-							<li>
-								<a href="<?php echo base_url();?>produksiluarkph/rekap">Luar Kawasan</a>
-							</li>
-						</ul>
-					</li>
-					<li <?php if($page=='reportindustri'){ ?> class="active" <?php } ?>> 
-						<a href="<?php echo base_url();?>Industri/rekap">Industri</a>
-					</li>
-					<li <?php if($page=='reportproduksiolahan'){ ?> class="active" <?php } ?>> 
-						<a href="<?php echo base_url();?>produksiolahan/rekap">Produksi Olahan Hasil Hutan</a>
-					</li>
-				</ul>
-			</li>
-			
-			<?php } ?>
-
-			
-			<!-- /main -->
 			<?php if($role==1){ ?>
-				<!-- Appearance -->
 				<li class="navigation-header"><span>Setting</span><i class="icon-menu" title="Settings"></i></li>								
 				<!-- <li <?php if($page=='user'){ ?> class="active" <?php } ?>>
 					<a href="<?php echo base_url();?>user"><i class="icon-grid"></i> <span>Users</span></a>
-				</li> -->								
+				</li> -->
+				<li <?php if($page=='module'){ ?> class="active" <?php } ?>>
+					<a href="<?php echo base_url();?>module"><i class="icon-grid"></i> <span>Modul</span></a>
+				</li>								
 				<li <?php if($page=='role'){ ?> class="active" <?php } ?>>
-					<a href="<?php echo base_url();?>role"><i class="icon-grid"></i> <span>Role</span></a>
+					<a href="<?php echo base_url();?>role"><i class="icon-grid"></i> <span>Role User</span></a>
 				</li>
-				<!-- /appearance -->
 			<?php } ?>
 
 			

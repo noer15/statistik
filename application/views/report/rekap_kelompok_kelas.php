@@ -81,7 +81,6 @@
 	 	<table border="1" style="table-layout:fixed; width:100%;border-collapse: collapse;">
 	 		<tr>
 	 			<td style="width: 5%;text-align: center;"><b>No</b></td>
-	 			<td style="width: 15%;text-align: center;"><b>Kode</b></td>
 	 			<td style="width: 60%;text-align: center;"><b>Nama <?php echo 
 	 			isset($kab[0]->nama) ?  (isset($kec[0]->nama) ? "Desa" :  " Kecamatan" ) : "Kabupaten" ; ?> </b></td>
 	 			<td style="width: 20%;text-align: center;"><b>Pemula</b></td>
@@ -95,7 +94,6 @@
 	 		  foreach ($data as $key => $value) { ?>
 	 		  	<tr>
 	 		  		<td align="center"><?php echo $key+1?></td>
-	 		  		<td align="center"><?php echo $value->kode; ?></td>
 	 		  		<td><?php echo $value->nama; ?></td>
 	 		  		<td align="center"><?php echo $value->jml_pemula; ?></td>
 	 		  		<td align="center"><?php echo $value->jml_madya; ?></td>
@@ -112,7 +110,7 @@
 	 		  } ?>
 
  		 	<tr>
-				<td colspan="3" align="center">Jumlah </td>			
+				<td colspan="2" align="center">Jumlah </td>			
 				<td align="center"><?php echo $totPemula;?></td>
 				<td align="center"><?php echo $totMadya;?></td>
 				<td align="center"><?php echo $totUtama;?></td>

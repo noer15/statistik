@@ -46,6 +46,8 @@ class Industri extends CI_Controller {
 		$phone = $this->input->post('phone');
 		$email = $this->input->post('email');
 		$kapasitas = $this->input->post('kapasitas');
+		$perizinan = $this->input->post('perizinan');
+		$tgl_perizinan = $this->input->post('tgl_perizinan');
 		
 		$kabId = $this->input->post('kab');
 		$kecId = $this->input->post('kec');
@@ -57,8 +59,10 @@ class Industri extends CI_Controller {
 	      		'email' => $email,
 	      		'kapasitas_izin' => $kapasitas,
 				'kabupaten_id' => $kabId,
-				'kecamatan_id' => $kecId
-	    		);
+				'kecamatan_id' => $kecId,
+				'perizinan' => $perizinan,
+				'tgl_perizinan' => $tgl_perizinan
+	    	);
 	    $this->db->insert('t_industri',$post_data);
 
 		redirect(base_url().'Industri');
@@ -99,6 +103,8 @@ class Industri extends CI_Controller {
 		$phone = $this->input->post('phone');
 		$email = $this->input->post('email');
 		$kapasitas = $this->input->post('kapasitas');
+		$perizinan = $this->input->post('perizinan');
+		$tgl_perizinan = $this->input->post('tgl_perizinan');
 		
 		$kabId = $this->input->post('kab');
 		$kecId = $this->input->post('kec');
@@ -110,8 +116,10 @@ class Industri extends CI_Controller {
 	      		'email' => $email,
 	      		'kapasitas_izin' => $kapasitas,
 				'kabupaten_id' => $kabId,
-				'kecamatan_id' => $kecId	        	
-	    		);
+				'kecamatan_id' => $kecId,
+				'perizinan' => $perizinan,
+				'tgl_perizinan' => $tgl_perizinan	        	
+	    	);
 		$this->db->where('id',$id);
 	    $this->db->update('t_industri',$post_data);
 

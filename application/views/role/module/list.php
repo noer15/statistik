@@ -56,8 +56,8 @@
 			
 			<div class="form-group">
 				<label class="control-label col-lg-2">Module</label>
-				<div class="col-lg-10">
-					<table id="table-modules" class="table table-bordered table-hover stripe dataTable no-footer" role="grid" aria-describedby="user_info">
+				<div class="col-lg-10" style="overflow: auto; height:500px;">
+					<table id="table-modules" class="table table-bordered table-hover stripe " role="grid" aria-describedby="user_info">
 						<thead>
 							<tr>
 								<th width="4%">No.</th>
@@ -67,9 +67,12 @@
 						</thead>
 						<tbody>
 							<?php foreach($data as $key => $value){ ?>
+
 								<tr role="row" class="odd">
 									<td><?php echo $key+1 ?></td>
-									<td><?php echo $value->name;?></td>
+									<td><span style="color:red">[<?=$value->module?>]</span> 
+										<?=$value->sub1 ? '<br><span style="color:blue">['.$value->sub1.']</span><br>' : '' ?> 
+										<?=$value->sub2 ? '<span style="color:green">['.$value->sub2.']</span><br>' : '' ?> <?= $value->name;?></td>
 									<td align="center">
 										<input type="checkbox" 
 										    <?php if($value->rolemodule_id==$value->id) { ?> checked="checked" <?php }?>
