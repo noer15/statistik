@@ -36,7 +36,12 @@
 						<div class="form-group">
 							<label class="col-lg-1 control-label">Sub Modul 1</label>
 							<div class="col-lg-5">
-								<input type="text" class="form-control" placeholder="Sub Modul ke 1.." name="sub1">
+								<select name="sub1" class="form-control" id="">
+									<option value="">--Pilih Sub Menu--</option>
+									<?php foreach($this->db->query('SELECT sub1 FROM module GROUP BY sub1')->result() as $data): ?>
+										<option value="<?=$data->sub1?>"><?=$data->sub1 ?></option>
+									<?php endforeach; ?>
+								</select>
 							</div>
 							<label class="col-lg-1 control-label">Sub Modul 2</label>
 							<div class="col-lg-5">
