@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
 
-$config['base_url'] = 'https://ed162f380952.ngrok.io/';
+$config['base_url'] = 'https://statistik.test/';
 
 $config['index_page'] = '';
 

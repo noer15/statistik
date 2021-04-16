@@ -39,8 +39,8 @@
 					<ul>
 						<?php 
 							$list = $this->db->query('SELECT b.* FROM role_module_asignment a INNER JOIN module b 
-									ON a.module_id = b.id WHERE a.role_id = '.$role.' AND b.module = "'.$menu->module.'"')->result_object();
-							$oldSub1 = ''; $oldSub2 = '';
+									ON a.module_id = b.id WHERE a.role_id = '.$role.' AND b.module = "'.$menu->module.'" ORDER BY b.sub1 ASC')->result_object();
+							$oldSub1 = ''; $oldSub2 = ''; $oldSub1Lap = ''; $oldSub2Lap = '';
 							foreach($list as $list): ?>
 								<?php if($menu->module == 'Input'): ?>
 									<?php if($list->sub1) :?>
@@ -70,8 +70,8 @@
 															</li>
 															<?php endif; ?>
 														<?php
-															$oldSub2 = $sub1->sub2;
-															 else: ?>
+															  $oldSub2 = $sub1->sub2;
+															  else: ?>
 														<li>
 															<a href="<?=base_url(''.$sub1->controller);?>"><?=$sub1->name?></a>
 														</li>
@@ -90,7 +90,7 @@
 								 <!-- menu laporan -->
 								<?php else: if($menu->module == 'Laporan'): ?>
 									<?php if($list->sub1): ?>
-										<?php if($list->sub1 != $oldSub1): ?>
+										<?php if($list->sub1 != $oldSub1Lap): ?>
 											<li>
 												<a href="#"><?=$list->sub1?></a>
 												<ul>
@@ -100,7 +100,7 @@
 
 														foreach($list2 as $sub1): ?>
 														<?php if($sub1->sub2): ?>
-															<?php if($sub1->sub2 != $oldSub2): ?>
+															<?php if($sub1->sub2 != $oldSub2Lap): ?>
 															<li>
 																<a href="#"><?=$sub1->sub2?></a>
 																<ul>
@@ -116,7 +116,7 @@
 															</li>
 															<?php endif; ?>
 														<?php 
-															$oldSub2 = $sub1->sub2;
+															$oldSub2Lap = $sub1->sub2;
 															else: ?>
 														<li>
 															<a href="<?=base_url(''.$sub1->controller);?>/rekap"><?=$sub1->name?></a>
@@ -142,6 +142,7 @@
 									<?php endif; ?>
 								<?php endif; ?>
 								<?php $oldSub1 = $list->sub1; ?>
+								<?php $oldSub1Lap = $list->sub1; ?>
 						<?php 
 							endforeach; ?>
 					</ul>
