@@ -199,6 +199,11 @@ class Kelompoktani extends CI_Controller {
 		$tahun_berdiri = $this->input->post('tahun_berdiri');
 		$ba = $this->input->post('ba');
 		$kelas = $this->input->post('kelas');
+		$lat = $this->input->post('lat');
+		$long = $this->input->post('long');
+		$jumlah_anggota = $this->input->post('jumlah_anggota');
+		$luas = $this->input->post('luas');
+		$id_satuan = $this->input->post('id_satuan');
 
 		$role = $this->session->userdata('role_id');
 		if($role != 1){
@@ -240,6 +245,11 @@ class Kelompoktani extends CI_Controller {
 	        	'sk_berdiri' => $sk,
 	        	'berita_acara' => $ba,
 	        	'kelas' => $kelas,
+	        	'lat' => $lat,
+	        	'long' => $long,
+	        	'luas' => $luas,
+	        	'jumlah_anggota' => $jumlah_anggota,
+	        	'id_satuan' => $id_satuan,
 	        	'tahun_berdiri' => $tahun_berdiri,	        	
 	        	'desa_id' => $desaId,
 				'user_id' => $user_id
@@ -293,6 +303,11 @@ class Kelompoktani extends CI_Controller {
 		$kelas = $this->input->post('kelas');
 		$tahun_berdiri = $this->input->post('tahun_berdiri');
 		$status = $this->input->post('status');
+		$lat = $this->input->post('lat');
+		$long = $this->input->post('long');
+		$jumlah_anggota = $this->input->post('jumlah_anggota');
+		$luas = $this->input->post('luas');
+		$id_satuan = $this->input->post('id_satuan');
 
 		$role = $this->session->userdata('role_id');
 		if($role != 1){
@@ -314,6 +329,11 @@ class Kelompoktani extends CI_Controller {
 	        	'berita_acara' => $ba,
 	        	'email' => $email,
 	        	'kelas' => $kelas,
+				'lat' => $lat,
+	        	'long' => $long,
+	        	'luas' => $luas,
+	        	'jumlah_anggota' => $jumlah_anggota,
+	        	'id_satuan' => $id_satuan,
 				'user_id' => $user_id
 	    );
 

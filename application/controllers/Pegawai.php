@@ -48,6 +48,7 @@ class Pegawai extends CI_Controller {
 	public function store(){
 		try{
 			$nip = $this->input->post('nip');
+			$status = $this->input->post('status');
 			$nama = $this->input->post('nama');
 			$alamat = $this->input->post('alamat');
 			$sex = $this->input->post('sex');
@@ -58,11 +59,13 @@ class Pegawai extends CI_Controller {
 			$jabatan = $this->input->post('jabatan');
 			$pendidikan = $this->input->post('pendidikan');
 			$password = '123456789'; // default created
+			$kode = '1';
 
 			$role_id = $this->input->post('role');
 			
 			$post_data = array(
 		      		'nip' 	=> $nip,
+		      		'status' 	=> $status,
 		        	'nama' => $nama,
 		        	'alamat' => $alamat,
 		        	'sex' => $sex,
@@ -73,7 +76,8 @@ class Pegawai extends CI_Controller {
 		        	'jabatan_id' => $jabatan,
 		        	'password'=> $password,
 		        	'role_id' => $role_id,
-		        	'pendidikan' => $pendidikan
+		        	'pendidikan' => $pendidikan,
+		        	'kode' => $kode,
 		    );
 		    $this->db->insert('tb_pegawai',$post_data);
 
@@ -132,6 +136,7 @@ class Pegawai extends CI_Controller {
 	public function update(){
 		$id = $this->input->post('id');
 		$nip = $this->input->post('nip');
+		$status = $this->input->post('status');
 		$nama = $this->input->post('nama');
 		$alamat = $this->input->post('alamat');
 		$sex = $this->input->post('sex');
@@ -141,11 +146,14 @@ class Pegawai extends CI_Controller {
 		$unit_kerja = $this->input->post('unit_kerja');
 		$jabatan = $this->input->post('jabatan');
 		$pendidikan = $this->input->post('pendidikan');
+		$kode = '1';
+
 
 		$role_id = $this->input->post('role');
 
 		$post_data = array(
 	      		'nip' 	=> $nip,
+	      		'status' 	=> $status,
 	        	'nama' => $nama,
 	        	'alamat' => $alamat,
 	        	'sex' => $sex,
@@ -155,7 +163,8 @@ class Pegawai extends CI_Controller {
 	        	'unit_kerja_id' => $unit_kerja,
 	        	'jabatan_id' => $jabatan,
 	        	'role_id' => $role_id,
-	        	'pendidikan' => $pendidikan
+	        	'pendidikan' => $pendidikan,
+	        	'kode' => $kode,
 	    		);
 		$this->db->where('id',$id);
 	    $this->db->update('tb_pegawai',$post_data);

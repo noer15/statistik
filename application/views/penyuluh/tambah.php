@@ -166,7 +166,7 @@
                             </div>
 					</div>
 
-					<!-- <div class="form-group">
+					<div class="form-group">
 							<label class="col-lg-2 control-label">Desa</label>
 							<div class="col-lg-10">
                             <select name="desa"  id="desa" class="select-search" required
@@ -179,7 +179,7 @@
                                 
                             </select>
                             </div>
-					</div> -->
+					</div>
 
 						<div class="form-group" id="nip">
 							<label class="col-lg-2 control-label">NIP</label>
@@ -282,7 +282,7 @@
 
 
                         <div class="form-group">
-                            <label class="col-lg-2 control-label">Jabatan Penyuluh</label>
+                            <label class="col-lg-2 control-label">Bidang Keahlian</label>
                             <div class="col-lg-5">
                             <select name="jabatanpenyuluh"  id="jabatanpenyuluh" class="form-control select-search" required
                                 data-placeholder="Pilih Jabatan Penyuluh">
@@ -295,6 +295,18 @@
                             </select>
                             </div>
                         </div>
+
+                        <div class="form-group" id="nip">
+							<label class="col-lg-2 control-label">Jumlah Binaan</label>
+							<div class="col-lg-4">
+								<input type="number" class="form-control" placeholder="Jumlah Binaan" name="jumlah_binaan">
+							</div>
+
+                            <label class="col-lg-2 control-label">Skala Pengukuhan</label>
+							<div class="col-lg-4">
+								<input type="number" class="form-control" placeholder="Skala Pengukuhan" name="skala_pengukuhan">
+							</div>
+						</div>
 
                        
 						<div class="text-left">

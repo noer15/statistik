@@ -40,7 +40,7 @@ class Unitkerja extends CI_Controller {
 		$post_data = array(
 	      		'nama' => $nama	    
 	    		);
-	    $this->db->insert('m_jabatan',$post_data);
+	    $this->db->insert('m_unit_kerja',$post_data);
 
 		redirect(base_url().'unitkerja');
 	}

@@ -231,7 +231,7 @@
 						</div>
 
                         <div class="form-group">
-                            <label class="col-lg-2 control-label">Kategori</label>
+                            <label class="col-lg-2 control-label">Jenis Kegiatan</label>
                             <div class="col-lg-10">
                             <select name="kategori"  id="kategori" class="select-search" required
                                 data-placeholder="Pilih Kategori">
@@ -368,6 +368,38 @@
                                 
                             </select>
                             </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-lg-2 control-label">Kordinat Kantor KTH</label>
+                            <div class="col-lg-4">
+                                <input type="text" class="form-control" placeholder="Latitude" name="lat" required>
+                            </div>
+                            <div class="col-lg-4">
+                                <input type="text" class="form-control" placeholder="Longitude" name="long" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-lg-2 control-label">Jumlah Anggota</label>
+                            <div class="col-lg-4">
+                                <input type="number" class="form-control" placeholder="Jumlah Anggota" name="jumlah_anggota" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-lg-2 control-label">Luas</label>
+                            <div class="col-lg-4">
+                                <input type="number" class="form-control" placeholder="Luas" name="luas" required>
+                            </div>
+
+                            <label class="col-lg-2 control-label">Satuan</label>
+                                <div class="col-lg-4">
+									<select name="id_satuan" id="id_satuan" class="form-control">
+										<option value="">< Pilih Satuan ></option>
+										<?php foreach($this->db->get('m_satuan')->result() as $satuan): ?>
+										<option value="<?=$satuan->nama?>"><?=$satuan->nama?></option>
+										<?php endforeach; ?>
+									</select>
+								</div>
                         </div>
 
                        

@@ -56,18 +56,25 @@ class Gangguan extends CI_Controller {
 
 	public function store(){
 		$tahun = $this->input->post('tahun');
+		$bulan = $this->input->post('bulan');
 		$jumlah = $this->input->post('jumlah');
 		$satuan = $this->input->post('satuan');
 		$kawasan = $this->input->post('kawasan');
 		$jenis = $this->input->post('jenis');
 		$desaId = $this->input->post('desa');
+		$kph = $this->input->post('kph');
+		$jenis_hutan = $this->input->post('jenis_hutan');
 		
 		$post_data = array(
 	      		'tahun' 	=> $tahun,
+	      		'bulan' 	=> $bulan,
+	      		'bulan' 	=> $bulan,
 	      		'jumlah' 	=> $jumlah,
 	        	'satuan' => $satuan,	        	
 	        	'jenis_gangguan' => $jenis,	  
 	        	'kawasan_hutan_id' => $kawasan,
+	        	'jenis_hutan' => $jenis_hutan,
+	        	'kph' => $kph,
 	        	'desa_id' => $desaId
 	    		);
 	    $this->db->insert('t_gangguan',$post_data);
@@ -105,17 +112,23 @@ class Gangguan extends CI_Controller {
 	public function update(){
 		$id = $this->input->post('id');
 		$tahun = $this->input->post('tahun');
+		$bulan = $this->input->post('bulan');
 		$jumlah = $this->input->post('jumlah');
 		$satuan = $this->input->post('satuan');
 		$kawasan = $this->input->post('kawasan');
 		$jenis = $this->input->post('jenis');
+		$kph = $this->input->post('kph');
+		$jenis_hutan = $this->input->post('jenis_hutan');
 
 		$post_data = array(
 	      		'tahun' 	=> $tahun,
+	      		'bulan' 	=> $bulan,
 	      		'jumlah' 	=> $jumlah,
 	        	'satuan' => $satuan,	        	
 	        	'jenis_gangguan' => $jenis,
-	        	'kawasan_hutan_id' => $kawasan
+	        	'kawasan_hutan_id' => $kawasan,
+				'jenis_hutan' => $jenis_hutan,
+	        	'kph' => $kph,
 	    		);
 		$this->db->where('id',$id);
 	    $this->db->update('t_gangguan',$post_data);

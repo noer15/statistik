@@ -27,10 +27,8 @@
 						<input type="hidden" name="id" value="<?php echo $data[0]->id;?>">
 
 						<div class="form-group">
-							<label class="col-lg-2 control-label">Tahun
-								<span class="text-danger">*</span>
-							</label>
-							<div class="col-lg-5">
+							<label class="col-lg-2 control-label">Tahun</label>
+							<div class="col-lg-4">
 								<select class="form-control" name="tahun" id="tahun">
 									<option value="2013" <?php if($data[0]->tahun=="2013") { echo "selected";  } ?> >2018</option>
 									<option value="2014" <?php if($data[0]->tahun=="2014") { echo "selected";  } ?> >2018</option>
@@ -44,7 +42,37 @@
 									<option value="2022" <?php if($data[0]->tahun=="2022") { echo "selected";  } ?> >2022</option>
 								</select>                            	
                             </div>
+
+							<label class="col-lg-2 control-label">Bulan</label>
+								<div class="col-lg-4">
+									<select class="form-control" name="bulan" id="">
+										<option value="01" <?= $data[0]->bulan == '01' ? 'selected' : ''?>>January
+											</option>
+										<option value="02" <?= $data[0]->bulan == '02' ? 'selected' : ''?>>Februari
+										</option>
+										<option value="03" <?= $data[0]->bulan == '03' ? 'selected' : ''?>>Maret
+										</option>
+										<option value="04" <?= $data[0]->bulan == '04' ? 'selected' : ''?>>April
+										</option>
+										<option value="05" <?= $data[0]->bulan == '05' ? 'selected' : ''?>>Mei</option>
+										<option value="06" <?= $data[0]->bulan == '06' ? 'selected' : ''?>>Juni</option>
+										<option value="07" <?= $data[0]->bulan == '07' ? 'selected' : ''?>>Juli</option>
+										<option value="08" <?= $data[0]->bulan == '08' ? 'selected' : ''?>>Agustus
+										</option>
+										<option value="09" <?= $data[0]->bulan == '09' ? 'selected' : ''?>>September
+										</option>
+										<option value="10" <?= $data[0]->bulan == '10' ? 'selected' : ''?>>Oktober
+										</option>
+										<option value="11" <?= $data[0]->bulan == '11' ? 'selected' : ''?>>November
+										</option>
+										<option value="12" <?= $data[0]->bulan == '12' ? 'selected' : ''?>>Desember
+										</option>
+									</select>
+								</div>
 						</div>
+
+
+						
 
 						<div class="form-group">
 							<label class="col-lg-2 control-label">Kabupaten
@@ -97,6 +125,26 @@
                             </div>
 						</div>
 
+						<div class="form-group">
+                            <label class="col-lg-2 control-label">KPH / BKPH / RPH</label>
+                            <div class="col-lg-10">
+                            <input type="text" class="form-control" name="kph" placeholder="Masukan nama KPH / BKPH / RPH"
+							value="<?php echo $data[0]->kph;?>">
+                            </div>
+						</div>
+
+						<div class="form-group">
+							<label class="col-lg-2 control-label">Jenis Kawasan Hutan</label>
+							<div class="col-lg-10">
+							<select name="jenis_hutan" id="" class="form-control">
+									<option value="<?= $data[0]->jenis_hutan ?>"><?= $data[0]->jenis_hutan ?></option>
+									<option value="Hutan Lindung">Hutan Lindung</option>
+									<option value="Hutan Produksi">Hutan Produksi</option>
+									<option value="Hutan Konservasi">Hutan Konservasi</option>
+							</select>
+							</div>
+						</div>
+
 					<div class="form-group">
                             <label class="col-lg-2 control-label">Nama Kawasan</label>
                             <div class="col-lg-10">
@@ -138,7 +186,7 @@
 							</label>
 							<div class="col-lg-10">
 								<input type="text" class="form-control" placeholder="Jumlah" name="jumlah" required
-								 value="<?php echo $data[0]->jumlah;?>">
+								  value="<?php echo $data[0]->jumlah;?>">
 							</div>
 						</div>
 

@@ -23,12 +23,20 @@ class Pengukuhankh extends CI_Controller {
 	}	
 	
 	public function tambah(){
+		$kab = $this->db->query("Select a.* from m_kabupaten a ")->result_object();
 
+		$kec = $this->db->query("Select a.* from m_kecamatan a where a.kabupaten_id=".$kab[0]->id)->result_object();
+
+		$desa = $this->db->query("Select a.* from m_desa a where a.kecamatan_id=".$kec[0]->id)->result_object();
+		
 		$kawasan = $this->db->query("Select a.* from m_kawasan_hutan a ")->result_object();
 		$satuan = $this->db->query("Select a.* from m_satuan a")->result_object();
 		
 		$data['satuan'] 	 = $satuan;		
 		$data['kawasan'] 	 = $kawasan;
+		$data['kabupaten'] 	 = $kab;
+		$data['kecamatan'] 	 = $kec;
+		$data['desa'] 	 = $desa;
 		$data['page'] 	 = 'pengukuhankh';
 		$data['subpage'] ='tambah';		
 		$data['judul']	 =$this->judul;
@@ -37,6 +45,9 @@ class Pengukuhankh extends CI_Controller {
 	}
 
 	public function store(){
+		$id_kab = $this->input->post('id_kab');
+		$id_kec = $this->input->post('id_kec');
+		$id_desa = $this->input->post('id_desa');
 		$kawasan = $this->input->post('kawasan');
 		$penunjukan_no  	 =  $this->input->post('penunjukan_no');
     	$penunjukan_date	 =  $this->input->post('penunjukan_date');
@@ -64,6 +75,9 @@ class Pengukuhankh extends CI_Controller {
 
 		$post_data = array(
 	      		'kawasan_id' 	=> $kawasan,
+	      		'id_kab' 	=> $id_kab,
+	      		'id_kec' 	=> $id_kec,
+	      		'id_desa' 	=> $id_desa,
 	      		'penunjukan_no'  	 => $penunjukan_no,
 	        	'penunjukan_date'	 => $penunjukan_date,	        	
 	        	'penunjukan_pilihan' => $penunjukan_pilihan,	  
@@ -96,7 +110,9 @@ class Pengukuhankh extends CI_Controller {
 
 	public function edit($id){
 		$dt = $this->db->query("Select a.* from t_pengukuhan_kawasanhutan a where id='".$id."'")->result_object();
-		
+		$desa = $this->db->query("Select a.* from m_desa a where id=".$dt[0]->id_desa)->result_object();		
+		$kec = $this->db->query("Select a.* from m_kecamatan a where id=".$desa[0]->kecamatan_id)->result_object();
+		$kab = $this->db->query("Select a.* from m_kabupaten a where id=".$kec[0]->kabupaten_id)->result_object();
 		$kawasan = $this->db->query("Select a.* from m_kawasan_hutan a ")->result_object();
 		
 		$satuan = $this->db->query("Select a.* from m_satuan a")->result_object();
@@ -104,6 +120,9 @@ class Pengukuhankh extends CI_Controller {
 		$data['satuan'] 	 = $satuan;
 		$data['kawasan'] 	 = $kawasan;		
 		$data['data'] = $dt;
+		$data['kabupaten'] 	 = $kab;
+		$data['kecamatan'] 	 = $kec;
+		$data['desa'] 	 = $desa;
 		$data['page'] 	 = 'pengukuhankh';
 		$data['subpage'] ='edit';		
 		$data['judul']	 =$this->judul;
@@ -113,6 +132,9 @@ class Pengukuhankh extends CI_Controller {
 
 	public function update(){
 		$id = $this->input->post('id');
+		$id_kab = $this->input->post('id_kab');
+		$id_kec = $this->input->post('id_kec');
+		$id_desa = $this->input->post('id_desa');
 		$kawasan = $this->input->post('kawasan');
 		$penunjukan_no  	 =  $this->input->post('penunjukan_no');
     	$penunjukan_date	 =  $this->input->post('penunjukan_date');
@@ -140,6 +162,9 @@ class Pengukuhankh extends CI_Controller {
 
 		$post_data = array(
 	      		'kawasan_id' 	=> $kawasan,
+				'id_kab' 	=> $id_kab,
+	      		'id_kec' 	=> $id_kec,
+	      		'id_desa' 	=> $id_desa,
 	      		'penunjukan_no'  	 => $penunjukan_no,
 	        	'penunjukan_date'	 => $penunjukan_date,	        	
 	        	'penunjukan_pilihan' => $penunjukan_pilihan,	  

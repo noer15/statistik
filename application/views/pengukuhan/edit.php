@@ -37,7 +37,57 @@
 					
 					
 					<div class="panel-body">
+                        <div class="form-group">
+							<label class="col-lg-2 control-label">Kabupaten
+                                <span class="text-danger">*</span>
+                            </label>
+							<div class="col-lg-10">
+                            <select name="id_kab"  id="kab" class="select-search" required
+                                data-placeholder="Pilih Kabupaten">
+                                <?php foreach ($kabupaten as $key => $value) { ?>
+                                    <option value="<?php echo $value->id?>">
+                                    	<?php echo $value->nama?>                                    		
+                                    </option>
+                                <?php }  ?>
+                                
+                            </select>
+                            </div>
+					</div>
 
+
+					<div class="form-group">
+							<label class="col-lg-2 control-label">Kecamatan
+                                <span class="text-danger">*</span>
+                            </label>
+							<div class="col-lg-10">
+                            <select name="id_kec" id="kec" class="select-search" required
+                                data-placeholder="Pilih Kecamatan">
+                                <?php foreach ($kecamatan as $key => $value) { ?>
+                                    <option value="<?php echo $value->id?>">
+                                    	<?php echo $value->nama?>                                    		
+                                    </option>
+                                <?php }  ?>
+                                
+                            </select>
+                            </div>
+					</div>
+
+					<div class="form-group">
+							<label class="col-lg-2 control-label">Desa
+                                <span class="text-danger">*</span>
+                            </label>
+							<div class="col-lg-10">
+                            <select name="id_desa"  id="desa" class="select-search" required
+                                data-placeholder="Pilih Desa">
+                                <?php foreach ($desa as $key => $value) { ?>
+                                    <option value="<?php echo $value->id?>">
+                                    	<?php echo $value->nama?>                                    		
+                                    </option>
+                                <?php }  ?>
+                                
+                            </select>
+                            </div>
+					</div>
 						<div class="panel-body">
 
                     <input type="hidden" name="id" value="<?php echo $data[0]->id; ?>">
@@ -91,30 +141,7 @@
                             </div>
                         </div>
 
-                        <div class="form-group">
-                            <label class="col-lg-2 control-label">Panjang</label>
-                            <div class="col-lg-4">
-                                <input type="text" class="form-control" 
-                                    placeholder="Panjang" name="penunjukan_panjang"
-                                    value="<?php echo $data[0]->penunjukan_panjang; ?>" 
-                                    required>
-                            </div>
-                            <div class="col-lg-5">
-                                <select name="penunjukan_satuan_panjang"  
-                                    id="penunjukan_satuan_panjang" 
-                                    class="form-control select-search" required
-                                    data-placeholder="Pilih Satuan">
-                                    <option value=""></option>
-                                    <?php foreach ($satuan as $key => $value) { ?>
-                                        <option value="<?php echo $value->id?>"
-                                            <?php if($data[0]->penunjukan_satuan_panjang==$value->id){ echo "selected"; } ?> >
-                                            <?php echo $value->nama?>                                           
-                                        </option>
-                                    <?php }  ?>
-                                    
-                                </select>
-                            </div>
-                        </div>
+                      
 
                         <div class="form-group">
                             <label class="col-lg-2 control-label">Luas</label>

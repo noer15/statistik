@@ -62,6 +62,15 @@
 										data-validation="required">
 									<span class="help-block text-danger"></span>
 								</div>
+
+								<label class="col-lg-2 control-label">Status</label>
+								<div class="col-lg-2">
+									<select class="form-control" name="status" id="status" data-validation="required">
+										<option value="PNS">PNS</option>
+										<option value="CPNS">CPNS</option>
+									</select>
+									<span class="help-block text-danger"></span>
+								</div>
 							</div>
 							<div class="form-group">
 								<label class="col-lg-2 control-label">Nama</label>

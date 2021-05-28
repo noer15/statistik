@@ -167,12 +167,12 @@
                             </div>
 					</div>
 
-					<!-- <div class="form-group">
+					<div class="form-group">
 							<label class="col-lg-2 control-label">Desa</label>
 							<div class="col-lg-10">
-                            <select name="desa"  id="desa" class="select-search" required disabled 
-                                data-placeholder="Pilih Desa">
-                                <?php foreach ($desa as $key => $value) { ?>
+                            <select name="desa"  id="desa" class="select-search" required 
+                                >
+                                <?php foreach ($this->db->get('m_desa')->result() as $value) { ?>
                                     <option value="<?php echo $value->id?>">
                                     	<?php echo $value->nama?>                                    		
                                     </option>
@@ -180,7 +180,7 @@
                                 
                             </select>
                             </div>
-					</div> -->                    
+					</div>                    
 
                         <div class="form-group" id="nip">
                             <label class="col-lg-2 control-label">NIP</label>
@@ -293,7 +293,7 @@
                     </div>
 
                     <div class="form-group">
-                        <label class="col-lg-2 control-label">Jabatan Penyuluh</label>
+                        <label class="col-lg-2 control-label">Bidang Keahlian</label>
                         <div class="col-lg-5">
                         <select name="jabatanpenyuluh"  id="jabatanpenyuluh" class="form-control" required
                             data-placeholder="Pilih Jabatan Penyuluh">
@@ -307,6 +307,18 @@
                         </select>
                         </div>
                     </div>
+
+                        <div class="form-group" id="nip">
+							<label class="col-lg-2 control-label">Jumlah Binaan</label>
+							<div class="col-lg-4">
+								<input type="number" class="form-control" placeholder="Jumlah Binaan" name="jumlah_binaan" value="<?php echo $data[0]->jumlah_binaan; ?>">
+							</div>
+
+                            <label class="col-lg-2 control-label">Skala Pengukuhan</label>
+							<div class="col-lg-4">
+								<input type="number" class="form-control" placeholder="Skala Pengukuhan" name="skala_pengukuhan" value="<?php echo $data[0]->skala_pengukuhan; ?>">
+							</div>
+						</div>
                        
 						<div class="text-left">
 							<a  href="<?php echo base_url();?>Penyuluh" class="btn btn-danger">Batal</a>

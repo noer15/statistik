@@ -53,6 +53,7 @@ class Pinjampakai extends CI_Controller {
 
 	public function store(){
 		$desaId = $this->input->post('desa');
+		$masa_berlaku = $this->input->post('masa_berlaku');
 		$kawasan = $this->input->post('kawasan');
 		$kph = $this->input->post('kph');
 		$nama_perusahaan = $this->input->post('nama_perusahaan');
@@ -72,6 +73,7 @@ class Pinjampakai extends CI_Controller {
 		
 		$post_data = array(
 	      		'desa_id' 	=> $desaId,
+	      		'masa_berlaku' 	=> $masa_berlaku,
 	      		'kawasan_id' 	=> $kawasan,
 	      		'kph_id' 	=> $kph,
 	      		'nama_perusahaan' => $nama_perusahaan,
@@ -126,6 +128,7 @@ class Pinjampakai extends CI_Controller {
 	public function update(){
 		$id = $this->input->post('id');
 		//$desaId = $this->input->post('desa');
+		$masa_berlaku = $this->input->post('masa_berlaku');
 		$kawasan = $this->input->post('kawasan');
 		$kph = $this->input->post('kph');
 		$nama_perusahaan = $this->input->post('nama_perusahaan');
@@ -146,6 +149,7 @@ class Pinjampakai extends CI_Controller {
 		$post_data = array(	      		
 	      		'kawasan_id' 	=> $kawasan,
 	      		'kph_id' 	=> $kph,
+	      		'masa_berlaku' 	=> $masa_berlaku,
 	      		'nama_perusahaan' => $nama_perusahaan,
 	      		'permohonan_no' => $permohonan_no,
 	      		'permohonan_date' => $permohonan_date,

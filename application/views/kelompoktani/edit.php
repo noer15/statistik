@@ -357,6 +357,37 @@
                             </div>
                             <?php endif; ?>
                         </div>
+
+                        <div class="form-group">
+                            <label class="col-lg-2 control-label">Kordinat Kantor KTH</label>
+                            <div class="col-lg-4">
+                                <input type="text" class="form-control" placeholder="Latitude" name="lat" value="<?php echo $data[0]->lat?>" required>
+                            </div>
+                            <div class="col-lg-4">
+                                <input type="text" class="form-control" placeholder="Longitude" name="long" value="<?php echo $data[0]->long?>" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-lg-2 control-label">Jumlah Anggota</label>
+                            <div class="col-lg-4">
+                                <input type="number" class="form-control" placeholder="Jumlah Anggota" value="<?php echo $data[0]->jumlah_anggota?>" name="jumlah_anggota" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-lg-2 control-label">Luas</label>
+                            <div class="col-lg-4">
+                                <input type="number" class="form-control" placeholder="Tahun Berdiri" name="luas" value="<?php echo $data[0]->luas?>" required>
+                            </div>
+
+                            <label class="col-lg-2 control-label">Satuan</label>
+                                <div class="col-lg-4">
+									<select name="id_satuan" id="id_satuan" class="form-control">
+										<?php foreach($this->db->get('m_satuan')->result() as $satuan): ?>
+										<option value="<?=$satuan->nama?>"><?=$satuan->nama?></option>
+										<?php endforeach; ?>
+									</select>
+								</div>
+                        </div>
 						
 						<div class="text-left">
 							<a  href="<?php echo base_url();?>Kelompoktani" class="btn btn-danger">Batal</a>

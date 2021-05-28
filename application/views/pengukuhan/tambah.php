@@ -15,6 +15,83 @@
             });
 	});
 </script>
+<script type="text/javascript">
+	$(function () {
+		var baseurl = "<?php echo base_url();?>"
+		$('#kab').change(function(){
+            var kab  = $(this).val();     
+            var kec  = $(this).val();     
+            console.log(kab+" "+kec);
+            $("#kec").empty();
+            $("#desa").empty();
+            $.ajax({                            
+                url: baseurl+'/Desa/getKecamatan/'+kab,
+                type:'GET',
+                contentType: 'application/json',
+                success: function (resp) { 
+
+                	var dataArray = JSON.parse(resp);                 	
+                	// console.log(dataArray);                	
+                	for (var i in dataArray) {
+                		console.log(dataArray[i]);
+                    	$('#kec').append($("<option></option>")
+                        	.attr("value",dataArray[i].id)
+                            .text(dataArray[i].nama));
+                    }
+                    //console.log(dataArray[0].id);                	
+                    desa(dataArray[0].id)
+                },
+        	});                           
+        });
+
+        $('#kec').change(function(){
+            var kec  = $(this).val();     
+            //console.log(kab)
+            $("#desa").empty();                        
+            $.ajax({                            
+                url: baseurl+'/Desa/getDesa/'+kec,
+                type:'GET',
+                contentType: 'application/json',
+                success: function (resp) { 
+
+                	var dataArray = JSON.parse(resp);                 	
+                	console.log(dataArray);                	
+                	for (var i in dataArray) {
+                		console.log(dataArray[i]);
+                    	$('#desa').append($("<option></option>")
+                        	.attr("value",dataArray[i].id)
+                            .text(dataArray[i].nama));
+                    }
+                },
+        	});                           
+        });
+
+        function desa($kec){
+            var kec  = $kec;
+            //console.log(kab)
+            $("#desa").empty();                        
+            $.ajax({                            
+                url: baseurl+'/Desa/getDesa/'+kec,
+                type:'GET',
+                contentType: 'application/json',
+                success: function (resp) { 
+
+                	var dataArray = JSON.parse(resp);                 	
+                	console.log(dataArray);                	
+                	for (var i in dataArray) {
+                		console.log(dataArray[i]);
+                    	$('#desa').append($("<option></option>")
+                        	.attr("value",dataArray[i].id)
+                            .text(dataArray[i].nama));
+                    }
+                },
+        	});                           
+        }
+
+
+
+	});
+</script>
 
 <!-- /theme JS files -->
 
@@ -39,7 +116,57 @@
 					<div class="panel-body">
 
 						<div class="panel-body">
+                        <div class="form-group">
+							<label class="col-lg-2 control-label">Kabupaten
+                                <span class="text-danger">*</span>
+                            </label>
+							<div class="col-lg-10">
+                            <select name="id_kab"  id="kab" class="select-search" required
+                                data-placeholder="Pilih Kabupaten">
+                                <?php foreach ($kabupaten as $key => $value) { ?>
+                                    <option value="<?php echo $value->id?>">
+                                    	<?php echo $value->nama?>                                    		
+                                    </option>
+                                <?php }  ?>
+                                
+                            </select>
+                            </div>
+					</div>
 
+
+					<div class="form-group">
+							<label class="col-lg-2 control-label">Kecamatan
+                                <span class="text-danger">*</span>
+                            </label>
+							<div class="col-lg-10">
+                            <select name="id_kec" id="kec" class="select-search" required
+                                data-placeholder="Pilih Kecamatan">
+                                <?php foreach ($kecamatan as $key => $value) { ?>
+                                    <option value="<?php echo $value->id?>">
+                                    	<?php echo $value->nama?>                                    		
+                                    </option>
+                                <?php }  ?>
+                                
+                            </select>
+                            </div>
+					</div>
+
+					<div class="form-group">
+							<label class="col-lg-2 control-label">Desa
+                                <span class="text-danger">*</span>
+                            </label>
+							<div class="col-lg-10">
+                            <select name="id_desa"  id="desa" class="select-search" required
+                                data-placeholder="Pilih Desa">
+                                <?php foreach ($desa as $key => $value) { ?>
+                                    <option value="<?php echo $value->id?>">
+                                    	<?php echo $value->nama?>                                    		
+                                    </option>
+                                <?php }  ?>
+                                
+                            </select>
+                            </div>
+					</div>
                     <!-- <div class="form-group">
                         <label class="col-lg-2 control-label">Tahun
                             <span class="text-danger">*</span>
@@ -98,7 +225,7 @@
                             </div>
                         </div>
 
-                        <div class="form-group">
+                        <!-- <div class="form-group">
                             <label class="col-lg-2 control-label">Panjang</label>
                             <div class="col-lg-4">
                                 <input type="text" class="form-control" 
@@ -118,7 +245,7 @@
                                     
                                 </select>
                             </div>
-                        </div>
+                        </div> -->
 
                         <div class="form-group">
                             <label class="col-lg-2 control-label">Luas</label>

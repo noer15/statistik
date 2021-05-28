@@ -494,9 +494,10 @@ class Penyuluh extends CI_Controller {
 		$jabatanpenyuluh = $this->input->post('jabatanpenyuluh');		
 		$phone = $this->input->post('phone');
 		$email = $this->input->post('email');
-		//$desaId = $this->input->post('desa');
+		$desaId = $this->input->post('desa');
 		$kecamatanId = $this->input->post('kec');
-
+		$binaan = $this->input->post('jumlah_binaan');
+		$skala = $this->input->post('skala_pengukuhan');
 
 		$penPKSM = $this->db->query(" SELECT ifnull(max( substring(a.nip, 7,4) ),0) as max from t_penyuluh a
 							where kecamatan_id='".$kecamatanId."'")->result_object();
@@ -544,7 +545,10 @@ class Penyuluh extends CI_Controller {
 	        	'penyuluh_dari' => $penyuluhdari,
 	        	'jabatan_penyuluh' => $jabatanpenyuluh,
 	        	'pegawai_id' => $idPeg,
-	        	'kecamatan_id' => $kecamatanId
+	        	'kecamatan_id' => $kecamatanId,
+	        	'desa_id' => $desaId,
+	        	'jumlah_binaan' => $binaan,
+	        	'skala_pengukuhan' => $skala,
 	    		);
 	    $this->db->insert('t_penyuluh',$post_data);
 
@@ -555,7 +559,7 @@ class Penyuluh extends CI_Controller {
 
 		$dt = $this->db->query("Select a.* from t_penyuluh a where id='".$id."'")->result_object();
 		
-		//$desa = $this->db->query("Select a.* from m_desa a where id=".$dt[0]->desa_id)->result_object();		
+		// $desa = $this->db->query("Select a.* from m_desa a where id=".$dt[0]->desa_id)->result_object();		
 		$kec = $this->db->query("Select a.* from m_kecamatan a where id=".$dt[0]->kecamatan_id)->result_object();
 		$kab = $this->db->query("Select a.* from m_kabupaten a where id=".$kec[0]->kabupaten_id)->result_object();
 		
@@ -569,7 +573,7 @@ class Penyuluh extends CI_Controller {
 		$data['data'] = $dt;
 		$data['kabupaten'] 	 = $kab;
 		$data['kecamatan'] 	 = $kec;
-		//$data['desa'] 	 = $desa;
+		// $data['desa'] 	 = $desa;
 		$data['page'] 	 = 'penyuluh';
 		$data['subpage'] ='edit';		
 		$data['judul']	 =$this->judul;
@@ -589,8 +593,10 @@ class Penyuluh extends CI_Controller {
 		$jabatanpenyuluh = $this->input->post('jabatanpenyuluh');		
 		$phone = $this->input->post('phone');
 		$email = $this->input->post('email');
-		//$desaId = $this->input->post('desa');
+		$desaId = $this->input->post('desa');
 		$kecamatanId = $this->input->post('kec');
+		$binaan = $this->input->post('jumlah_binaan');
+		$skala = $this->input->post('skala_pengukuhan');
 
 		if($penyuluhdari=='PKSM'){
 			$nip = '';
@@ -622,7 +628,10 @@ class Penyuluh extends CI_Controller {
 	        	'penyuluh_dari' => $penyuluhdari,
 	        	'jabatan_penyuluh' => $jabatanpenyuluh,
 	        	'pegawai_id' => $idPeg,
-	        	'kecamatan_id' => $kecamatanId
+	        	'kecamatan_id' => $kecamatanId,
+	        	'desa_id' => $desaId,
+				'jumlah_binaan' => $binaan,
+	        	'skala_pengukuhan' => $skala,
 	    		);
 		$this->db->where('id',$id);
 	    $this->db->update('t_penyuluh',$post_data);

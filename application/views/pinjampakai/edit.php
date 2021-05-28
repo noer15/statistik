@@ -221,10 +221,10 @@
                     </div>
 
                     <div class="form-group">
-                        <label class="col-lg-2 control-label">Nama Perusahaan</label>
+                        <label class="col-lg-2 control-label">Nama Pengguna</label>
                         <div class="col-lg-10">
                             <input type="text" class="form-control" 
-                                    placeholder="Nama Perusahaan" name="nama_perusahaan" 
+                                    placeholder="Nama Pengguna" name="nama_perusahaan" 
                                     value="<?php echo $data[0]->nama_perusahaan; ?>" required>
                          
                         </div>
@@ -244,7 +244,6 @@
                                         <?php echo $value->nama?>                                           
                                     </option>
                                 <?php }  ?>
-                                
                             </select>
                          
                         </div>
@@ -281,7 +280,7 @@
                         </div>
                     </div>
 
-                    <fieldset class="content-group">
+                    <!-- <fieldset class="content-group">
                         <legend class="text-bold">Permohonan : </legend>
                         <div class="form-group">
                             <label class="col-lg-2 control-label">Nomor</label>
@@ -325,7 +324,7 @@
                             </div>
                         </div>
                         
-                    </fieldset>
+                    </fieldset> -->
 
                     <fieldset class="content-group">
                         <legend class="text-bold">Izin : </legend>
@@ -345,6 +344,15 @@
                                     placeholder="Tanggal Izin, Format : yyyy-mm-dd" 
                                     name="izin_date" id="izin_date" 
                                     value="<?php echo $data[0]->izin_date; ?>">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-lg-2 control-label">Masa Berlaku</label>
+                            <div class="col-lg-10">
+                            <input type="text" class="form-control" 
+                                    placeholder="Tanggal Izin, Format : yyyy-mm-dd" 
+                                    name="masa_berlaku" id="izin_date" value="<?php echo $data[0]->masa_berlaku; ?>">
                             </div>
                         </div>
                     </fieldset>

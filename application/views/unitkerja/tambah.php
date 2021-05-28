@@ -11,7 +11,7 @@
 	<div class="row">
 		<div class="col-md-12">
 			<!-- Basic layout-->
-			<form action="<?php echo base_url();?>Jabatan/store" class="form-horizontal" method="post">
+			<form action="<?php echo base_url();?>Unitkerja/store" class="form-horizontal" method="post">
 				<div class="panel panel-flat">
 					<div class="panel-heading">
 						<h5 class="panel-title"><?php echo $header;?></h5>
