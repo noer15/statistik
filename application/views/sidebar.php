@@ -50,7 +50,7 @@
 												<ul>
 													<?php 
 														$list2 = $this->db->query('SELECT b.* FROM role_module_asignment a INNER JOIN module b 
-														ON a.module_id = b.id WHERE a.role_id = '.$role.' AND b.sub1 = "'.$list->sub1.'"')->result_object();
+														ON a.module_id = b.id WHERE a.role_id = '.$role.' AND b.sub1 = "'.$list->sub1.'" AND b.module = "Input"')->result_object();
 
 														foreach($list2 as $sub1): ?>
 														<?php if($sub1->sub2): ?>
@@ -60,7 +60,7 @@
 																<ul>
 																	<?php 
 																		$list3 = $this->db->query('SELECT b.* FROM role_module_asignment a INNER JOIN module b 
-																		ON a.module_id = b.id WHERE a.role_id = '.$role.' AND b.sub2 = "'.$sub1->sub2.'"')->result_object();
+																		ON a.module_id = b.id WHERE a.role_id = '.$role.' AND b.sub2 = "'.$sub1->sub2.'" AND b.module = "Input"')->result_object();
 																		foreach($list3 as $sub2): ?>
 																	<li>
 																		<a href="<?=base_url(''.$sub2->controller);?>"><?=$sub2->name?></a>
@@ -96,7 +96,7 @@
 												<ul>
 													<?php 
 														$list2 = $this->db->query('SELECT b.* FROM role_module_asignment a INNER JOIN module b 
-														ON a.module_id = b.id WHERE a.role_id = '.$role.' AND b.sub1 = "'.$list->sub1.'"')->result_object();
+														ON a.module_id = b.id WHERE a.role_id = '.$role.' AND b.sub1 = "'.$list->sub1.'" AND b.module = "Laporan"')->result_object();
 
 														foreach($list2 as $sub1): ?>
 														<?php if($sub1->sub2): ?>
@@ -106,7 +106,7 @@
 																<ul>
 																	<?php 
 																		$list3 = $this->db->query('SELECT b.* FROM role_module_asignment a INNER JOIN module b 
-																		ON a.module_id = b.id WHERE a.role_id = '.$role.' AND b.sub2 = "'.$sub1->sub2.'"')->result_object();
+																		ON a.module_id = b.id WHERE a.role_id = '.$role.' AND b.sub2 = "'.$sub1->sub2.'" AND b.module = "Laporan"')->result_object();
 																		foreach($list3 as $sub2): ?>
 																	<li>
 																		<a href="<?=base_url(''.$sub2->controller);?>/rekap"><?=$sub2->name?></a>
